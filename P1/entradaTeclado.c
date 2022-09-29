@@ -4,7 +4,7 @@
  	
 	Codigo base para la realización de las practicas de IG
 	
-	Estudiante: 
+	Estudiante: Gonzalo José López Castilla
 .gitignore file added
 =======================================================
 	G. Arroyo, J.C. Torres 
@@ -88,6 +88,18 @@ void letra (unsigned char k, int x, int y)
 
   switch (k)
     {
+    case 'p':
+      setModo(GL_POINT);
+      break;
+    case 'l':
+      setModo(GL_LINE);
+      break;
+    case 'f':
+      setModo(GL_FILL);
+      break;
+    case 'i':
+      iluminacionON();
+      break;
     case 'h':
     case 'H':
       printHelp ();		// H y h imprimen ayuda

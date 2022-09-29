@@ -4,7 +4,7 @@
  	
 	Codigo base para la realización de las practicas de IG
 	
-	Estudiante: 
+	Estudiante: Gonzalo Jose Lopez Castilla
 
 =======================================================
 	G. Arroyo, J.C. Torres 
@@ -48,6 +48,20 @@ initModel ()
 {
 
 
+}
+
+int modo = GL_FILL;
+bool iluminacion = true;
+
+void setModo (int M){
+    modo = M;
+}
+
+void iluminacionON (){
+    if (iluminacion)
+        iluminacion = false;
+    else
+        iluminacion = true;
 }
 
 class Ejes:Objeto3D
@@ -127,46 +141,52 @@ void draw(){
 class Piramide:Objeto3D{
 private:
 float l, a;
+float B, normalY, normalXZ;
 public:
 Piramide (float lado, float alto){
     l = lado;
     a = alto;
+    B = sqrt(l*l + a*a);
+    normalY = a / B;
+    normalXZ = l / B;
 };
 void draw(){
     //Construye una pirámide dado un lado y el alto
 
-    float color[4] = { 0.8, 0.0, 1, 1 };
-    glMaterialfv (GL_FRONT, GL_AMBIENT_AND_DIFFUSE, color);
-    glBegin (GL_QUAD_STRIP);
+    float color2[4] = { 0.0, 1.0, 0.0, 1 };
+    glMaterialfv (GL_FRONT, GL_AMBIENT_AND_DIFFUSE, color2);
+    glBegin (GL_QUADS);
     {				/* Caras transversales */
-        glNormal3f (0.0, 0.0, 1.0);	/*Vertical delantera */
-        glVertex3f (l, l, l);
-        glVertex3f (0, l, l);
+        glNormal3f (0.0, -normalY, 0.0);
+        glVertex3f (0, 0, 0);
+        glVertex3f (l, 0, 0);
         glVertex3f (l, 0, l);
         glVertex3f (0, 0, l);
-        glNormal3f (0.0, -1.0, 0.0);	/*Inferior */
-        glVertex3f (l, 0, 0);
-        glVertex3f (0, 0, 0);
-        glNormal3f (0.0, 0.0, -1.0);	/* Vertical hacia atras */
-        glVertex3f (l, l, 0);
-        glVertex3f (0, l, 0);
-        glNormal3f (0.0, 1.0, 0.0);	/* Superior, horizontal */
-        glVertex3f (l, l, l);
-        glVertex3f (0, l, l);
     }
     glEnd ();
-    glBegin (GL_QUADS);
-    {				/* Costados */
-        glNormal3f (1.0, 0.0, 0.0);
-        glVertex3f (l, 0, 0);
-        glVertex3f (l, l, 0);
-        glVertex3f (l, l, l);
-        glVertex3f (l, 0, l);
-        glNormal3f (-1.0, 0.0, 0.0);
+
+    glBegin (GL_TRIANGLES);
+    {
+        glNormal3f (-normalXZ, normalY, 0.0);
+        glVertex3f (l/2, a, l/2);
         glVertex3f (0, 0, 0);
         glVertex3f (0, 0, l);
-        glVertex3f (0, l, l);
-        glVertex3f (0, l, 0);
+
+        glNormal3f (0.0, normalY, -normalXZ);
+        glVertex3f (l/2, a, l/2);
+        glVertex3f (l, 0, 0);
+        glVertex3f (0, 0, 0);
+
+        glNormal3f (normalXZ, normalY, 0.0);
+        glVertex3f (l/2, a, l/2);
+        glVertex3f (l, 0, l);
+        glVertex3f (l, 0, 0);
+
+        glNormal3f (0.0, normalY, normalXZ);
+        glVertex3f (l/2, a, l/2);
+        glVertex3f (0, 0, l);
+        glVertex3f (l, 0, l);
+
     }
     glEnd ();
 }
@@ -176,6 +196,7 @@ void draw(){
 
 Ejes ejesCoordenadas;
 Cubo cubo(5);
+Piramide piramide(5,6);
 
 
 /**	void Dibuja( void )
@@ -202,7 +223,18 @@ void Dibuja (void)
 
     ejesCoordenadas.draw();			// Dibuja los ejes
 
+    if (iluminacion)
+        glEnable(GL_LIGHTING);
+    else
+        glDisable(GL_LIGHTING);
+
+    glPolygonMode (GL_FRONT_AND_BACK, modo) ;
+
     cubo.draw(); //Dibuja el cubo
+
+    glTranslatef( 7, 0, 0 );
+
+    piramide.draw(); //Dibuja la pirámide
 
     glMaterialfv (GL_FRONT, GL_AMBIENT_AND_DIFFUSE, color);
 

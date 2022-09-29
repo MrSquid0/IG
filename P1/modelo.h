@@ -42,6 +42,16 @@ void idle (int v);
 **/
 void initModel ();
 
+/**
+	Funcion para cambiar el modo de visualización de las figuras
+**/
+void setModo (int M);
+
+/**
+	Funcion para activar/desactivar la iluminación de las figuras
+**/
+void iluminacionON ();
+
 
 
 class Objeto3D 

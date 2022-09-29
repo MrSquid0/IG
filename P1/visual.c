@@ -4,7 +4,7 @@
  	
 	Codigo base para la realización de las practicas de IG
 	
-	Estudiante: 
+	Estudiante: Gonzalo José López Castilla
 
 	Programa principal
 =======================================================
