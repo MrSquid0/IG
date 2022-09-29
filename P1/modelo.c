@@ -47,39 +47,135 @@ void
 initModel ()
 {
 
+
 }
 
-
-
-class Ejes:Objeto3D 
-{ 
-public: 
-    float longitud = 30;
+class Ejes:Objeto3D
+{
+public:
+float longitud = 30;
 // Dibuja el objeto
 void draw( )
 {
-  glDisable (GL_LIGHTING);
-  glBegin (GL_LINES);
-  {
-    glColor3f (0, 1, 0);
-    glVertex3f (0, 0, 0);
-    glVertex3f (0, longitud, 0);
+    glDisable (GL_LIGHTING);
+    glBegin (GL_LINES);
+    {
+        glColor3f (0, 1, 0);
+        glVertex3f (0, 0, 0);
+        glVertex3f (0, longitud, 0);
 
-    glColor3f (1, 0, 0);
-    glVertex3f (0, 0, 0);
-    glVertex3f (longitud, 0, 0);
+        glColor3f (1, 0, 0);
+        glVertex3f (0, 0, 0);
+        glVertex3f (longitud, 0, 0);
 
-    glColor3f (0, 0, 1);
-    glVertex3f (0, 0, 0);
-    glVertex3f (0, 0, longitud);
-  }
-  glEnd ();
-  glEnable (GL_LIGHTING);
-
+        glColor3f (0, 0, 1);
+        glVertex3f (0, 0, 0);
+        glVertex3f (0, 0, longitud);
+    }
+    glEnd ();
+    glEnable (GL_LIGHTING);
 }
-} ; 
+};
+
+class Cubo:Objeto3D{
+private:
+float l;
+public:
+Cubo (float lado){
+    l = lado;
+};
+void draw(){
+    //Construye un cubo dado un lado
+
+    float color[4] = { 0.8, 0.0, 1, 1 };
+    glMaterialfv (GL_FRONT, GL_AMBIENT_AND_DIFFUSE, color);
+    glBegin (GL_QUAD_STRIP);
+    {				/* Caras transversales */
+        glNormal3f (0.0, 0.0, 1.0);	/*Vertical delantera */
+        glVertex3f (l, l, l);
+        glVertex3f (0, l, l);
+        glVertex3f (l, 0, l);
+        glVertex3f (0, 0, l);
+        glNormal3f (0.0, -1.0, 0.0);	/*Inferior */
+        glVertex3f (l, 0, 0);
+        glVertex3f (0, 0, 0);
+        glNormal3f (0.0, 0.0, -1.0);	/* Vertical hacia atras */
+        glVertex3f (l, l, 0);
+        glVertex3f (0, l, 0);
+        glNormal3f (0.0, 1.0, 0.0);	/* Superior, horizontal */
+        glVertex3f (l, l, l);
+        glVertex3f (0, l, l);
+    }
+    glEnd ();
+    glBegin (GL_QUADS);
+    {				/* Costados */
+        glNormal3f (1.0, 0.0, 0.0);
+        glVertex3f (l, 0, 0);
+        glVertex3f (l, l, 0);
+        glVertex3f (l, l, l);
+        glVertex3f (l, 0, l);
+        glNormal3f (-1.0, 0.0, 0.0);
+        glVertex3f (0, 0, 0);
+        glVertex3f (0, 0, l);
+        glVertex3f (0, l, l);
+        glVertex3f (0, l, 0);
+    }
+    glEnd ();
+}
+};
+
+class Piramide:Objeto3D{
+private:
+float l, a;
+public:
+Piramide (float lado, float alto){
+    l = lado;
+    a = alto;
+};
+void draw(){
+    //Construye una pirámide dado un lado y el alto
+
+    float color[4] = { 0.8, 0.0, 1, 1 };
+    glMaterialfv (GL_FRONT, GL_AMBIENT_AND_DIFFUSE, color);
+    glBegin (GL_QUAD_STRIP);
+    {				/* Caras transversales */
+        glNormal3f (0.0, 0.0, 1.0);	/*Vertical delantera */
+        glVertex3f (l, l, l);
+        glVertex3f (0, l, l);
+        glVertex3f (l, 0, l);
+        glVertex3f (0, 0, l);
+        glNormal3f (0.0, -1.0, 0.0);	/*Inferior */
+        glVertex3f (l, 0, 0);
+        glVertex3f (0, 0, 0);
+        glNormal3f (0.0, 0.0, -1.0);	/* Vertical hacia atras */
+        glVertex3f (l, l, 0);
+        glVertex3f (0, l, 0);
+        glNormal3f (0.0, 1.0, 0.0);	/* Superior, horizontal */
+        glVertex3f (l, l, l);
+        glVertex3f (0, l, l);
+    }
+    glEnd ();
+    glBegin (GL_QUADS);
+    {				/* Costados */
+        glNormal3f (1.0, 0.0, 0.0);
+        glVertex3f (l, 0, 0);
+        glVertex3f (l, l, 0);
+        glVertex3f (l, l, l);
+        glVertex3f (l, 0, l);
+        glNormal3f (-1.0, 0.0, 0.0);
+        glVertex3f (0, 0, 0);
+        glVertex3f (0, 0, l);
+        glVertex3f (0, l, l);
+        glVertex3f (0, l, 0);
+    }
+    glEnd ();
+}
+};
+
+
 
 Ejes ejesCoordenadas;
+Cubo cubo(5);
 
 
 /**	void Dibuja( void )
@@ -90,30 +186,32 @@ Procedimiento de dibujo del modelo. Es llamado por glut cada vez que se debe red
 
 void Dibuja (void)
 {
-  static GLfloat  pos[4] = { 5.0, 5.0, 10.0, 0.0 };	// Posicion de la fuente de luz
+    static GLfloat  pos[4] = { 5.0, 5.0, 10.0, 0.0 };	// Posicion de la fuente de luz
 
-  float  color[4] = { 0.8, 0.0, 1, 1 };
+    float  color[4] = { 0.8, 0.0, 1, 1 };
 
-  glPushMatrix ();		// Apila la transformacion geometrica actual
+    glPushMatrix ();		// Apila la transformacion geometrica actual
 
-  glClearColor (0.0, 0.0, 0.0, 1.0);	// Fija el color de fondo a negro
+    glClearColor (0.0, 0.0, 0.0, 1.0);	// Fija el color de fondo a negro
 
-  glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	// Inicializa el buffer de color y el Z-Buffer
+    glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	// Inicializa el buffer de color y el Z-Buffer
 
-  transformacionVisualizacion ();	// Carga transformacion de visualizacion
+    transformacionVisualizacion ();	// Carga transformacion de visualizacion
 
-  glLightfv (GL_LIGHT0, GL_POSITION, pos);	// Declaracion de luz. Colocada aqui esta fija en la escena
+    glLightfv (GL_LIGHT0, GL_POSITION, pos);	// Declaracion de luz. Colocada aqui esta fija en la escena
 
-  ejesCoordenadas.draw();			// Dibuja los ejes
+    ejesCoordenadas.draw();			// Dibuja los ejes
 
-  glMaterialfv (GL_FRONT, GL_AMBIENT_AND_DIFFUSE, color);
+    cubo.draw(); //Dibuja el cubo
 
-  // Dibuja el modelo (A rellenar en prácticas 1,2 y 3)          
+    glMaterialfv (GL_FRONT, GL_AMBIENT_AND_DIFFUSE, color);
 
-  glPopMatrix ();		// Desapila la transformacion geometrica
+    // Dibuja el modelo (A rellenar en prácticas 1,2 y 3)
+
+    glPopMatrix ();		// Desapila la transformacion geometrica
 
 
-  glutSwapBuffers ();		// Intercambia el buffer de dibujo y visualizacion
+    glutSwapBuffers ();		// Intercambia el buffer de dibujo y visualizacion
 }
 
 
@@ -122,9 +220,8 @@ void Dibuja (void)
 Procedimiento de fondo. Es llamado por glut cuando no hay eventos pendientes.
 
 **/
-void idle (int v)
-{
+void idle (int v) {
 
-  glutPostRedisplay ();		// Redibuja
-  glutTimerFunc (30, idle, 0);	// Vuelve a activarse dentro de 30 ms
+    glutPostRedisplay();        // Redibuja
+    glutTimerFunc(30, idle, 0);    // Vuelve a activarse dentro de 30 ms
 }
