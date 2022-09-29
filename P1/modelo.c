@@ -192,6 +192,61 @@ void draw(){
 }
 };
 
+class Rectangulo:Objeto3D{
+private:
+float l, a
+float B, normalY, normalXZ;
+public:
+Piramide (float lado, float alto){
+    l = lado;
+    a = alto;
+    B = sqrt(l*l + a*a);
+    normalY = a / B;
+    normalXZ = l / B;
+};
+void draw(){
+    //Construye una pirámide dado un lado y el alto
+
+    float color2[4] = { 0.0, 1.0, 0.0, 1 };
+    glMaterialfv (GL_FRONT, GL_AMBIENT_AND_DIFFUSE, color2);
+    glBegin (GL_QUADS);
+    {				/* Caras transversales */
+        glNormal3f (0.0, -normalY, 0.0);
+        glVertex3f (0, 0, 0);
+        glVertex3f (l, 0, 0);
+        glVertex3f (l, 0, l);
+        glVertex3f (0, 0, l);
+    }
+    glEnd ();
+
+    glBegin (GL_TRIANGLES);
+    {
+        glNormal3f (-normalXZ, normalY, 0.0);
+        glVertex3f (l/2, a, l/2);
+        glVertex3f (0, 0, 0);
+        glVertex3f (0, 0, l);
+
+        glNormal3f (0.0, normalY, -normalXZ);
+        glVertex3f (l/2, a, l/2);
+        glVertex3f (l, 0, 0);
+        glVertex3f (0, 0, 0);
+
+        glNormal3f (normalXZ, normalY, 0.0);
+        glVertex3f (l/2, a, l/2);
+        glVertex3f (l, 0, l);
+        glVertex3f (l, 0, 0);
+
+        glNormal3f (0.0, normalY, normalXZ);
+        glVertex3f (l/2, a, l/2);
+        glVertex3f (0, 0, l);
+        glVertex3f (l, 0, l);
+
+    }
+    glEnd ();
+}
+};
+
+
 
 
 Ejes ejesCoordenadas;
@@ -223,16 +278,16 @@ void Dibuja (void)
 
     ejesCoordenadas.draw();			// Dibuja los ejes
 
-    if (iluminacion)
+    if (iluminacion) //Activa / desactiva la iluminación de las figuras
         glEnable(GL_LIGHTING);
     else
         glDisable(GL_LIGHTING);
 
-    glPolygonMode (GL_FRONT_AND_BACK, modo) ;
+    glPolygonMode (GL_FRONT_AND_BACK, modo) ; //Cambia los modos de visualización
 
     cubo.draw(); //Dibuja el cubo
 
-    glTranslatef( 7, 0, 0 );
+    glTranslatef( 7, 0, 0 ); //Traslada la siguiente figura
 
     piramide.draw(); //Dibuja la pirámide
 
