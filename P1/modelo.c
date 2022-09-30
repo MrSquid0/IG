@@ -188,12 +188,12 @@ void draw(){
 }
 };
 
-class Rectangulo:Objeto3D{
+class Prisma:Objeto3D{
 private:
 float l, a;
 float B, normalY, normalXZ;
 public:
-Rectangulo (float lado, float alto){
+Prisma (float lado, float alto){
     l = lado;
     a = alto;
     B = sqrt(l*l + a*a);
@@ -201,7 +201,7 @@ Rectangulo (float lado, float alto){
     normalXZ = l / B;
 };
 void draw(){
-    //Construye un rectángulo dado un lado y el alto
+    //Construye un prisma dado un lado y el alto
 
     float color3[4] = { 1.0, 0.0, 0.0, 1 };
     glMaterialfv (GL_FRONT, GL_AMBIENT_AND_DIFFUSE, color3);
@@ -315,7 +315,7 @@ void draw(){
 Ejes ejesCoordenadas;
 Cubo cubo(5);
 Piramide piramide(5,6);
-Rectangulo rectangulo (5,8);
+Prisma prisma (5,8);
 PiramideTriangular piramideTriangular (7,9);
 
 
@@ -356,7 +356,7 @@ void Dibuja (void)
 
     glTranslatef( -10, 0, 10 ); //Traslada la siguiente figura
 
-    rectangulo.draw(); // Dibuja el rectángulo
+    prisma.draw(); // Dibuja el prisma
 
     glTranslatef( 10, 0, 0 ); //Traslada la siguiente figura
 
