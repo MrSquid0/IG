@@ -194,10 +194,10 @@ void draw(){
 
 class Rectangulo:Objeto3D{
 private:
-float l, a
+float l, a;
 float B, normalY, normalXZ;
 public:
-Piramide (float lado, float alto){
+Rectangulo (float lado, float alto){
     l = lado;
     a = alto;
     B = sqrt(l*l + a*a);
@@ -205,42 +205,57 @@ Piramide (float lado, float alto){
     normalXZ = l / B;
 };
 void draw(){
-    //Construye una pirámide dado un lado y el alto
+    //Construye un rectángulo dado un lado y el alto
 
-    float color2[4] = { 0.0, 1.0, 0.0, 1 };
-    glMaterialfv (GL_FRONT, GL_AMBIENT_AND_DIFFUSE, color2);
+    float color3[4] = { 1.0, 0.0, 0.0, 1 };
+    glMaterialfv (GL_FRONT, GL_AMBIENT_AND_DIFFUSE, color3);
     glBegin (GL_QUADS);
-    {				/* Caras transversales */
+    {				//Cara inferior
         glNormal3f (0.0, -normalY, 0.0);
         glVertex3f (0, 0, 0);
         glVertex3f (l, 0, 0);
         glVertex3f (l, 0, l);
         glVertex3f (0, 0, l);
+
+
+        //Cara superior
+        glNormal3f (0.0, normalY, 0.0);
+        glVertex3f (0, a, 0);
+        glVertex3f (0, a, l);
+        glVertex3f (l, a, l);
+        glVertex3f (l, a, 0);
     }
     glEnd ();
 
-    glBegin (GL_TRIANGLES);
+    glBegin (GL_QUADS);
     {
-        glNormal3f (-normalXZ, normalY, 0.0);
-        glVertex3f (l/2, a, l/2);
+        //Cara delantera
+        glNormal3f (0.0, 0.0, normalXZ);
+        glVertex3f (0, a, l);
+        glVertex3f (0, 0, l);
+        glVertex3f (l, 0, l);
+        glVertex3f (l, a, l);
+
+        //Cara izquierda
+        glNormal3f (-normalXZ, 0.0, 0.0);
+        glVertex3f (0, a, 0);
         glVertex3f (0, 0, 0);
         glVertex3f (0, 0, l);
+        glVertex3f (0, a, l);
 
-        glNormal3f (0.0, normalY, -normalXZ);
-        glVertex3f (l/2, a, l/2);
+        //Cara inferior
+        glNormal3f (0.0, 0.0, -normalXZ);
+        glVertex3f (0, a, 0);
+        glVertex3f (l, a, 0);
         glVertex3f (l, 0, 0);
         glVertex3f (0, 0, 0);
 
-        glNormal3f (normalXZ, normalY, 0.0);
-        glVertex3f (l/2, a, l/2);
+        //Cara derecha
+        glNormal3f (normalXZ, 0.0, 0.0);
+        glVertex3f (l, a, 0);
+        glVertex3f (l, a, l);
         glVertex3f (l, 0, l);
         glVertex3f (l, 0, 0);
-
-        glNormal3f (0.0, normalY, normalXZ);
-        glVertex3f (l/2, a, l/2);
-        glVertex3f (0, 0, l);
-        glVertex3f (l, 0, l);
-
     }
     glEnd ();
 }
@@ -252,6 +267,7 @@ void draw(){
 Ejes ejesCoordenadas;
 Cubo cubo(5);
 Piramide piramide(5,6);
+Rectangulo rectangulo (5,8);
 
 
 /**	void Dibuja( void )
@@ -290,6 +306,10 @@ void Dibuja (void)
     glTranslatef( 7, 0, 0 ); //Traslada la siguiente figura
 
     piramide.draw(); //Dibuja la pirámide
+
+    glTranslatef( 7, 0, 0 ); //Traslada la siguiente figura
+
+    rectangulo.draw();
 
     glMaterialfv (GL_FRONT, GL_AMBIENT_AND_DIFFUSE, color);
 
