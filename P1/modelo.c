@@ -1,33 +1,27 @@
 /*	Prácticas de Informática Gráfica
-
 	Grupo C					Curso 2022-23
- 	
-	Codigo base para la realización de las practicas de IG
-	
-	Estudiante: Gonzalo Jose Lopez Castilla
 
+	Codigo base para la realización de las practicas de IG
+
+	Estudiante: Gonzalo Jose Lopez Castilla
 =======================================================
-	G. Arroyo, J.C. Torres 
+	G. Arroyo, J.C. Torres
 	Dpto. Lenguajes y Sistemas Informticos
 	(Univ. de Granada)
-
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
  as published by the Free Software Foundation; either version 2
  of the License, or (at your option) any later version.
-
  This program is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU General Public License for more details 
+ GNU General Public License for more details
  http://www.gnu.org/copyleft/gpl.html
-
 =======================================================/
 modulo modelo.c
     Representación del modelo
     Funciones de dibujo
     Función Idle
-
 */
 #include <iostream>
 #include <stdio.h>
@@ -38,10 +32,7 @@ modulo modelo.c
 
 
 /**	void initModel()
-
 Inicializa el modelo y de las variables globales
-
-
 **/
 void
 initModel ()
@@ -146,6 +137,7 @@ public:
 Piramide (float lado, float alto){
     l = lado;
     a = alto;
+    //Cálculo de las normales a través de la fórmula
     B = sqrt(l*l + a*a);
     normalY = a / B;
     normalXZ = l / B;
@@ -156,7 +148,7 @@ void draw(){
     float color2[4] = { 0.0, 1.0, 0.0, 1 };
     glMaterialfv (GL_FRONT, GL_AMBIENT_AND_DIFFUSE, color2);
     glBegin (GL_QUADS);
-    {				/* Caras transversales */
+    {   //Base de la pirámide
         glNormal3f (0.0, -normalY, 0.0);
         glVertex3f (0, 0, 0);
         glVertex3f (l, 0, 0);
@@ -167,21 +159,25 @@ void draw(){
 
     glBegin (GL_TRIANGLES);
     {
+        //Cara izquierda
         glNormal3f (-normalXZ, normalY, 0.0);
         glVertex3f (l/2, a, l/2);
         glVertex3f (0, 0, 0);
         glVertex3f (0, 0, l);
 
+        //Cara trasera
         glNormal3f (0.0, normalY, -normalXZ);
         glVertex3f (l/2, a, l/2);
         glVertex3f (l, 0, 0);
         glVertex3f (0, 0, 0);
 
+        //Cara derecha
         glNormal3f (normalXZ, normalY, 0.0);
         glVertex3f (l/2, a, l/2);
         glVertex3f (l, 0, l);
         glVertex3f (l, 0, 0);
 
+        //Cara delantera
         glNormal3f (0.0, normalY, normalXZ);
         glVertex3f (l/2, a, l/2);
         glVertex3f (0, 0, l);
@@ -210,7 +206,7 @@ void draw(){
     float color3[4] = { 1.0, 0.0, 0.0, 1 };
     glMaterialfv (GL_FRONT, GL_AMBIENT_AND_DIFFUSE, color3);
     glBegin (GL_QUADS);
-    {				//Cara inferior
+    {	//Cara inferior
         glNormal3f (0.0, -normalY, 0.0);
         glVertex3f (0, 0, 0);
         glVertex3f (l, 0, 0);
@@ -243,7 +239,7 @@ void draw(){
         glVertex3f (0, 0, l);
         glVertex3f (0, a, l);
 
-        //Cara inferior
+        //Cara trasera
         glNormal3f (0.0, 0.0, -normalXZ);
         glVertex3f (0, a, 0);
         glVertex3f (l, a, 0);
@@ -261,19 +257,70 @@ void draw(){
 }
 };
 
+class PiramideTriangular:Objeto3D{
+private:
+float l, a;
+float B, normalY, normalXZ;
+public:
+PiramideTriangular (float lado, float alto){
+    l = lado;
+    a = alto;
+    B = sqrt(l*l + a*a);
+    normalY = a / B;
+    normalXZ = l / B;
+};
+void draw(){
+    //Construye una pirámide de base triangular dado un lado y el alto
+
+    float color3[4] = { 1.0, 1.0, 0.0, 1 };
+    glMaterialfv (GL_FRONT, GL_AMBIENT_AND_DIFFUSE, color3);
+    glBegin (GL_TRIANGLES);
+    {	//Base de la pirámide triangular
+        glNormal3f (0.0, -normalY, 0.0);
+        glVertex3f (0, 0, 0);
+        glVertex3f (l, 0, 0);
+        glVertex3f (0, 0, l);
+    }
+    glEnd ();
+
+    glBegin (GL_TRIANGLES);
+    {	//Cara izquierda
+        glNormal3f (-normalXZ, 0.0, 0.0);
+        glVertex3f (0, 0, 0);
+        glVertex3f (0, 0, l/2);
+        glVertex3f (0, a, 0);
+
+        //Cara derecha
+        glNormal3f (0.0, 0.0, -normalXZ);
+        glVertex3f (0, 0, 0);
+        glVertex3f (0, a, 0);
+        glVertex3f (l/2, 0, 0);
+
+        //Cara delantera
+        glNormal3f (normalXZ, 0.0, normalXZ);
+        glVertex3f (0, a, 0);
+        glVertex3f (0, 0, l/2);
+        glVertex3f (l/2, 0, 0);
+    }
+    glEnd ();
+}
+};
 
 
+
+/**
+ * Instanciamos objetos de los ejes y las cuatro figuras
+ */
 
 Ejes ejesCoordenadas;
 Cubo cubo(5);
 Piramide piramide(5,6);
 Rectangulo rectangulo (5,8);
+PiramideTriangular piramideTriangular (7,9);
 
 
 /**	void Dibuja( void )
-
 Procedimiento de dibujo del modelo. Es llamado por glut cada vez que se debe redibujar.
-
 **/
 
 void Dibuja (void)
@@ -295,21 +342,25 @@ void Dibuja (void)
     ejesCoordenadas.draw();			// Dibuja los ejes
 
     if (iluminacion) //Activa / desactiva la iluminación de las figuras
-        glEnable(GL_LIGHTING);
+        glEnable(GL_LIGHTING); //Activa
     else
-        glDisable(GL_LIGHTING);
+        glDisable(GL_LIGHTING); //Desactiva
 
     glPolygonMode (GL_FRONT_AND_BACK, modo) ; //Cambia los modos de visualización
 
     cubo.draw(); //Dibuja el cubo
 
-    glTranslatef( 7, 0, 0 ); //Traslada la siguiente figura
+    glTranslatef( 10, 0, 0 ); //Traslada la siguiente figura
 
     piramide.draw(); //Dibuja la pirámide
 
-    glTranslatef( 7, 0, 0 ); //Traslada la siguiente figura
+    glTranslatef( -10, 0, 10 ); //Traslada la siguiente figura
 
-    rectangulo.draw();
+    rectangulo.draw(); // Dibuja el rectángulo
+
+    glTranslatef( 10, 0, 0 ); //Traslada la siguiente figura
+
+    piramideTriangular.draw(); //Dibuja la pirámide triangular
 
     glMaterialfv (GL_FRONT, GL_AMBIENT_AND_DIFFUSE, color);
 
@@ -323,9 +374,7 @@ void Dibuja (void)
 
 
 /**	void idle()
-
 Procedimiento de fondo. Es llamado por glut cuando no hay eventos pendientes.
-
 **/
 void idle (int v) {
 
