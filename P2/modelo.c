@@ -31,6 +31,7 @@ modulo modelo.c
 #include "practicasIG.h"
 #include <vector>
 #include "file_ply_stl.h"
+#include <fstream>
 
 
 /**	void initModel()
@@ -86,45 +87,104 @@ void draw( )
 
 class mallaTriangulos:Objeto3D{
     private:
-
+    //Almacena todos los vértices y caras de los archivos '.ply'
     std::vector<float> vertices_ply;
     std::vector<int> caras_ply;
 
+    //Almacena los vértices y las caras de los anteriores vectores
     std::vector<struct vertice> vertices;
     std::vector<struct cara> caras;
 
+    //Almacena las normales de los vértices y de las caras
+    std::vector<struct vertice> normalesCaras;
+    std::vector<struct vertice> normalesVertices;
+
     public:
-    //Constructor de la malla
-    mallaTriangulos(){
-        ply::read("./plys/beethoven.ply", vertices_ply, caras_ply);
+    //Constructor de la malla pasándole por argumento la figura que queramos dibujar
+    mallaTriangulos(char archivo[50]){
+        char fichero[50];
+        sprintf(fichero, "./plys/%s", archivo);
+        ply::read(fichero, vertices_ply, caras_ply);
 
-        vertices.resize(vertices_ply.size() / 3);
-        int contador = 0;
-
+        int contador = 0; //Contador de vértices
 
         //Introducimos las 3 coordenadas (x,y,z) en cada vértice
+        vertices.resize(vertices_ply.size() / 3);
         for (int i=0; i<vertices_ply.size(); i+=3){
             vertices[contador].x = vertices_ply[i];
             vertices[contador].y = vertices_ply[i+1];
             vertices[contador].z = vertices_ply[i+2];
             contador++;
         }
+        contador = 0; //Reseteamos a 0 para ser ahora contador de caras
 
         //Introducimos los 3 vértices en cada cara (v1, v2, v3)
         caras.resize(caras_ply.size() / 3);
-        contador = 0;
         for (int i=0; i<caras_ply.size(); i+=3){
             caras[contador].v1 = caras_ply[i];
             caras[contador].v2 = caras_ply[i+1];
             caras[contador].v3 = caras_ply[i+2];
             contador++;
         }
+
+        //Calculamos las normales de las caras
+        normalesCaras.resize(caras.size());
+        for (int i=0; i<caras.size(); i++){
+            vertice vector1, vector2, prodVec;
+            float modulo;
+
+            //Calculamos el vector 1 de la cara (P0, P1)
+            vector1.x = vertices[caras[i].v2].x - vertices[caras[i].v1].x;
+            vector1.y = vertices[caras[i].v2].y - vertices[caras[i].v1].y;
+            vector1.z = vertices[caras[i].v2].z - vertices[caras[i].v1].z;
+
+            //Calculamos el vector 2 de la cara (P0, P2)
+            vector2.x = vertices[caras[i].v3].x - vertices[caras[i].v1].x;
+            vector2.y = vertices[caras[i].v3].y - vertices[caras[i].v1].y;
+            vector2.z = vertices[caras[i].v3].z - vertices[caras[i].v1].z;
+
+            //Calculamos el producto vectorial de vector1 con vector2
+            prodVec.x = (vector1.y * vector2.z) - (vector1.z * vector2.y);
+            prodVec.y = -1 * ((vector1.x * vector2.z) - (vector1.z * vector2.x));
+            prodVec.z = (vector1.x * vector2.y) - (vector1.y * vector2.x);
+
+            //Calculamos el módulo
+            modulo = sqrt(pow(prodVec.x, 2) + pow(prodVec.y, 2) + pow(prodVec.z, 2));
+
+            normalesCaras[i].x = prodVec.x / modulo;
+            normalesCaras[i].y = prodVec.y / modulo;
+            normalesCaras[i].z = prodVec.z / modulo;
+        }
+
+        //Calculamos las normales de los vértices
+        normalesVertices.resize(vertices.size());
+        for (int i=0; i<normalesVertices.size(); i++){
+
+            //Calculamos la normal del vértice 1 de la cara
+            normalesVertices[caras[i].v1].x += normalesCaras[i].x;
+            normalesVertices[caras[i].v1].y += normalesCaras[i].y;
+            normalesVertices[caras[i].v1].z += normalesCaras[i].z;
+
+            //Calculamos la normal del vértice 2 de la cara
+            normalesVertices[caras[i].v2].x += normalesCaras[i].x;
+            normalesVertices[caras[i].v2].y += normalesCaras[i].y;
+            normalesVertices[caras[i].v2].z += normalesCaras[i].z;
+
+            //Calculamos la normal del vértice 3 de la cara
+            normalesVertices[caras[i].v3].x += normalesCaras[i].x;
+            normalesVertices[caras[i].v3].y += normalesCaras[i].y;
+            normalesVertices[caras[i].v3].z += normalesCaras[i].z;
+        }
+
     }
     //Método para dibujar la malla
     void draw(){
         glBegin (GL_TRIANGLES);
         {
             for (int i=0; i<caras.size(); i++){
+                //Dibujamos la normal de la figura
+                glNormal3f(normalesCaras[i].x, normalesCaras[i].y, normalesCaras[i].z);
+                //Dibujamos los vértices de las caras
                 glVertex3f (vertices[caras[i].v1].x, vertices[caras[i].v1].y, vertices[caras[i].v1].z);
                 glVertex3f (vertices[caras[i].v2].x, vertices[caras[i].v2].y, vertices[caras[i].v2].z);
                 glVertex3f (vertices[caras[i].v3].x, vertices[caras[i].v3].y, vertices[caras[i].v3].z);
@@ -140,7 +200,9 @@ class mallaTriangulos:Objeto3D{
  */
 
 Ejes ejesCoordenadas;
-mallaTriangulos malla;
+mallaTriangulos malla("beethoven.ply");
+mallaTriangulos mallaDos("dentadura.ply");
+mallaTriangulos mallaTres("big_dodge.ply");
 
 
 /**	void Dibuja( void )
@@ -172,7 +234,17 @@ void Dibuja (void)
 
     glPolygonMode (GL_FRONT_AND_BACK, modo) ; //Cambia los modos de visualización
 
+    glTranslatef( -50, 0, 0 ); //Traslada la primera figura a -50x
+
     malla.draw(); //Dibuja la malla de triángulos
+
+    glTranslatef( 50, 0, 0 ); //Traslada la siguiente figura
+
+    mallaDos.draw();
+
+    glTranslatef( 50, 0, 0 ); //Traslada la siguiente figura
+
+    mallaTres.draw();
 
     glMaterialfv (GL_FRONT, GL_AMBIENT_AND_DIFFUSE, color);
 
