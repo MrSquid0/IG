@@ -111,7 +111,7 @@ class mallaTriangulos:Objeto3D{
         }
 
         //Introducimos los 3 vértices en cada cara (v1, v2, v3)
-        caras.resize(caras.size() / 3);
+        caras.resize(caras_ply.size() / 3);
         contador = 0;
         for (int i=0; i<caras_ply.size(); i+=3){
             caras[contador].v1 = caras_ply[i];
