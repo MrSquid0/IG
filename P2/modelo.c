@@ -217,7 +217,7 @@ class mallaTriangulos:Objeto3D{
         glEnd();
     }
 
-    //Método para dibujar la malla
+    //Lo dejamos sin implementar, ya que de lo contrario, da error y en su lugar, usamos la función pinta() de abajo
     void draw(){
 
     }
