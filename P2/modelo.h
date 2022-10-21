@@ -52,6 +52,14 @@ void setModo (int M);
 **/
 void iluminacionON ();
 
+struct vertice{
+    float x, y, z; //Coordenadas x,y,z que componen un vértice
+};
+
+struct cara{
+    int v1, v2, v3; //Índice de vértices que componen una cara
+};
+
 
 
 class Objeto3D 

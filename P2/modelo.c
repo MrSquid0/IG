@@ -29,6 +29,8 @@ modulo modelo.c
 #include <math.h>
 #include <GL/glut.h>		// Libreria de utilidades de OpenGL
 #include "practicasIG.h"
+#include <vector>
+#include "file_ply_stl.h"
 
 
 /**	void initModel()
@@ -82,230 +84,55 @@ void draw( )
 }
 };
 
-class Cubo:Objeto3D{
-private:
-float l;
-public:
-Cubo (float lado){
-    l = lado;
-};
-void draw(){
-    //Construye un cubo dado un lado
+class mallaTriangulos:Objeto3D{
+    private:
 
-    float color[4] = { 0.8, 0.0, 1, 1 };
-    glMaterialfv (GL_FRONT, GL_AMBIENT_AND_DIFFUSE, color);
-    glBegin (GL_QUAD_STRIP);
-    {				/* Caras transversales */
-        glNormal3f (0.0, 0.0, 1.0);	/*Vertical delantera */
-        glVertex3f (l, l, l);
-        glVertex3f (0, l, l);
-        glVertex3f (l, 0, l);
-        glVertex3f (0, 0, l);
-        glNormal3f (0.0, -1.0, 0.0);	/*Inferior */
-        glVertex3f (l, 0, 0);
-        glVertex3f (0, 0, 0);
-        glNormal3f (0.0, 0.0, -1.0);	/* Vertical hacia atras */
-        glVertex3f (l, l, 0);
-        glVertex3f (0, l, 0);
-        glNormal3f (0.0, 1.0, 0.0);	/* Superior, horizontal */
-        glVertex3f (l, l, l);
-        glVertex3f (0, l, l);
+    std::vector<float> vertices_ply;
+    std::vector<int> caras_ply;
+
+    std::vector<struct vertice> vertices;
+    std::vector<struct cara> caras;
+
+    public:
+    //Constructor de la malla
+    mallaTriangulos(){
+        ply::read("./plys/beethoven.ply", vertices_ply, caras_ply);
+
+        vertices.resize(vertices_ply.size() / 3);
+        int contador = 0;
+
+
+        //Introducimos las 3 coordenadas (x,y,z) en cada vértice
+        for (int i=0; i<vertices_ply.size(); i+=3){
+            vertices[contador].x = vertices_ply[i];
+            vertices[contador].y = vertices_ply[i+1];
+            vertices[contador].z = vertices_ply[i+2];
+            contador++;
+        }
+
+        //Introducimos los 3 vértices en cada cara (v1, v2, v3)
+        caras.resize(caras.size() / 3);
+        contador = 0;
+        for (int i=0; i<caras_ply.size(); i+=3){
+            caras[contador].v1 = caras_ply[i];
+            caras[contador].v2 = caras_ply[i+1];
+            caras[contador].v3 = caras_ply[i+2];
+            contador++;
+        }
     }
-    glEnd ();
-    glBegin (GL_QUADS);
-    {				/* Costados */
-        glNormal3f (1.0, 0.0, 0.0);
-        glVertex3f (l, 0, 0);
-        glVertex3f (l, l, 0);
-        glVertex3f (l, l, l);
-        glVertex3f (l, 0, l);
-        glNormal3f (-1.0, 0.0, 0.0);
-        glVertex3f (0, 0, 0);
-        glVertex3f (0, 0, l);
-        glVertex3f (0, l, l);
-        glVertex3f (0, l, 0);
+    //Método para dibujar la malla
+    void draw(){
+        glBegin (GL_TRIANGLES);
+        {
+            for (int i=0; i<caras.size(); i++){
+                glVertex3f (vertices[caras[i].v1].x, vertices[caras[i].v1].y, vertices[caras[i].v1].z);
+                glVertex3f (vertices[caras[i].v2].x, vertices[caras[i].v2].y, vertices[caras[i].v2].z);
+                glVertex3f (vertices[caras[i].v3].x, vertices[caras[i].v3].y, vertices[caras[i].v3].z);
+            }
+        }
+        glEnd();
     }
-    glEnd ();
-}
 };
-
-class Piramide:Objeto3D{
-private:
-float l, a;
-float B, normalY, normalXZ;
-public:
-Piramide (float lado, float alto){
-    l = lado;
-    a = alto;
-    //Cálculo de las normales a través de la fórmula
-    B = sqrt(l*l + a*a);
-    normalY = a / B;
-    normalXZ = l / B;
-};
-void draw(){
-    //Construye una pirámide dado un lado y el alto
-
-    float color2[4] = { 0.0, 1.0, 0.0, 1 };
-    glMaterialfv (GL_FRONT, GL_AMBIENT_AND_DIFFUSE, color2);
-    glBegin (GL_QUADS);
-    {   //Base de la pirámide
-        glNormal3f (0.0, -normalY, 0.0);
-        glVertex3f (0, 0, 0);
-        glVertex3f (l, 0, 0);
-        glVertex3f (l, 0, l);
-        glVertex3f (0, 0, l);
-    }
-    glEnd ();
-
-    glBegin (GL_TRIANGLES);
-    {
-        //Cara izquierda
-        glNormal3f (-normalXZ, normalY, 0.0);
-        glVertex3f (l/2, a, l/2);
-        glVertex3f (0, 0, 0);
-        glVertex3f (0, 0, l);
-
-        //Cara trasera
-        glNormal3f (0.0, normalY, -normalXZ);
-        glVertex3f (l/2, a, l/2);
-        glVertex3f (l, 0, 0);
-        glVertex3f (0, 0, 0);
-
-        //Cara derecha
-        glNormal3f (normalXZ, normalY, 0.0);
-        glVertex3f (l/2, a, l/2);
-        glVertex3f (l, 0, l);
-        glVertex3f (l, 0, 0);
-
-        //Cara delantera
-        glNormal3f (0.0, normalY, normalXZ);
-        glVertex3f (l/2, a, l/2);
-        glVertex3f (0, 0, l);
-        glVertex3f (l, 0, l);
-
-    }
-    glEnd ();
-}
-};
-
-class Prisma:Objeto3D{
-private:
-float l, a;
-float B, normalY, normalXZ;
-public:
-Prisma (float lado, float alto){
-    l = lado;
-    a = alto;
-    B = sqrt(l*l + a*a);
-    normalY = a / B;
-    normalXZ = l / B;
-};
-void draw(){
-    //Construye un prisma dado un lado y el alto
-
-    float color3[4] = { 1.0, 0.0, 0.0, 1 };
-    glMaterialfv (GL_FRONT, GL_AMBIENT_AND_DIFFUSE, color3);
-    glBegin (GL_QUADS);
-    {	//Cara inferior
-        glNormal3f (0.0, -normalY, 0.0);
-        glVertex3f (0, 0, 0);
-        glVertex3f (l, 0, 0);
-        glVertex3f (l, 0, l);
-        glVertex3f (0, 0, l);
-
-
-        //Cara superior
-        glNormal3f (0.0, normalY, 0.0);
-        glVertex3f (0, a, 0);
-        glVertex3f (0, a, l);
-        glVertex3f (l, a, l);
-        glVertex3f (l, a, 0);
-    }
-    glEnd ();
-
-    glBegin (GL_QUADS);
-    {
-        //Cara delantera
-        glNormal3f (0.0, 0.0, normalXZ);
-        glVertex3f (0, a, l);
-        glVertex3f (0, 0, l);
-        glVertex3f (l, 0, l);
-        glVertex3f (l, a, l);
-
-        //Cara izquierda
-        glNormal3f (-normalXZ, 0.0, 0.0);
-        glVertex3f (0, a, 0);
-        glVertex3f (0, 0, 0);
-        glVertex3f (0, 0, l);
-        glVertex3f (0, a, l);
-
-        //Cara trasera
-        glNormal3f (0.0, 0.0, -normalXZ);
-        glVertex3f (0, a, 0);
-        glVertex3f (l, a, 0);
-        glVertex3f (l, 0, 0);
-        glVertex3f (0, 0, 0);
-
-        //Cara derecha
-        glNormal3f (normalXZ, 0.0, 0.0);
-        glVertex3f (l, a, 0);
-        glVertex3f (l, a, l);
-        glVertex3f (l, 0, l);
-        glVertex3f (l, 0, 0);
-    }
-    glEnd ();
-}
-};
-
-class PiramideTriangular:Objeto3D{
-private:
-float l, a;
-float B, normalY, normalXZ;
-public:
-PiramideTriangular (float lado, float alto){
-    l = lado;
-    a = alto;
-    B = sqrt(l*l + a*a);
-    normalY = a / B;
-    normalXZ = l / B;
-};
-void draw(){
-    //Construye una pirámide de base triangular dado un lado y el alto
-
-    float color3[4] = { 1.0, 1.0, 0.0, 1 };
-    glMaterialfv (GL_FRONT, GL_AMBIENT_AND_DIFFUSE, color3);
-    glBegin (GL_TRIANGLES);
-    {	//Base de la pirámide triangular
-        glNormal3f (0.0, -normalY, 0.0);
-        glVertex3f (0, 0, 0);
-        glVertex3f (l, 0, 0);
-        glVertex3f (0, 0, l);
-    }
-    glEnd ();
-
-    glBegin (GL_TRIANGLES);
-    {	//Cara izquierda
-        glNormal3f (-normalXZ, 0.0, 0.0);
-        glVertex3f (0, 0, 0);
-        glVertex3f (0, 0, l/2);
-        glVertex3f (0, a, 0);
-
-        //Cara derecha
-        glNormal3f (0.0, 0.0, -normalXZ);
-        glVertex3f (0, 0, 0);
-        glVertex3f (0, a, 0);
-        glVertex3f (l/2, 0, 0);
-
-        //Cara delantera
-        glNormal3f (normalXZ, 0.0, normalXZ);
-        glVertex3f (0, a, 0);
-        glVertex3f (0, 0, l/2);
-        glVertex3f (l/2, 0, 0);
-    }
-    glEnd ();
-}
-};
-
 
 
 /**
@@ -313,10 +140,7 @@ void draw(){
  */
 
 Ejes ejesCoordenadas;
-Cubo cubo(5);
-Piramide piramide(5,6);
-Prisma prisma (5,8);
-PiramideTriangular piramideTriangular (7,9);
+mallaTriangulos malla;
 
 
 /**	void Dibuja( void )
@@ -348,19 +172,7 @@ void Dibuja (void)
 
     glPolygonMode (GL_FRONT_AND_BACK, modo) ; //Cambia los modos de visualización
 
-    cubo.draw(); //Dibuja el cubo
-
-    glTranslatef( 10, 0, 0 ); //Traslada la siguiente figura
-
-    piramide.draw(); //Dibuja la pirámide
-
-    glTranslatef( -10, 0, 10 ); //Traslada la siguiente figura
-
-    prisma.draw(); // Dibuja el prisma
-
-    glTranslatef( 10, 0, 0 ); //Traslada la siguiente figura
-
-    piramideTriangular.draw(); //Dibuja la pirámide triangular
+    malla.draw(); //Dibuja la malla de triángulos
 
     glMaterialfv (GL_FRONT, GL_AMBIENT_AND_DIFFUSE, color);
 
