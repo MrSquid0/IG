@@ -31,7 +31,6 @@ modulo modelo.c
 #include "practicasIG.h"
 #include <vector>
 #include "file_ply_stl.h"
-#include <fstream>
 
 
 /**	void initModel()
@@ -46,6 +45,7 @@ initModel ()
 
 int modo = GL_FILL;
 bool iluminacion = true;
+bool sombraPlana = false;
 
 void setModo (int M){
     modo = M;
@@ -56,6 +56,13 @@ void iluminacionON (){
         iluminacion = false;
     else
         iluminacion = true;
+}
+
+void setSombra (){
+    if (sombraPlana)
+        sombraPlana = false;
+    else
+        sombraPlana = true;
 }
 
 class Ejes:Objeto3D
@@ -101,7 +108,7 @@ class mallaTriangulos:Objeto3D{
 
     public:
     //Constructor de la malla pasándole por argumento la figura que queramos dibujar
-    mallaTriangulos(char archivo[50]){
+    mallaTriangulos(const char archivo[50]){
         char fichero[50];
         sprintf(fichero, "./plys/%s", archivo);
         ply::read(fichero, vertices_ply, caras_ply);
@@ -177,8 +184,9 @@ class mallaTriangulos:Objeto3D{
         }
 
     }
-    //Método para dibujar la malla
-    void draw(){
+
+    void drawFlat(){
+        glShadeModel(GL_FLAT);
         glBegin (GL_TRIANGLES);
         {
             for (int i=0; i<caras.size(); i++){
@@ -192,6 +200,35 @@ class mallaTriangulos:Objeto3D{
         }
         glEnd();
     }
+
+    void drawSmooth(){
+        glShadeModel(GL_SMOOTH);
+        glBegin (GL_TRIANGLES);
+        for (int i=0; i<caras.size(); i++){
+            glNormal3f(normalesVertices[caras[i].v1].x, normalesVertices[caras[i].v1].y, normalesVertices[caras[i].v1].z);
+            glVertex3f(vertices[caras[i].v1].x, vertices[caras[i].v1].y, vertices[caras[i].v1].z);
+
+            glNormal3f(normalesVertices[caras[i].v2].x, normalesVertices[caras[i].v2].y, normalesVertices[caras[i].v2].z);
+            glVertex3f(vertices[caras[i].v2].x, vertices[caras[i].v2].y, vertices[caras[i].v2].z);
+
+            glNormal3f(normalesVertices[caras[i].v3].x, normalesVertices[caras[i].v3].y, normalesVertices[caras[i].v3].z);
+            glVertex3f(vertices[caras[i].v3].x, vertices[caras[i].v3].y, vertices[caras[i].v3].z);
+        }
+        glEnd();
+    }
+
+    //Método para dibujar la malla
+    void draw(){
+
+    }
+
+//Método para dibujar la malla
+void pinta(bool sombra){
+    if (sombraPlana)
+        drawSmooth();
+    else
+        drawFlat();
+}
 };
 
 
@@ -234,17 +271,17 @@ void Dibuja (void)
 
     glPolygonMode (GL_FRONT_AND_BACK, modo) ; //Cambia los modos de visualización
 
-    glTranslatef( -50, 0, 0 ); //Traslada la primera figura a -50x
+    //glTranslatef( -50, 0, 0 ); //Traslada la primera figura a -50x
 
-    malla.draw(); //Dibuja la malla de triángulos
-
-    glTranslatef( 50, 0, 0 ); //Traslada la siguiente figura
-
-    mallaDos.draw();
+    malla.pinta(sombraPlana); //Dibuja la malla de triángulos
 
     glTranslatef( 50, 0, 0 ); //Traslada la siguiente figura
 
-    mallaTres.draw();
+    //mallaDos.pinta(sombraPlana);
+
+    glTranslatef( 50, 0, 0 ); //Traslada la siguiente figura
+
+    //mallaTres.pinta(sombraPlana);
 
     glMaterialfv (GL_FRONT, GL_AMBIENT_AND_DIFFUSE, color);
 

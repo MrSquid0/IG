@@ -52,6 +52,11 @@ void setModo (int M);
 **/
 void iluminacionON ();
 
+/**
+	Funcion para cambiar la sombra de las figuras (sombreado plano o suave)
+**/
+void setSombra ();
+
 struct vertice{
     float x, y, z; //Coordenadas x,y,z que componen un vértice
 };

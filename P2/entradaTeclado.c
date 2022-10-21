@@ -88,16 +88,16 @@ void letra (unsigned char k, int x, int y)
 
   switch (k)
     {
-    case 'p':
+    case 'p': //Cambia la visualización a puntos
       setModo(GL_POINT);
       break;
-    case 'l':
+    case 'l': //Cambia la visualización a líneas
       setModo(GL_LINE);
       break;
-    case 'f':
+    case 'f': //Cambia la visualización a relleno
       setModo(GL_FILL);
       break;
-    case 'i':
+    case 'i': //Activa o desactiva la iluminación de la figura
       iluminacionON();
       break;
     case 'h':
@@ -110,6 +110,9 @@ void letra (unsigned char k, int x, int y)
     case '-':			// aleja la cámara
       dCamara += 5.0;
       break;
+     case 'v':
+         setSombra();
+         break;
     case 27:			// Escape  Terminar
       exit (0);
     default:
