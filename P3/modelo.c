@@ -33,7 +33,6 @@ modulo modelo.c
 #include "file_ply_stl.h"
 #include "estructura.h"
 
-
 /**	void initModel()
 Inicializa el modelo y de las variables globales
 **/
@@ -90,6 +89,53 @@ void draw( )
     }
     glEnd ();
     glEnable (GL_LIGHTING);
+}
+};
+
+class Cubo:Objeto3D{
+private:
+float l;
+public:
+Cubo (float lado){
+    l = lado;
+};
+void draw(){
+    //Construye un cubo dado un lado
+
+    float color[4] = {1.0, 1.0, 0.0, 1 }; //Amarillo
+    glMaterialfv (GL_FRONT, GL_AMBIENT_AND_DIFFUSE, color);
+    glBegin (GL_QUAD_STRIP);
+    {				/* Caras transversales */
+        glNormal3f (0.0, 0.0, 1.0);	/*Vertical delantera */
+        glVertex3f (l, l, l);
+        glVertex3f (0, l, l);
+        glVertex3f (l, 0, l);
+        glVertex3f (0, 0, l);
+        glNormal3f (0.0, -1.0, 0.0);	/*Inferior */
+        glVertex3f (l, 0, 0);
+        glVertex3f (0, 0, 0);
+        glNormal3f (0.0, 0.0, -1.0);	/* Vertical hacia atras */
+        glVertex3f (l, l, 0);
+        glVertex3f (0, l, 0);
+        glNormal3f (0.0, 1.0, 0.0);	/* Superior, horizontal */
+        glVertex3f (l, l, l);
+        glVertex3f (0, l, l);
+    }
+    glEnd ();
+    glBegin (GL_QUADS);
+    {				/* Costados */
+        glNormal3f (1.0, 0.0, 0.0);
+        glVertex3f (l, 0, 0);
+        glVertex3f (l, l, 0);
+        glVertex3f (l, l, l);
+        glVertex3f (l, 0, l);
+        glNormal3f (-1.0, 0.0, 0.0);
+        glVertex3f (0, 0, 0);
+        glVertex3f (0, 0, l);
+        glVertex3f (0, l, l);
+        glVertex3f (0, l, 0);
+    }
+    glEnd ();
 }
 };
 
@@ -238,13 +284,58 @@ void pinta(bool sombra){
  */
 
 Ejes ejesCoordenadas;
+Cubo cubo (1);
 /* Instancias PRÁCTICA 2
 mallaTriangulos malla("beethoven.ply");
 mallaTriangulos mallaDos("dentadura.ply");
 mallaTriangulos mallaTres("big_dodge.ply");
  */
 
+void construyeGrua(){
 
+    float rojo[4] = {1.0f, 0.0f, 0.0f, 0.0f }; //Rojo
+    float amarillo[4] = {1.0f, 1.0f, 0.0f, 1 }; //Amarillo
+    float gris[4] = {0.5f, 0.5f, 0.5f};       //Gris
+
+    glMaterialfv (GL_FRONT, GL_AMBIENT_AND_DIFFUSE, amarillo);
+    glClearColor (0.0, 0.0, 0.0, 1.0);
+    creaEstructura(0, 0, 0,0, 15, 0, 1, 1, 10);
+
+    glTranslatef(-14,15,0);
+
+    creaBrazo(0, 0, 0, 13.5, 0, 0, 1, 6);
+
+    glTranslatef(13.5,0,-0.5);
+
+    cubo.draw();
+
+    glTranslatef(0.5,1,0.5);
+
+    glMaterialfv (GL_FRONT, GL_AMBIENT_AND_DIFFUSE, rojo);
+    creaTorre(0, 0, 0, 0, 3, 0, 1, 1, 3);
+
+    glTranslatef(0.5,-0.5,0);
+
+    glMaterialfv (GL_FRONT, GL_AMBIENT_AND_DIFFUSE, amarillo);
+    creaEstructura(0, 0, 0,5, 0, 0, 1, 1, 6);
+
+    glTranslatef(3.8,-1.5,0);
+
+    glMaterialfv (GL_FRONT, GL_AMBIENT_AND_DIFFUSE, gris);
+    caja(2.5,1,1);
+
+    glTranslatef(-17.7, 0.75,0);
+
+    glMaterialfv (GL_FRONT, GL_AMBIENT_AND_DIFFUSE, rojo);
+    caja (1.25, 0.2, 1);
+
+    glTranslatef(0, -8,0);
+
+    glMaterialfv (GL_FRONT, GL_AMBIENT_AND_DIFFUSE, gris);
+    cilindro(0, 0, 0, 0, 8, 0, 0.1);
+
+    creaGancho(0, 0, 0, 1);
+}
 
 
 
@@ -270,11 +361,7 @@ void Dibuja (void)
 
     ejesCoordenadas.draw();			// Dibuja los ejes
 
-    //caja(3.0, 5.0, 3.0);
-
-    //glTranslatef(10,0,0);
-
-    creaEstructura(2, 10, 4,0, 0, 0, 2, 3, 10);
+    construyeGrua();
 
     if (iluminacion) //Activa / desactiva la iluminación de las figuras
         glEnable(GL_LIGHTING); //Activa
