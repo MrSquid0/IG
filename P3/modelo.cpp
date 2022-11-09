@@ -92,213 +92,28 @@ void draw( )
 }
 };
 
-class Cubo:Objeto3D{
-private:
-float l;
-public:
-Cubo (float lado){
-    l = lado;
-};
-void draw(){
-    //Construye un cubo dado un lado
-
-    float color[4] = {1.0, 1.0, 0.0, 1 }; //Amarillo
-    glMaterialfv (GL_FRONT, GL_AMBIENT_AND_DIFFUSE, color);
-    glBegin (GL_QUAD_STRIP);
-    {				/* Caras transversales */
-        glNormal3f (0.0, 0.0, 1.0);	/*Vertical delantera */
-        glVertex3f (l, l, l);
-        glVertex3f (0, l, l);
-        glVertex3f (l, 0, l);
-        glVertex3f (0, 0, l);
-        glNormal3f (0.0, -1.0, 0.0);	/*Inferior */
-        glVertex3f (l, 0, 0);
-        glVertex3f (0, 0, 0);
-        glNormal3f (0.0, 0.0, -1.0);	/* Vertical hacia atras */
-        glVertex3f (l, l, 0);
-        glVertex3f (0, l, 0);
-        glNormal3f (0.0, 1.0, 0.0);	/* Superior, horizontal */
-        glVertex3f (l, l, l);
-        glVertex3f (0, l, l);
-    }
-    glEnd ();
-    glBegin (GL_QUADS);
-    {				/* Costados */
-        glNormal3f (1.0, 0.0, 0.0);
-        glVertex3f (l, 0, 0);
-        glVertex3f (l, l, 0);
-        glVertex3f (l, l, l);
-        glVertex3f (l, 0, l);
-        glNormal3f (-1.0, 0.0, 0.0);
-        glVertex3f (0, 0, 0);
-        glVertex3f (0, 0, l);
-        glVertex3f (0, l, l);
-        glVertex3f (0, l, 0);
-    }
-    glEnd ();
-}
-};
-
-class mallaTriangulos:Objeto3D{
-    private:
-    //Almacena todos los vértices y caras de los archivos '.ply'
-    std::vector<float> vertices_ply;
-    std::vector<int> caras_ply;
-
-    //Almacena los vértices y las caras de los anteriores vectores
-    std::vector<struct vertice> vertices;
-    std::vector<struct cara> caras;
-
-    //Almacena las normales de los vértices y de las caras
-    std::vector<struct vertice> normalesCaras;
-    std::vector<struct vertice> normalesVertices;
-
-    public:
-    //Constructor de la malla pasándole por argumento la figura que queramos dibujar
-    mallaTriangulos(const char archivo[50]){
-        char fichero[50];
-        sprintf(fichero, "./plys/%s", archivo);
-        ply::read(fichero, vertices_ply, caras_ply);
-
-        int contador = 0; //Contador de vértices
-
-        //Introducimos las 3 coordenadas (x,y,z) en cada vértice
-        vertices.resize(vertices_ply.size() / 3);
-        for (int i=0; i<vertices_ply.size(); i+=3){
-            vertices[contador].x = vertices_ply[i];
-            vertices[contador].y = vertices_ply[i+1];
-            vertices[contador].z = vertices_ply[i+2];
-            contador++;
-        }
-        contador = 0; //Reseteamos a 0 para ser ahora contador de caras
-
-        //Introducimos los 3 vértices en cada cara (v1, v2, v3)
-        caras.resize(caras_ply.size() / 3);
-        for (int i=0; i<caras_ply.size(); i+=3){
-            caras[contador].v1 = caras_ply[i];
-            caras[contador].v2 = caras_ply[i+1];
-            caras[contador].v3 = caras_ply[i+2];
-            contador++;
-        }
-
-        //Calculamos las normales de las caras
-        normalesCaras.resize(caras.size());
-        for (int i=0; i<caras.size(); i++){
-            vertice vector1, vector2, prodVec;
-            float modulo;
-
-            //Calculamos el vector 1 de la cara (P0, P1)
-            vector1.x = vertices[caras[i].v2].x - vertices[caras[i].v1].x;
-            vector1.y = vertices[caras[i].v2].y - vertices[caras[i].v1].y;
-            vector1.z = vertices[caras[i].v2].z - vertices[caras[i].v1].z;
-
-            //Calculamos el vector 2 de la cara (P0, P2)
-            vector2.x = vertices[caras[i].v3].x - vertices[caras[i].v1].x;
-            vector2.y = vertices[caras[i].v3].y - vertices[caras[i].v1].y;
-            vector2.z = vertices[caras[i].v3].z - vertices[caras[i].v1].z;
-
-            //Calculamos el producto vectorial de vector1 con vector2
-            prodVec.x = (vector1.y * vector2.z) - (vector1.z * vector2.y);
-            prodVec.y = -1 * ((vector1.x * vector2.z) - (vector1.z * vector2.x));
-            prodVec.z = (vector1.x * vector2.y) - (vector1.y * vector2.x);
-
-            //Calculamos el módulo
-            modulo = sqrt(pow(prodVec.x, 2) + pow(prodVec.y, 2) + pow(prodVec.z, 2));
-
-            normalesCaras[i].x = prodVec.x / modulo;
-            normalesCaras[i].y = prodVec.y / modulo;
-            normalesCaras[i].z = prodVec.z / modulo;
-        }
-
-        //Calculamos las normales de los vértices
-        normalesVertices.resize(vertices.size());
-        for (int i=0; i<normalesVertices.size(); i++){
-
-            //Calculamos la normal del vértice 1 de la cara
-            normalesVertices[caras[i].v1].x += normalesCaras[i].x;
-            normalesVertices[caras[i].v1].y += normalesCaras[i].y;
-            normalesVertices[caras[i].v1].z += normalesCaras[i].z;
-
-            //Calculamos la normal del vértice 2 de la cara
-            normalesVertices[caras[i].v2].x += normalesCaras[i].x;
-            normalesVertices[caras[i].v2].y += normalesCaras[i].y;
-            normalesVertices[caras[i].v2].z += normalesCaras[i].z;
-
-            //Calculamos la normal del vértice 3 de la cara
-            normalesVertices[caras[i].v3].x += normalesCaras[i].x;
-            normalesVertices[caras[i].v3].y += normalesCaras[i].y;
-            normalesVertices[caras[i].v3].z += normalesCaras[i].z;
-        }
-
-    }
-
-    void drawFlat(){
-        glShadeModel(GL_FLAT);
-        glBegin (GL_TRIANGLES);
-        {
-            for (int i=0; i<caras.size(); i++){
-                //Dibujamos la normal de la figura
-                glNormal3f(normalesCaras[i].x, normalesCaras[i].y, normalesCaras[i].z);
-                //Dibujamos los vértices de las caras
-                glVertex3f (vertices[caras[i].v1].x, vertices[caras[i].v1].y, vertices[caras[i].v1].z);
-                glVertex3f (vertices[caras[i].v2].x, vertices[caras[i].v2].y, vertices[caras[i].v2].z);
-                glVertex3f (vertices[caras[i].v3].x, vertices[caras[i].v3].y, vertices[caras[i].v3].z);
-            }
-        }
-        glEnd();
-    }
-
-    void drawSmooth(){
-        glShadeModel(GL_SMOOTH);
-        glBegin (GL_TRIANGLES);
-        for (int i=0; i<caras.size(); i++){
-            glNormal3f(normalesVertices[caras[i].v1].x, normalesVertices[caras[i].v1].y, normalesVertices[caras[i].v1].z);
-            glVertex3f(vertices[caras[i].v1].x, vertices[caras[i].v1].y, vertices[caras[i].v1].z);
-
-            glNormal3f(normalesVertices[caras[i].v2].x, normalesVertices[caras[i].v2].y, normalesVertices[caras[i].v2].z);
-            glVertex3f(vertices[caras[i].v2].x, vertices[caras[i].v2].y, vertices[caras[i].v2].z);
-
-            glNormal3f(normalesVertices[caras[i].v3].x, normalesVertices[caras[i].v3].y, normalesVertices[caras[i].v3].z);
-            glVertex3f(vertices[caras[i].v3].x, vertices[caras[i].v3].y, vertices[caras[i].v3].z);
-        }
-        glEnd();
-    }
-
-    //Lo dejamos sin implementar, ya que de lo contrario, da error y en su lugar, usamos la función pinta() de abajo
-    void draw(){
-
-    }
-
-//Método para dibujar la malla
-void pinta(bool sombra){
-    if (sombraPlana)
-        drawSmooth();
-    else
-        drawFlat();
-}
-};
-
 
 /**
- * Instanciamos objetos de los ejes y las cuatro figuras
+ * Instanciamos objetos de los ejes
  */
 
 Ejes ejesCoordenadas;
-Cubo cubo (1);
-/* Instancias PRÁCTICA 2
-mallaTriangulos malla("beethoven.ply");
-mallaTriangulos mallaDos("dentadura.ply");
-mallaTriangulos mallaTres("big_dodge.ply");
+
+
+/**
+ * Colores
  */
 
+float rojo[4] = {1.0f, 0.0f, 0.0f, 0.0f };
+float amarillo[4] = {1.0f, 1.0f, 0.0f, 1 };
+float gris[4] = {0.5f, 0.5f, 0.5f};
+
+/*
 void construyeGrua(){
 
-    float rojo[4] = {1.0f, 0.0f, 0.0f, 0.0f }; //Rojo
-    float amarillo[4] = {1.0f, 1.0f, 0.0f, 1 }; //Amarillo
-    float gris[4] = {0.5f, 0.5f, 0.5f};       //Gris
+
 
     glMaterialfv (GL_FRONT, GL_AMBIENT_AND_DIFFUSE, amarillo);
-    glClearColor (0.0, 0.0, 0.0, 1.0);
     creaEstructura(0, 0, 0,0, 15, 0, 1, 1, 10);
 
     glTranslatef(-14,15,0);
@@ -336,6 +151,177 @@ void construyeGrua(){
 
     creaGancho(0, 0, 0, 1);
 }
+ */
+
+
+void A (float xzPie, float yPie, int numMallas){
+    glMaterialfv (GL_FRONT, GL_AMBIENT_AND_DIFFUSE, amarillo);
+    creaEstructura(0, 0, 0, 0, yPie, 0, xzPie, xzPie, numMallas);
+}
+
+void B (float xCaja, float yCaja, float zCaja){
+    glMaterialfv (GL_FRONT, GL_AMBIENT_AND_DIFFUSE, amarillo);
+    paralelepipedo(0, 0, 0, 0, yCaja, 0, xCaja, zCaja);
+    //B(1,0.5,1);
+}
+
+void C (float xzTorre, float yTorre, int numMallas){
+    glMaterialfv (GL_FRONT, GL_AMBIENT_AND_DIFFUSE, rojo);
+    creaTorre(0, 0, 0, 0, yTorre, 0, xzTorre, xzTorre, numMallas);
+}
+
+void D (float xBrazoGrande, float zBrazoGrande, int numMallas){
+    glMaterialfv (GL_FRONT, GL_AMBIENT_AND_DIFFUSE, amarillo);
+    creaBrazo(0, 0, 0, xBrazoGrande, 0, 0, zBrazoGrande, numMallas);
+}
+
+void E (float xCaja, float yCaja, float zCaja){
+    glMaterialfv (GL_FRONT, GL_AMBIENT_AND_DIFFUSE, rojo);
+    paralelepipedo(0, 0, 0, 0, yCaja, 0, xCaja, zCaja);
+}
+
+void F (float yCuerda){
+    glMaterialfv (GL_FRONT, GL_AMBIENT_AND_DIFFUSE, gris);
+    cilindro(0, 0, 0, 0, yCuerda, 0, 0.1);
+}
+
+void G (float yGancho){
+    glMaterialfv (GL_FRONT, GL_AMBIENT_AND_DIFFUSE, gris);
+    creaGancho(0, 0, 0, yGancho);
+}
+
+void H (float xBrazoPequenyo, float altoMalla, float anchoMalla, int numMallas){
+    glMaterialfv (GL_FRONT, GL_AMBIENT_AND_DIFFUSE, amarillo);
+    creaEstructura(0, 0, 0, xBrazoPequenyo, 0, 0, altoMalla, anchoMalla, numMallas);
+}
+
+void I (float xCaja, float yCaja, float zCaja){
+    glMaterialfv (GL_FRONT, GL_AMBIENT_AND_DIFFUSE, gris);
+    caja(xCaja,yCaja,zCaja);
+}
+
+
+//H+I
+void brazoPequenyoConCaja(float xBrazoPequenyo){
+
+    int numMallas = xBrazoPequenyo/2;
+    float altoMalla = 0.5, anchoMalla = 1;
+    H (xBrazoPequenyo, altoMalla, anchoMalla, numMallas);
+
+    float xCaja = xBrazoPequenyo/3, yCaja = altoMalla, zCaja = anchoMalla;
+    glTranslatef(xBrazoPequenyo-xCaja/2, altoMalla / 2 - yCaja * 2, 0);
+    I (xCaja, yCaja, zCaja);
+}
+
+//D+E
+void brazoGrandeConCaja(float xBrazoGrande){
+    int numMallas = xBrazoGrande/2;
+    float zBrazoGrande = 1;
+    D(xBrazoGrande, zBrazoGrande, numMallas);
+
+    float xCaja = xBrazoGrande/numMallas, yCaja = zBrazoGrande/8, zCaja = zBrazoGrande;
+    glTranslatef(xCaja/2,-yCaja,0);
+    E(xCaja, yCaja, zCaja);
+}
+
+//F+G
+void cuerdaConGancho(float yCuerda){
+    F(yCuerda);
+
+    float yGancho = yCuerda/4;
+    glTranslatef(0, yCuerda/4-yGancho, 0);
+    G(yGancho);
+}
+
+//D+E+F+G
+void brazoGrande (float xBrazoGrande, float yCuerda){
+
+    glPushMatrix();
+    brazoGrandeConCaja(xBrazoGrande);
+    glPopMatrix();
+
+    int numMallas = xBrazoGrande/8;
+    if (xBrazoGrande <= 15)
+        numMallas = xBrazoGrande/8 * 2;
+    if (xBrazoGrande <= 8)
+        numMallas = xBrazoGrande/8 * 4;
+
+    glPushMatrix();
+    glTranslatef(numMallas/2,-yCuerda,0);
+    cuerdaConGancho(yCuerda);
+    glPopMatrix();
+}
+
+//D+E+F+G+B
+void brazoGrandeConCubo (float xBrazoGrande, float yCuerda){
+    int numMallas = xBrazoGrande/2;
+    glPushMatrix();
+    brazoGrande(xBrazoGrande, yCuerda);
+    glPopMatrix();
+
+    float xCajaCubo = numMallas/4, yCajaCubo = -xCajaCubo/2, zCajaCubo = numMallas/4;
+
+    glPushMatrix();
+        glTranslatef(xBrazoGrande+xCajaCubo/2,0,0);
+        B(xCajaCubo, yCajaCubo, zCajaCubo);
+    glPopMatrix();
+}
+
+//D+E+F+G+B+H+I
+
+void brazoGrandeConCuboYBrazoPequenyo(float xBrazoGrande, float yCuerda, float xBrazoPequenyo){
+    glTranslatef(-xBrazoGrande, 0, 0);
+    glPushMatrix();
+        brazoGrandeConCubo(xBrazoGrande, yCuerda);
+    glPopMatrix();
+
+    int numMallas = xBrazoGrande/2;
+    float xCajaCubo = numMallas/4, yCajaCubo = xCajaCubo/2;
+    glTranslatef(xBrazoGrande+xCajaCubo, yCajaCubo-yCajaCubo/2,0);
+    glPushMatrix();
+    brazoPequenyoConCaja(xBrazoPequenyo);
+    glPopMatrix();
+}
+
+//A+C+D+E+F+G+B+H+I
+void construirGrua(float xBrazoGrande, float yCuerda, float xBrazoPequenyo,
+                   float yPie){
+    //Construimos figura A
+    int numMallasPie = xBrazoGrande/2;
+    float xzPieYTorre = 1;
+    A(xzPieYTorre, yPie, numMallasPie);
+
+    //Construimos figura D+E+F+G+B+H+I
+    int numMallas = xBrazoGrande/2;
+    float xCajaCubo = numMallas/4, yCajaCubo = xCajaCubo/2;
+    glTranslatef(xCajaCubo/2 - xzPieYTorre, yPie + yCajaCubo, 0);
+    glPushMatrix();
+    brazoGrandeConCuboYBrazoPequenyo(xBrazoGrande, yCuerda, xBrazoPequenyo);
+    glPopMatrix();
+
+    //Construimos figura C
+    glTranslatef(xCajaCubo/2,0,0);
+    float yTorre = xBrazoGrande/5;
+    int numMallasTorre = numMallas/2;
+    C(xzPieYTorre, yTorre, numMallasTorre);
+}
+
+/*Parámetros usados para la grúa:
+ *
+ * ****** Brazo pequeño ******
+ * xBrazoPeq --> 5
+ * altoMallaPeq --> 1
+ * anchoMallaPeq --> 1
+ * numMallasPeq --> 6
+ * xCajaPeq --> 2.5
+ * yCajaPeq --> 1
+ * zCajaPeq --> 1
+ *
+ * */
+
+void dibujaGrua(){
+    construirGrua(15,3,6,10);
+}
 
 
 
@@ -361,7 +347,7 @@ void Dibuja (void)
 
     ejesCoordenadas.draw();			// Dibuja los ejes
 
-    construyeGrua();
+    dibujaGrua();
 
     if (iluminacion) //Activa / desactiva la iluminación de las figuras
         glEnable(GL_LIGHTING); //Activa
