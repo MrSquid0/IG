@@ -65,6 +65,15 @@ struct cara{
     int v1, v2, v3; //Índice de vértices que componen una cara
 };
 
+int getAnguloR1();
+int getAnguloR2();
+int getAnguloR3();
+
+void setAnguloR1(int angulo);
+void setAnguloR2(int angulo);
+
+void setAnguloR3(int angulo);
+
 
 
 class Objeto3D 
@@ -72,4 +81,4 @@ class Objeto3D
 public: 
 
 virtual void draw( ) = 0; // Dibuja el objeto
-} ; 
+} ;

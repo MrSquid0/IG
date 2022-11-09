@@ -82,7 +82,6 @@ y:
 float rotxCamara = 30, rotyCamara = 45;
 float dCamara = 10;
 
-
 void letra (unsigned char k, int x, int y)
 {
 
@@ -112,6 +111,36 @@ void letra (unsigned char k, int x, int y)
       break;
      case 'v':
          setSombra();
+         break;
+     case 'B':
+         setAnguloR1(getAnguloR1()+1);
+         if (getAnguloR1()>360)
+             setAnguloR1(getAnguloR1()-360);
+         break;
+     case 'b':
+         setAnguloR1(getAnguloR1()-1);
+         if (getAnguloR1()<0)
+             setAnguloR1(getAnguloR1()+360);
+         break;
+     case 'C':
+         setAnguloR2(getAnguloR2()+1);
+         if (getAnguloR2()>90)
+            setAnguloR2(90);
+         break;
+     case 'c':
+         setAnguloR2(getAnguloR2()-1);
+         if (getAnguloR2()<-90)
+            setAnguloR2(-90);
+         break;
+     case 'M':
+         setAnguloR3(getAnguloR3()+1);
+         if (getAnguloR3()>360)
+            setAnguloR3(getAnguloR3()-360);
+         break;
+     case 'm':
+         setAnguloR3(getAnguloR3()-1);
+         if (getAnguloR3()<0)
+            setAnguloR3(getAnguloR3()+360);
          break;
     case 27:			// Escape  Terminar
       exit (0);
