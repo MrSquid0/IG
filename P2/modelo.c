@@ -163,6 +163,16 @@ class mallaTriangulos:Objeto3D{
             normalesCaras[i].z = prodVec.z / modulo;
         }
 
+
+        //Inicializamos todas las posiciones de normalesVertices a 0,0,0
+        vertice verticesACero;
+        verticesACero.x = 0;
+        verticesACero.y = 0;
+        verticesACero.z = 0;
+        for(int i=0; i<vertices.size(); i++){
+            normalesVertices.push_back(verticesACero);
+        }
+
         //Calculamos las normales de los vértices
         normalesVertices.resize(vertices.size());
         for (int i=0; i<normalesVertices.size(); i++){
@@ -183,8 +193,20 @@ class mallaTriangulos:Objeto3D{
             normalesVertices[caras[i].v3].z += normalesCaras[i].z;
         }
 
+        for (int i=0; i<normalesVertices.size(); i++){
+            float modulo = sqrt(pow(normalesVertices[i].x, 2) + pow(normalesVertices[i].y, 2) +
+            pow (normalesVertices[i].z, 2));
+
+            if (modulo > 0){
+                normalesVertices[i].x = normalesVertices[i].x/modulo;
+                normalesVertices[i].y = normalesVertices[i].y/modulo;
+                normalesVertices[i].z = normalesVertices[i].z/modulo;
+            }
+        }
+
     }
 
+    //Función para pintar la figura con sombra plana
     void drawFlat(){
         glShadeModel(GL_FLAT);
         glBegin (GL_TRIANGLES);
@@ -201,18 +223,24 @@ class mallaTriangulos:Objeto3D{
         glEnd();
     }
 
+    //Función para pintar la figura con sombra suave
     void drawSmooth(){
         glShadeModel(GL_SMOOTH);
         glBegin (GL_TRIANGLES);
-        for (int i=0; i<caras.size(); i++){
-            glNormal3f(normalesVertices[caras[i].v1].x, normalesVertices[caras[i].v1].y, normalesVertices[caras[i].v1].z);
-            glVertex3f(vertices[caras[i].v1].x, vertices[caras[i].v1].y, vertices[caras[i].v1].z);
+        {
+            for (int i = 0; i < caras.size(); i++) {
+                glNormal3f(normalesVertices[caras[i].v1].x, normalesVertices[caras[i].v1].y,
+                           normalesVertices[caras[i].v1].z);
+                glVertex3f(vertices[caras[i].v1].x, vertices[caras[i].v1].y, vertices[caras[i].v1].z);
 
-            glNormal3f(normalesVertices[caras[i].v2].x, normalesVertices[caras[i].v2].y, normalesVertices[caras[i].v2].z);
-            glVertex3f(vertices[caras[i].v2].x, vertices[caras[i].v2].y, vertices[caras[i].v2].z);
+                glNormal3f(normalesVertices[caras[i].v2].x, normalesVertices[caras[i].v2].y,
+                           normalesVertices[caras[i].v2].z);
+                glVertex3f(vertices[caras[i].v2].x, vertices[caras[i].v2].y, vertices[caras[i].v2].z);
 
-            glNormal3f(normalesVertices[caras[i].v3].x, normalesVertices[caras[i].v3].y, normalesVertices[caras[i].v3].z);
-            glVertex3f(vertices[caras[i].v3].x, vertices[caras[i].v3].y, vertices[caras[i].v3].z);
+                glNormal3f(normalesVertices[caras[i].v3].x, normalesVertices[caras[i].v3].y,
+                           normalesVertices[caras[i].v3].z);
+                glVertex3f(vertices[caras[i].v3].x, vertices[caras[i].v3].y, vertices[caras[i].v3].z);
+            }
         }
         glEnd();
     }
@@ -238,8 +266,8 @@ void pinta(bool sombra){
 
 Ejes ejesCoordenadas;
 mallaTriangulos malla("beethoven.ply");
-mallaTriangulos mallaDos("dentadura.ply");
-mallaTriangulos mallaTres("big_dodge.ply");
+//mallaTriangulos mallaDos("dentadura.ply");
+//mallaTriangulos mallaTres("big_dodge.ply");
 
 
 /**	void Dibuja( void )
