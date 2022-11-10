@@ -210,7 +210,7 @@ void draw( )
         H (xBrazoPequenyo, altoMalla, anchoMalla, numMallas);
 
         float xCaja = xBrazoPequenyo/3, yCaja = altoMalla, zCaja = anchoMalla;
-        glTranslatef(xBrazoPequenyo-xCaja/2, altoMalla / 2 - yCaja * 2, 0); //T5
+        glTranslatef(xBrazoPequenyo-xCaja/2, altoMalla / 2 - yCaja * 2, 0); //T4
         I (xCaja, yCaja, zCaja);
     }
 
@@ -221,17 +221,17 @@ void draw( )
         D(xBrazoGrande, zBrazoGrande, numMallas);
 
         float xCaja = xBrazoGrande/numMallas, yCaja = zBrazoGrande/8, zCaja = zBrazoGrande;
-        glTranslatef(xCaja/2,-yCaja,0); //T8
+        glTranslatef(xCaja/2,-yCaja,0); //T7
         E(xCaja, yCaja, zCaja);
     }
 
 //F+G
     void cuerdaConGancho(float yCuerda){
         glRotatef(anguloR2, 0,0,1);//R2
-        F(yCuerda);
+        F(-yCuerda);
 
         float yGancho = yCuerda/4;
-        glTranslatef(0, yCuerda/4-yGancho, 0); //T9
+        glTranslatef(0, -yCuerda, 0); //T8
         glRotatef(anguloR3, 0,1,0);//R3
         G(yGancho);
     }
@@ -249,7 +249,7 @@ void draw( )
         if (xBrazoGrande <= 8)
             numMallas = xBrazoGrande/8 * 4;
 
-        glTranslatef(numMallas/2,-yCuerda,0); //T7
+        glTranslatef(numMallas/2,0,0); //T6
         glPushMatrix();
         cuerdaConGancho(yCuerda);
         glPopMatrix();
@@ -265,7 +265,7 @@ void draw( )
         float xCajaCubo = numMallas/4, yCajaCubo = -xCajaCubo/2, zCajaCubo = numMallas/4;
 
         glPushMatrix();
-        glTranslatef(xBrazoGrande+xCajaCubo/2,0,0); //T6
+        glTranslatef(xBrazoGrande+xCajaCubo/2,0,0); //T5
         B(xCajaCubo, yCajaCubo, zCajaCubo);
         glPopMatrix();
     }
@@ -273,15 +273,16 @@ void draw( )
 //D+E+F+G+B+H+I
 
     void brazoGrandeConCuboYBrazoPequenyo(float xBrazoGrande, float yCuerda, float xBrazoPequenyo){
+        int numMallas = xBrazoGrande/2;
+        float xCajaCubo = numMallas/4, yCajaCubo = xCajaCubo/2;
+
         glRotatef(anguloR1, 0,1,0); //R1
-        glTranslatef(-xBrazoGrande, 0, 0); //T3
+        glTranslatef(-xBrazoGrande-xCajaCubo/2, 0, 0); //T2
         glPushMatrix();
         brazoGrandeConCubo(xBrazoGrande, yCuerda);
         glPopMatrix();
 
-        int numMallas = xBrazoGrande/2;
-        float xCajaCubo = numMallas/4, yCajaCubo = xCajaCubo/2;
-        glTranslatef(xBrazoGrande+xCajaCubo, yCajaCubo-yCajaCubo/2,0); //T4
+        glTranslatef(xBrazoGrande+xCajaCubo, yCajaCubo-yCajaCubo/2,0); //T3
         glPushMatrix();
         brazoPequenyoConCaja(xBrazoPequenyo);
         glPopMatrix();
@@ -298,13 +299,12 @@ void draw( )
         //Construimos figura brazoGrandeConCuboYBrazoPequenyo
         int numMallas = xBrazoGrande/2;
         float xCajaCubo = numMallas/4, yCajaCubo = xCajaCubo/2;
-        glTranslatef(xCajaCubo/2 - xzPieYTorre, yPie + yCajaCubo, 0); //T1
+        glTranslatef(xCajaCubo/2 - xzPieYTorre +xCajaCubo/2, yPie + yCajaCubo, 0); //T1
         glPushMatrix();
         brazoGrandeConCuboYBrazoPequenyo(xBrazoGrande, yCuerda, xBrazoPequenyo);
         glPopMatrix();
 
         //Construimos figura C
-        glTranslatef(xCajaCubo/2,0,0); //T2
         float yTorre = xBrazoGrande/5;
         int numMallasTorre = numMallas/2;
         C(xzPieYTorre, yTorre, numMallasTorre);
@@ -353,20 +353,6 @@ void Dibuja (void)
         glDisable(GL_LIGHTING); //Desactiva
 
     glPolygonMode (GL_FRONT_AND_BACK, modo) ; //Cambia los modos de visualización
-
-    /* Dibujos de la PRÁCTICA 2
-    glTranslatef( -50, 0, 0 ); //Traslada la primera figura a -50x
-
-    malla.pinta(sombraPlana); //Dibuja la malla de triángulos
-
-    glTranslatef( 50, 0, 0 ); //Traslada la siguiente figura
-
-    mallaDos.pinta(sombraPlana);
-
-    glTranslatef( 50, 0, 0 ); //Traslada la siguiente figura
-
-    mallaTres.pinta(sombraPlana);
-    */
 
     glMaterialfv (GL_FRONT, GL_AMBIENT_AND_DIFFUSE, color);
 
