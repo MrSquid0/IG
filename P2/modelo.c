@@ -118,7 +118,7 @@ class mallaTriangulos:Objeto3D{
         //Introducimos las 3 coordenadas (x,y,z) en cada vértice
         vertices.resize(vertices_ply.size() / 3);
         for (int i=0; i<vertices_ply.size(); i+=3){
-            vertices[contador].x = vertices_ply[i];
+            vertices[contador].x = vertices_ply[i]/0.5;
             vertices[contador].y = vertices_ply[i+1];
             vertices[contador].z = vertices_ply[i+2];
             contador++;
