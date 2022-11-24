@@ -36,12 +36,6 @@ modulo modelo.c
 /**	void initModel()
 Inicializa el modelo y de las variables globales
 **/
-void
-initModel ()
-{
-
-
-}
 
 int modo = GL_FILL;
 bool iluminacion = true;
@@ -63,6 +57,10 @@ void setSombra (){
         sombraPlana = false;
     else
         sombraPlana = true;
+}
+
+void setReflectividad(){
+
 }
 
 class Ejes:Objeto3D
@@ -92,6 +90,114 @@ void draw( )
 }
 };
 
+class Cubo:Objeto3D{
+private:
+    float l;
+public:
+    Cubo (float lado){
+        l = lado;
+    };
+    void draw(){
+        glEnable(GL_TEXTURE_2D);
+        glBindTexture(GL_TEXTURE_2D, texId);
+        //Construye un cubo dado un lado
+
+        //color blanco
+        float color[4] = { 1.0, 1.0, 1.0, 0.0 };
+        glMaterialfv (GL_FRONT, GL_AMBIENT_AND_DIFFUSE, color);
+        glBegin (GL_QUADS);
+        {	//Cara inferior
+            glNormal3f (0.0, -1, 0.0);
+            glTexCoord2f(0.5,0.5);
+            glVertex3f (0, 0, 0);
+            glTexCoord2f(0.75,0.5);
+            glVertex3f (l, 0, 0);
+            glTexCoord2f(0.75,0.75);
+            glVertex3f (l, 0, l);
+            glTexCoord2f(0.5,0.75);
+            glVertex3f (0, 0, l);
+
+
+            //Cara superior
+            glNormal3f (0.0, 1, 0.0);
+            glTexCoord2f(0.25,0.5);
+            glVertex3f (0, l, 0);
+            glTexCoord2f(0.25,0.75);
+            glVertex3f (0, l, l);
+            glTexCoord2f(0,0.75);
+            glVertex3f (l, l, l);
+            glTexCoord2f(0,0.5);
+            glVertex3f (l, l, 0);
+        }
+        glEnd ();
+
+        glBegin (GL_QUADS);
+        {
+            //Cara delantera
+            glNormal3f (0.0, 0.0, 1);
+            glTexCoord2f(0.5,1);
+            glVertex3f (0, l, l);
+            glTexCoord2f(0.5,0.75);
+            glVertex3f (0, 0, l);
+            glTexCoord2f(0.75,0.75);
+            glVertex3f (l, 0, l);
+            glTexCoord2f(0.75,1);
+            glVertex3f (l, l, l);
+
+            //Cara izquierda
+            glNormal3f (-1, 0.0, 0.0);
+            glTexCoord2f(0.25,0.5);
+            glVertex3f (0, l, 0);
+            glTexCoord2f(0.25,0.75);
+            glVertex3f (0, 0, 0);
+            glTexCoord2f(0.5,0.75);
+            glVertex3f (0, 0, l);
+            glTexCoord2f(0.5,0.5);
+            glVertex3f (0, l, l);
+
+            //Cara trasera
+            glNormal3f (0.0, 0.0, -1);
+            glTexCoord2f(0.5,0.25);
+            glVertex3f (0, l, 0);
+            glTexCoord2f(0.75,0.25);
+            glVertex3f (l, l, 0);
+            glTexCoord2f(0.75,0.5);
+            glVertex3f (l, 0, 0);
+            glTexCoord2f(0.5,0.5);
+            glVertex3f (0, 0, 0);
+
+            //Cara derecha
+            glNormal3f (1, 0.0, 0.0);
+            glTexCoord2f(1,0.5);
+            glVertex3f (l, l, 0);
+            glTexCoord2f(1,0.75);
+            glVertex3f (l, l, l);
+            glTexCoord2f(0.75,0.75);
+            glVertex3f (l, 0, l);
+            glTexCoord2f(0.75,0.5);
+            glVertex3f (l, 0, 0);
+        }
+        glEnd ();
+        glDisable(GL_TEXTURE_2D);
+    }
+
+    void cargarTextura(){
+        glGenTextures (1, &texId);
+        glBindTexture(GL_TEXTURE_2D, texId);
+
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, ancho, alto, 0,
+                     GL_RGB, GL_UNSIGNED_BYTE, asignarTextura("jpg/dado.jpg"));
+    }
+
+
+};
+
+/*
 class mallaTriangulos:Objeto3D{
     private:
     //Almacena todos los vértices y caras de los archivos '.ply'
@@ -123,7 +229,7 @@ class mallaTriangulos:Objeto3D{
             vertices[contador].z = vertices_ply[i+2];
             contador++;
         }
-        contador = 0; //Reseteamos a 0 para ser ahora contador de caras
+        contador = 0; //Reseteamos l 0 para ser ahora contador de caras
 
         //Introducimos los 3 vértices en cada cara (v1, v2, v3)
         caras.resize(caras_ply.size() / 3);
@@ -164,7 +270,7 @@ class mallaTriangulos:Objeto3D{
         }
 
 
-        //Inicializamos todas las posiciones de normalesVertices a 0,0,0
+        //Inicializamos todas las posiciones de normalesVertices l 0,0,0
         vertice verticesACero;
         verticesACero.x = 0;
         verticesACero.y = 0;
@@ -249,7 +355,6 @@ class mallaTriangulos:Objeto3D{
     void draw(){
 
     }
-
 //Método para dibujar la malla
 void pinta(bool sombra){
     if (sombraPlana)
@@ -259,16 +364,23 @@ void pinta(bool sombra){
 }
 };
 
-
+*/
 /**
  * Instanciamos objetos de los ejes y las cuatro figuras
  */
 
 Ejes ejesCoordenadas;
-mallaTriangulos malla("beethoven.ply");
+Cubo cubo(5);
+//mallaTriangulos malla("beethoven.ply");
 //mallaTriangulos mallaDos("dentadura.ply");
 //mallaTriangulos mallaTres("big_dodge.ply");
 
+void initModel ()
+{
+    cubo.cargarTextura();
+
+
+}
 
 /**	void Dibuja( void )
 Procedimiento de dibujo del modelo. Es llamado por glut cada vez que se debe redibujar.
@@ -282,7 +394,7 @@ void Dibuja (void)
 
     glPushMatrix ();		// Apila la transformacion geometrica actual
 
-    glClearColor (0.0, 0.0, 0.0, 1.0);	// Fija el color de fondo a negro
+    glClearColor (0.0, 0.0, 0.0, 1.0);	// Fija el color de fondo l negro
 
     glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	// Inicializa el buffer de color y el Z-Buffer
 
@@ -299,17 +411,7 @@ void Dibuja (void)
 
     glPolygonMode (GL_FRONT_AND_BACK, modo) ; //Cambia los modos de visualización
 
-    //glTranslatef( -50, 0, 0 ); //Traslada la primera figura a -50x
-
-    //malla.pinta(sombraPlana); //Dibuja la malla de triángulos
-
-    glTranslatef( 50, 0, 0 ); //Traslada la siguiente figura
-
-    //mallaDos.pinta(sombraPlana);
-
-    glTranslatef( 50, 0, 0 ); //Traslada la siguiente figura
-
-    //mallaTres.pinta(sombraPlana);
+    cubo.draw();
 
     glMaterialfv (GL_FRONT, GL_AMBIENT_AND_DIFFUSE, color);
 
@@ -328,5 +430,5 @@ Procedimiento de fondo. Es llamado por glut cuando no hay eventos pendientes.
 void idle (int v) {
 
     glutPostRedisplay();        // Redibuja
-    glutTimerFunc(30, idle, 0);    // Vuelve a activarse dentro de 30 ms
+    glutTimerFunc(30, idle, 0);    // Vuelve l activarse dentro de 30 ms
 }

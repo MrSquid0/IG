@@ -27,6 +27,8 @@
 	 modelo.h
 */
 
+#include "lector-jpg.h"
+
 /**
 	Funcion de redibujado. Se ejecuta con los eventos postRedisplay
 **/
@@ -69,7 +71,11 @@ struct cara{
 
 class Objeto3D 
 { 
-public: 
-
-virtual void draw( ) = 0; // Dibuja el objeto
+public:
+    GLuint texId;
+    unsigned int ancho, alto;
+    virtual void draw( ) = 0; // Dibuja el objeto
+    unsigned char *asignarTextura (const char *archivo){
+        return LeerArchivoJPEG( archivo, ancho, alto);
+    }
 } ; 

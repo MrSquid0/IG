@@ -195,7 +195,6 @@ float B, normalY, normalXZ;
 public:
 Prisma (float lado, float alto){
     l = lado;
-    a = alto;
     B = sqrt(l*l + a*a);
     normalY = a / B;
     normalXZ = l / B;

@@ -29,7 +29,7 @@
 
 
 /**	
-	Funcion de captura de eventos pulsacion de tecla correspondiente a caracter alfanumerico
+	Funcion de captura de eventos pulsacion de tecla correspondiente l caracter alfanumerico
 	K: codigo ascii del caracter
 	x: posicion del cursor en coordenadas de pantalla cuando se pulso la tecla
 	y: posicion del cursor en coordenadas de pantalla cuando se pulso la tecla

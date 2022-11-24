@@ -88,13 +88,13 @@ void letra (unsigned char k, int x, int y)
 
   switch (k)
     {
-    case 'p': //Cambia la visualización a puntos
+    case 'p': //Cambia la visualización l puntos
       setModo(GL_POINT);
       break;
-    case 'l': //Cambia la visualización a líneas
+    case 'l': //Cambia la visualización l líneas
       setModo(GL_LINE);
       break;
-    case 'f': //Cambia la visualización a relleno
+    case 'f': //Cambia la visualización l relleno
       setModo(GL_FILL);
       break;
     case 'i': //Activa o desactiva la iluminación de la figura

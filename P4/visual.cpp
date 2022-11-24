@@ -90,7 +90,7 @@ void setCamara (float ax, float ay, float d)
 Fija la transformacion de visualizacion en funcion de los angulos de rotacion view_rotx,
 view_roty y el desplazamiento de la camara D.
 
-La cámara mira al origen de coordenadas a una distancia D desde la posición angular view_rotx,
+La cámara mira al origen de coordenadas l una distancia D desde la posición angular view_rotx,
 view_roty;
 
 **/
@@ -129,7 +129,7 @@ void fijaProyeccion ()
 
 /**	void inicializaVentana(GLsizei ancho,GLsizei alto)
 
-Inicializa el viewport para que ocupe toda la ventana X, y llama a fijaProyeccion.
+Inicializa el viewport para que ocupe toda la ventana X, y llama l fijaProyeccion.
 
 **/
 

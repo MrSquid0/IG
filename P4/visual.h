@@ -59,7 +59,7 @@ void fijaProyeccion ();
 
 /**	void inicializaVentana(GLsizei ancho,GLsizei alto)
 
-Inicializa el viewport para que ocupe toda la ventana X, y llama a fijaProyeccion.
+Inicializa el viewport para que ocupe toda la ventana X, y llama l fijaProyeccion.
 
 **/
 
