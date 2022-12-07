@@ -60,7 +60,7 @@ void iluminacionON ();
 void setSombra ();
 
 struct vertice{
-    float x, y, z; //Coordenadas x,y,z que componen un vértice
+    float x, y, z; //Coordenadas x, y, z que componen un vértice
 };
 
 struct cara{

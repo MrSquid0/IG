@@ -197,9 +197,11 @@ public:
 
 };
 
-/*
+
 class mallaTriangulos:Objeto3D{
     private:
+
+    public:
     //Almacena todos los vértices y caras de los archivos '.ply'
     std::vector<float> vertices_ply;
     std::vector<int> caras_ply;
@@ -211,8 +213,8 @@ class mallaTriangulos:Objeto3D{
     //Almacena las normales de los vértices y de las caras
     std::vector<struct vertice> normalesCaras;
     std::vector<struct vertice> normalesVertices;
+    mallaTriangulos(){}
 
-    public:
     //Constructor de la malla pasándole por argumento la figura que queramos dibujar
     mallaTriangulos(const char archivo[50]){
         char fichero[50];
@@ -221,7 +223,7 @@ class mallaTriangulos:Objeto3D{
 
         int contador = 0; //Contador de vértices
 
-        //Introducimos las 3 coordenadas (x,y,z) en cada vértice
+        //Introducimos las 3 coordenadas (x, y, z) en cada vértice
         vertices.resize(vertices_ply.size() / 3);
         for (int i=0; i<vertices_ply.size(); i+=3){
             vertices[contador].x = vertices_ply[i];
@@ -229,7 +231,7 @@ class mallaTriangulos:Objeto3D{
             vertices[contador].z = vertices_ply[i+2];
             contador++;
         }
-        contador = 0; //Reseteamos l 0 para ser ahora contador de caras
+        contador = 0; //Reseteamos a 0 para ser ahora contador de caras
 
         //Introducimos los 3 vértices en cada cara (v1, v2, v3)
         caras.resize(caras_ply.size() / 3);
@@ -240,6 +242,11 @@ class mallaTriangulos:Objeto3D{
             contador++;
         }
 
+        obtenerNormales();
+
+    }
+
+    void obtenerNormales(){
         //Calculamos las normales de las caras
         normalesCaras.resize(caras.size());
         for (int i=0; i<caras.size(); i++){
@@ -268,7 +275,6 @@ class mallaTriangulos:Objeto3D{
             normalesCaras[i].y = prodVec.y / modulo;
             normalesCaras[i].z = prodVec.z / modulo;
         }
-
 
         //Inicializamos todas las posiciones de normalesVertices l 0,0,0
         vertice verticesACero;
@@ -301,7 +307,7 @@ class mallaTriangulos:Objeto3D{
 
         for (int i=0; i<normalesVertices.size(); i++){
             float modulo = sqrt(pow(normalesVertices[i].x, 2) + pow(normalesVertices[i].y, 2) +
-            pow (normalesVertices[i].z, 2));
+                                pow (normalesVertices[i].z, 2));
 
             if (modulo > 0){
                 normalesVertices[i].x = normalesVertices[i].x/modulo;
@@ -309,7 +315,6 @@ class mallaTriangulos:Objeto3D{
                 normalesVertices[i].z = normalesVertices[i].z/modulo;
             }
         }
-
     }
 
     //Función para pintar la figura con sombra plana
@@ -364,20 +369,85 @@ void pinta(bool sombra){
 }
 };
 
-*/
+class mallaRevolucion : public mallaTriangulos{
+private:
+    std::vector<vertice> perfilPrimitivo;
+
+    int n; //número de réplicas
+    int m; //tamaño de perfilPrimitivo
+    vertice v; //vértice
+    cara c; //cara
+
+public:
+
+    mallaRevolucion(const char archivo[50], int veces) {
+        n = veces;
+        char fichero[50];
+        sprintf(fichero, "./plys/%s", archivo);
+        ply::read_vertices(fichero, vertices_ply);
+
+        //Rellenamos los vértices en perfilPrimitivo
+        for (int i=0; i<vertices_ply.size(); i+=3){
+            v.x = vertices_ply[i];
+            v.y = vertices_ply[i+1];
+            v.z = vertices_ply[i+2];
+
+            perfilPrimitivo.push_back(v);
+        }
+
+        //Asignamos a m el tamaño de perfilPrimitivo
+        m = perfilPrimitivo.size();
+
+        //Rellenamos la lista de vértices
+        for (int i=0; i<n; i++){
+            for (int j=0; j<m; j++){
+                v.x = perfilPrimitivo[j].x * cos((2*i*M_PI)/(n-1));
+                v.y = perfilPrimitivo[j].y;
+                v.z = perfilPrimitivo[j].x * sin((2*i*M_PI)/(n-1));
+
+                vertices.push_back(v);
+            }
+        }
+
+        //Creamos dos triángulos nuevos que son adyacentes a ese vértice en cada iteración
+        for (int i=0; i<n-1; i++){
+            for (int j=0; j<m-1; j++){
+
+                int k = i * m + j;
+                c.v1 = k;
+                c.v3 = k+m;
+                c.v2 = k+m+1;
+
+                caras.push_back(c);
+
+                c.v1 = k;
+                c.v3 = k+m+1;
+                c.v2 = k+1;
+
+                caras.push_back(c);
+            }
+        }
+
+        //Calculamos las normales de la malla de revolución
+        obtenerNormales();
+    }
+
+};
+
+
 /**
  * Instanciamos objetos de los ejes y las cuatro figuras
  */
 
 Ejes ejesCoordenadas;
-Cubo cubo(5);
-//mallaTriangulos malla("beethoven.ply");
+//Cubo cubo(5);
+mallaRevolucion malla("perfil.ply", 30);
 //mallaTriangulos mallaDos("dentadura.ply");
 //mallaTriangulos mallaTres("big_dodge.ply");
 
 void initModel ()
 {
-    cubo.cargarTextura();
+    //cubo.cargarTextura();
 
 
 }
@@ -411,7 +481,8 @@ void Dibuja (void)
 
     glPolygonMode (GL_FRONT_AND_BACK, modo) ; //Cambia los modos de visualización
 
-    cubo.draw();
+    //cubo.draw();
+    malla.pinta(sombraPlana);
 
     glMaterialfv (GL_FRONT, GL_AMBIENT_AND_DIFFUSE, color);
 
