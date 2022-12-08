@@ -113,6 +113,15 @@ void letra (unsigned char k, int x, int y)
      case 'v':
          setSombra();
          break;
+     case 's':
+         setReflectividad(GL_SPECULAR);
+         break;
+     case 'd':
+         setReflectividad(GL_DIFFUSE);
+         break;
+     case 'a':
+          setReflectividad(GL_AMBIENT_AND_DIFFUSE);
+          break;
     case 27:			// Escape  Terminar
       exit (0);
     default:

@@ -40,6 +40,7 @@ Inicializa el modelo y de las variables globales
 int modo = GL_FILL;
 bool iluminacion = true;
 bool sombraPlana = false;
+float reflectividad = GL_AMBIENT_AND_DIFFUSE;
 
 void setModo (int M){
     modo = M;
@@ -59,8 +60,8 @@ void setSombra (){
         sombraPlana = true;
 }
 
-void setReflectividad(){
-
+void setReflectividad(float vision){
+    reflectividad = vision;
 }
 
 class Ejes:Objeto3D
@@ -102,9 +103,8 @@ public:
         glBindTexture(GL_TEXTURE_2D, texId);
         //Construye un cubo dado un lado
 
-        //color blanco
-        float color[4] = { 1.0, 1.0, 1.0, 0.0 };
-        glMaterialfv (GL_FRONT, GL_AMBIENT_AND_DIFFUSE, color);
+        float blanco[4] = { 1.0, 1.0, 1.0, 0.0 };
+        glMaterialfv (GL_FRONT, reflectividad, blanco);
         glBegin (GL_QUADS);
         {	//Cara inferior
             glNormal3f (0.0, -1, 0.0);
@@ -198,7 +198,7 @@ public:
 };
 
 
-class mallaTriangulos:Objeto3D{
+class mallaTriangulos: public Objeto3D{
     private:
 
     public:
@@ -213,16 +213,22 @@ class mallaTriangulos:Objeto3D{
     //Almacena las normales de los vértices y de las caras
     std::vector<struct vertice> normalesCaras;
     std::vector<struct vertice> normalesVertices;
+
+    //Constructor por defecto
     mallaTriangulos(){}
 
-    struct coordenada{
-        double primera, segunda;
-    };
+    //Par de 2 doubles donde almacenamos u y v
+    std::pair <double, double> coordenada;
 
-    std::vector<coordenada> coordenadas;
+    //Vector de pair donde almacenamos cada coordenada
+    std::vector<std::pair<double, double>> coordenadas;
+
+    //Variable lógica para verificar si es textura
+    boolean esTextura = false;
 
     //Constructor de la malla pasándole por argumento la figura que queramos dibujar
     mallaTriangulos(const char archivo[50]){
+        esTextura = false;
         char fichero[50];
         sprintf(fichero, "./plys/%s", archivo);
         ply::read(fichero, vertices_ply, caras_ply);
@@ -282,7 +288,7 @@ class mallaTriangulos:Objeto3D{
             normalesCaras[i].z = prodVec.z / modulo;
         }
 
-        //Inicializamos todas las posiciones de normalesVertices l 0,0,0
+        //Inicializamos todas las posiciones de normalesVertices a 0,0,0
         vertice verticesACero;
         verticesACero.x = 0;
         verticesACero.y = 0;
@@ -325,54 +331,100 @@ class mallaTriangulos:Objeto3D{
 
     //Función para pintar la figura con sombra plana
     void drawFlat(){
+        glEnable(GL_TEXTURE_2D);
+        glBindTexture(GL_TEXTURE_2D, texId);
         glShadeModel(GL_FLAT);
         glBegin (GL_TRIANGLES);
         {
             for (int i=0; i<caras.size(); i++){
-                //Dibujamos la normal de la figura
-                glNormal3f(normalesCaras[i].x, normalesCaras[i].y, normalesCaras[i].z);
-                //Dibujamos los vértices de las caras
-                glVertex3f (vertices[caras[i].v1].x, vertices[caras[i].v1].y, vertices[caras[i].v1].z);
-                glVertex3f (vertices[caras[i].v2].x, vertices[caras[i].v2].y, vertices[caras[i].v2].z);
-                glVertex3f (vertices[caras[i].v3].x, vertices[caras[i].v3].y, vertices[caras[i].v3].z);
+
+                if (esTextura) {
+                    //Dibujamos la normal de la figura
+                    glNormal3f(normalesCaras[i].x, normalesCaras[i].y, normalesCaras[i].z);
+                    //Dibujamos los vértices de las caras
+                    glTexCoord2f(coordenadas[caras[i].v1].first, coordenadas[caras[i].v1].second);
+                    glVertex3f(vertices[caras[i].v1].x, vertices[caras[i].v1].y, vertices[caras[i].v1].z);
+                    glTexCoord2f(coordenadas[caras[i].v2].first, coordenadas[caras[i].v2].second);
+                    glVertex3f(vertices[caras[i].v2].x, vertices[caras[i].v2].y, vertices[caras[i].v2].z);
+                    glTexCoord2f(coordenadas[caras[i].v3].first, coordenadas[caras[i].v3].second);
+                    glVertex3f(vertices[caras[i].v3].x, vertices[caras[i].v3].y, vertices[caras[i].v3].z);
+                } else {
+                    //Dibujamos la normal de la figura
+                    glNormal3f(normalesCaras[i].x, normalesCaras[i].y, normalesCaras[i].z);
+                    //Dibujamos los vértices de las caras
+                    glVertex3f (vertices[caras[i].v1].x, vertices[caras[i].v1].y, vertices[caras[i].v1].z);
+                    glVertex3f (vertices[caras[i].v2].x, vertices[caras[i].v2].y, vertices[caras[i].v2].z);
+                    glVertex3f (vertices[caras[i].v3].x, vertices[caras[i].v3].y, vertices[caras[i].v3].z);
+                }
             }
         }
         glEnd();
+        glDisable(GL_TEXTURE_2D);
     }
 
     //Función para pintar la figura con sombra suave
     void drawSmooth(){
+        glEnable(GL_TEXTURE_2D);
+        glBindTexture(GL_TEXTURE_2D, texId);
         glShadeModel(GL_SMOOTH);
         glBegin (GL_TRIANGLES);
         {
             for (int i = 0; i < caras.size(); i++) {
-                glNormal3f(normalesVertices[caras[i].v1].x, normalesVertices[caras[i].v1].y,
-                           normalesVertices[caras[i].v1].z);
-                glVertex3f(vertices[caras[i].v1].x, vertices[caras[i].v1].y, vertices[caras[i].v1].z);
+                if (esTextura){
+                    glNormal3f(normalesVertices[caras[i].v1].x, normalesVertices[caras[i].v1].y,
+                               normalesVertices[caras[i].v1].z);
+                    glTexCoord2f(coordenadas[caras[i].v1].first, coordenadas[caras[i].v1].second);
+                    glVertex3f(vertices[caras[i].v1].x, vertices[caras[i].v1].y, vertices[caras[i].v1].z);
+                    glNormal3f(normalesVertices[caras[i].v2].x, normalesVertices[caras[i].v2].y,
+                               normalesVertices[caras[i].v2].z);
+                    glTexCoord2f(coordenadas[caras[i].v2].first, coordenadas[caras[i].v2].second);
+                    glVertex3f(vertices[caras[i].v2].x, vertices[caras[i].v2].y, vertices[caras[i].v2].z);
 
-                glNormal3f(normalesVertices[caras[i].v2].x, normalesVertices[caras[i].v2].y,
-                           normalesVertices[caras[i].v2].z);
-                glVertex3f(vertices[caras[i].v2].x, vertices[caras[i].v2].y, vertices[caras[i].v2].z);
+                    glNormal3f(normalesVertices[caras[i].v3].x, normalesVertices[caras[i].v3].y,
+                               normalesVertices[caras[i].v3].z);
+                    glTexCoord2f(coordenadas[caras[i].v3].first, coordenadas[caras[i].v3].second);
+                    glVertex3f(vertices[caras[i].v3].x, vertices[caras[i].v3].y, vertices[caras[i].v3].z);
+                } else {
+                    glNormal3f(normalesVertices[caras[i].v1].x, normalesVertices[caras[i].v1].y,
+                               normalesVertices[caras[i].v1].z);
+                    glVertex3f(vertices[caras[i].v1].x, vertices[caras[i].v1].y, vertices[caras[i].v1].z);
 
-                glNormal3f(normalesVertices[caras[i].v3].x, normalesVertices[caras[i].v3].y,
-                           normalesVertices[caras[i].v3].z);
-                glVertex3f(vertices[caras[i].v3].x, vertices[caras[i].v3].y, vertices[caras[i].v3].z);
+                    glNormal3f(normalesVertices[caras[i].v2].x, normalesVertices[caras[i].v2].y,
+                               normalesVertices[caras[i].v2].z);
+                    glVertex3f(vertices[caras[i].v2].x, vertices[caras[i].v2].y, vertices[caras[i].v2].z);
+
+                    glNormal3f(normalesVertices[caras[i].v3].x, normalesVertices[caras[i].v3].y,
+                               normalesVertices[caras[i].v3].z);
+                    glVertex3f(vertices[caras[i].v3].x, vertices[caras[i].v3].y, vertices[caras[i].v3].z);
+                }
             }
         }
         glEnd();
+        glDisable(GL_TEXTURE_2D);
     }
 
-    //Lo dejamos sin implementar, ya que de lo contrario, da error y en su lugar, usamos la función pinta() de abajo
     void draw(){
-
+        if (sombraPlana)
+            drawSmooth();
+        else
+            drawFlat();
     }
-//Método para dibujar la malla
-void pinta(bool sombra){
-    if (sombraPlana)
-        drawSmooth();
-    else
-        drawFlat();
-}
+
+    void cargarTextura(const char archivo[50]){
+        char fichero[50];
+        sprintf(fichero, "./jpg/%s", archivo);
+        glGenTextures (1, &texId);
+        glBindTexture(GL_TEXTURE_2D, texId);
+
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, ancho, alto, 0,
+                     GL_RGB, GL_UNSIGNED_BYTE, asignarTextura(fichero));
+        esTextura = true;
+    }
 };
 
 class mallaRevolucion : public mallaTriangulos{
@@ -387,6 +439,7 @@ private:
 public:
 
     mallaRevolucion(const char archivo[50], int veces) {
+        esTextura = false;
         n = veces;
         char fichero[50];
         sprintf(fichero, "./plys/%s", archivo);
@@ -407,9 +460,9 @@ public:
         //Rellenamos la lista de vértices
         for (int i=0; i<n; i++){
             for (int j=0; j<m; j++){
-                v.x = perfilPrimitivo[j].x * cos((2*i*M_PI)/(n-1));
+                v.x = perfilPrimitivo[j].x * cos((2*i*M_PI)/(vertices_ply.size()-1));
                 v.y = perfilPrimitivo[j].y;
-                v.z = perfilPrimitivo[j].x * sin((2*i*M_PI)/(n-1));
+                v.z = perfilPrimitivo[j].x * sin((2*i*M_PI)/(vertices_ply.size()-1));
 
                 vertices.push_back(v);
             }
@@ -436,34 +489,70 @@ public:
 
         //Calculamos las normales de la malla de revolución
         obtenerNormales();
+
+        //Calculamos las coordenadas de la malla de revolución (textura)
+
+        if (archivo == "lata-pcue.ply")
+            obtenerCoordenadasLateral();
+
+        if (archivo == "lata-psup.ply")
+            obtenerCoordenadasTapayBase(0);
+
+        if (archivo == "lata-pinf.ply")
+            obtenerCoordenadasTapayBase(0.5);
     }
 
     float obtenerDistancias(vertice v1, vertice v2){
-        int distancia = sqrt(pow(v2.x-v1.x,2)
+        //Fórmula de cálculo de distancia entre 2 puntos
+        float distancia = sqrt(pow(v2.x-v1.x,2)
                 + pow(v2.y-v1.y,2));
         return distancia;
     }
 
-    void obtenerCoordenadas(){
+    void obtenerCoordenadasLateral(){
         //Calculamos las distancias
         std::vector<float> distancias;
-        for (int i=0; i<m-1; i++){
-            distancias.push_back(obtenerDistancias(
-                    perfilPrimitivo[i], perfilPrimitivo[i+1]));
+        float sumaDistancias = 0;
+        //Recorremos el vector y almacenamos distancias
+        for (int i=0; i<perfilPrimitivo.size()-1; i++){
+            sumaDistancias += obtenerDistancias(
+                    perfilPrimitivo[i], perfilPrimitivo[i+1]);
+            distancias.push_back(sumaDistancias);
         }
 
-        for (int i=0; i<vertices_ply.size(); i+=3){
-            double angulo = (2 * i * M_PI)/(n-1);
-            coordenadas[i].primera = ((angulo)*180/M_PI)/360;
+        //Calculamos las coordenadas
+        for (int i=0; i<n; i++){
+            for (int j=0; j<m; j++){
+
+                //Calculamos coordenada u
+                double angulo = (2 * i * M_PI)/(vertices_ply.size()-1);
+                coordenada.first = ((angulo)*180/M_PI)/360;
+
+                //Calculamos coordenada v
+                unsigned long distanciaMaxima = distancias.size()-1;
+                coordenada.second = distancias[j] / distancias[distanciaMaxima];
+
+                //Almacenamos ambas coordenadas en el vector
+                coordenadas.push_back(coordenada);
+            }
         }
-
-        vertice coordMax = perfilPrimitivo[perfilPrimitivo.size()-1];
-        for (int i=0; i<perfilPrimitivo.size(); i++){
-
-        }
-
     }
 
+    void obtenerCoordenadasTapayBase(float desplazamiento){
+        float radio = vertices[0].x;
+
+        //Calculamos las coordenadas
+        for (int i=0; i<vertices.size(); i++){
+                //Calculamos coordenada u
+                coordenada.first = desplazamiento + (((vertices[i].x+radio)/(2*radio))/2);
+
+                //Calculamos coordenada v
+                coordenada.second = (vertices[i].z+radio)/(2*radio);
+
+                //Almacenamos ambas coordenadas en el vector
+                coordenadas.push_back(coordenada);
+        }
+    }
 };
 
 
@@ -472,12 +561,18 @@ public:
  */
 
 Ejes ejesCoordenadas;
-//Cubo dado(5);
-mallaRevolucion lata("lata-pcue.ply", 30);
+Cubo dado(5);
+mallaRevolucion lata("lata-pcue.ply", 90);
+mallaRevolucion lataTapa("lata-psup.ply", 60);
+mallaRevolucion lataBase("lata-pinf.ply", 60);
+mallaTriangulos busto("beethoven.ply");
 
 void initModel ()
 {
-    //dado.cargarTextura();
+    dado.cargarTextura();
+    lata.cargarTextura("Cruzcampo.jpg");
+    lataTapa.cargarTextura("tapas.jpg");
+    lataBase.cargarTextura("tapas.jpg");
 
 
 }
@@ -490,7 +585,8 @@ void Dibuja (void)
 {
     static GLfloat  pos[4] = { 5.0, 5.0, 10.0, 0.0 };	// Posicion de la fuente de luz
 
-    float  color[4] = { 0.8, 0.0, 1, 1 };
+    float rosa[4] = { 0.8, 0.0, 1, 1 };
+    float blanco[4] = {1.0f, 1.0f, 1.0f, 0.0f};
 
     glPushMatrix ();		// Apila la transformacion geometrica actual
 
@@ -511,10 +607,20 @@ void Dibuja (void)
 
     glPolygonMode (GL_FRONT_AND_BACK, modo) ; //Cambia los modos de visualización
 
-    //dado.draw();
-    lata.pinta(sombraPlana);
 
-    glMaterialfv (GL_FRONT, GL_AMBIENT_AND_DIFFUSE, color);
+    glTranslatef(-10,0,0);
+    dado.draw();
+
+    glTranslatef(10,0,0);
+    glMaterialfv (GL_FRONT, reflectividad, blanco);
+    lata.draw();
+
+    lataTapa.draw();
+    lataBase.draw();
+
+    glMaterialfv (GL_FRONT, reflectividad, rosa);
+    glTranslatef(5,0,0);
+    busto.draw();
 
     // Dibuja el modelo (A rellenar en prácticas 1,2 y 3)
 
