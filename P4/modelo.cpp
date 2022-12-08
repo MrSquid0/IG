@@ -215,6 +215,12 @@ class mallaTriangulos:Objeto3D{
     std::vector<struct vertice> normalesVertices;
     mallaTriangulos(){}
 
+    struct coordenada{
+        double primera, segunda;
+    };
+
+    std::vector<coordenada> coordenadas;
+
     //Constructor de la malla pasándole por argumento la figura que queramos dibujar
     mallaTriangulos(const char archivo[50]){
         char fichero[50];
@@ -432,6 +438,32 @@ public:
         obtenerNormales();
     }
 
+    float obtenerDistancias(vertice v1, vertice v2){
+        int distancia = sqrt(pow(v2.x-v1.x,2)
+                + pow(v2.y-v1.y,2));
+        return distancia;
+    }
+
+    void obtenerCoordenadas(){
+        //Calculamos las distancias
+        std::vector<float> distancias;
+        for (int i=0; i<m-1; i++){
+            distancias.push_back(obtenerDistancias(
+                    perfilPrimitivo[i], perfilPrimitivo[i+1]));
+        }
+
+        for (int i=0; i<vertices_ply.size(); i+=3){
+            double angulo = (2 * i * M_PI)/(n-1);
+            coordenadas[i].primera = ((angulo)*180/M_PI)/360;
+        }
+
+        vertice coordMax = perfilPrimitivo[perfilPrimitivo.size()-1];
+        for (int i=0; i<perfilPrimitivo.size(); i++){
+
+        }
+
+    }
+
 };
 
 
@@ -440,14 +472,12 @@ public:
  */
 
 Ejes ejesCoordenadas;
-//Cubo cubo(5);
-//mallaTriangulos malla("beethoven.ply");
-mallaRevolucion malla("perfil.ply", 30);
-//mallaTriangulos mallaTres("big_dodge.ply");
+//Cubo dado(5);
+mallaRevolucion lata("lata-pcue.ply", 30);
 
 void initModel ()
 {
-    //cubo.cargarTextura();
+    //dado.cargarTextura();
 
 
 }
@@ -481,8 +511,8 @@ void Dibuja (void)
 
     glPolygonMode (GL_FRONT_AND_BACK, modo) ; //Cambia los modos de visualización
 
-    //cubo.draw();
-    malla.pinta(sombraPlana);
+    //dado.draw();
+    lata.pinta(sombraPlana);
 
     glMaterialfv (GL_FRONT, GL_AMBIENT_AND_DIFFUSE, color);
 

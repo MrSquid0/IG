@@ -382,11 +382,13 @@ void Dibuja (void)
 
     glTranslatef( 8, 0, 0 ); //Traslada la siguiente figura
 
+    glScalef(3,3,3);
     glMaterialfv (GL_FRONT, GL_AMBIENT_AND_DIFFUSE, rosa);
     peon.pinta(sombraPlana); //Dibuja la malla de revolución
 
-    glTranslatef( 10, 0, 0 ); //Traslada la siguiente figura
+    glTranslatef( 5, 0, 0 ); //Traslada la siguiente figura
 
+    glScalef(0.5,0.5,0.5);
     glMaterialfv (GL_FRONT, GL_AMBIENT_AND_DIFFUSE, rojo);
     coche.pinta(sombraPlana); //Dibuja la malla de triángulos
 
