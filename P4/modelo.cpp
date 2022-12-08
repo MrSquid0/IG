@@ -441,8 +441,8 @@ public:
 
 Ejes ejesCoordenadas;
 //Cubo cubo(5);
+//mallaTriangulos malla("beethoven.ply");
 mallaRevolucion malla("perfil.ply", 30);
-//mallaTriangulos mallaDos("dentadura.ply");
 //mallaTriangulos mallaTres("big_dodge.ply");
 
 void initModel ()
