@@ -98,7 +98,13 @@ void letra (unsigned char k, int x, int y)
       setModo(GL_FILL);
       break;
     case 'i': //Activa o desactiva la iluminación de la figura
-      iluminacionON();
+      setIluminacionGeneral();
+      break;
+    case '1':
+      setIluminacion1();
+      break;
+    case '2':
+      setIluminacion2();
       break;
     case 'h':
     case 'H':
@@ -110,17 +116,14 @@ void letra (unsigned char k, int x, int y)
     case '-':			// aleja la cámara
       dCamara += 5.0;
       break;
-     case 'v':
-         setSombra();
-         break;
      case 's':
-         setReflectividad(GL_SPECULAR);
+         //setReflectividad(GL_SPECULAR);
          break;
      case 'd':
-         setReflectividad(GL_DIFFUSE);
+         //setReflectividad(GL_DIFFUSE);
          break;
      case 'a':
-          setReflectividad(GL_AMBIENT_AND_DIFFUSE);
+          //setReflectividad(GL_AMBIENT_AND_DIFFUSE);
           break;
     case 27:			// Escape  Terminar
       exit (0);
