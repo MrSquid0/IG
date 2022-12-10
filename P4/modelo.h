@@ -75,8 +75,6 @@ struct cara{
     int v1, v2, v3; //Índice de vértices que componen una cara
 };
 
-
-
 class Objeto3D 
 {
 public:
@@ -88,8 +86,6 @@ public:
     unsigned char *asignarTextura (const char *archivo){
         return LeerArchivoJPEG( archivo, ancho, alto);
     }
-    void setMaterialColorLuz(unsigned int material, float colorMaterial[4],
-                             unsigned int luz);
 } ;
 
 class Ejes:Objeto3D {
@@ -113,6 +109,14 @@ class mallaTriangulos : public Objeto3D{
 private:
     void drawFlat();
     void drawSmooth();
+    struct Material{
+        float specular[4];
+        float diffuse[4];
+        float ambient[4];
+        float brillo;
+    };
+    Material material;
+
 public:
     //Almacena todos los vértices y caras de los archivos '.ply'
     std::vector<float> vertices_ply;
@@ -133,10 +137,12 @@ public:
     std::pair <double, double> coordenada;
 
     //Vector de pair donde almacenamos cada coordenada
-    std::vector<std::pair<double, double>> coordenadas;
+    std::vector<std::pair<float, float>> coordenadas;
 
     //Variable lógica para verificar si es textura
     boolean esTextura = false;
+
+    bool sombraPlana = false;
 
     float reflectividad = GL_AMBIENT_AND_DIFFUSE;
 
@@ -148,7 +154,8 @@ public:
 
     void draw();
 
-    void cargarTextura(const char archivo[50]);
+    void setMaterial(float ambient[4], float diffuse[4],
+                                      float specular[4], float brillo);
 };
 
 class mallaRevolucion : public mallaTriangulos {
@@ -163,6 +170,7 @@ private:
 public:
 
     mallaRevolucion(const char archivo[50], int veces);
+    void cargarTextura(const char archivo[50]);
     float obtenerDistancias(vertice v1, vertice v2);
     void obtenerCoordenadasLateral();
     void obtenerCoordenadasTapayBase(float desplazamiento);

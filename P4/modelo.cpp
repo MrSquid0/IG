@@ -39,9 +39,8 @@ Inicializa el modelo y de las variables globales
 
 int modo = GL_FILL;
 bool iluminacionGeneral = true;
-bool iluminacion1 = true;
-bool iluminacion2 = true;
-bool sombraPlana = false;
+bool iluminacion1 = false;
+bool iluminacion2 = false;
 
 void setModo(int M) {
     modo = M;
@@ -68,15 +67,23 @@ void setIluminacion2() {
         iluminacion2 = true;
 }
 
-void Objeto3D::setMaterialColorLuz(unsigned int material, float color[4],
-                                   unsigned int luz) {
-    this->material = material;
-    for (int i=0; i<4; i++){
-        this->color[i] = color[i];
+void mallaTriangulos::setMaterial(float ambient[4], float diffuse[4],
+                                  float specular[4], float brillo) {
+    for (int i = 0; i < 4; i++) {
+        material.ambient[i] = ambient[i];
     }
+    for (int i = 0; i < 4; i++) {
+        material.diffuse[i] = diffuse[i];
+    }
+    for (int i = 0; i < 4; i++) {
+        material.specular[i] = specular[i];
+    }
+    material.brillo = brillo;
     glPushAttrib(GL_LIGHTING_BIT);
-    glMaterialfv(GL_FRONT, material, color);
-    glLightfv(luz, material, color);
+    glMaterialfv(GL_FRONT, GL_AMBIENT, material.ambient);
+    glMaterialfv(GL_FRONT, GL_DIFFUSE, material.diffuse);
+    glMaterialfv(GL_FRONT, GL_SPECULAR, material.specular);
+    glMaterialf(GL_FRONT, GL_SHININESS, material.brillo);
 }
 
 void Ejes::draw() {
@@ -388,22 +395,6 @@ void mallaTriangulos::draw() {
     glPopAttrib();
 }
 
-void mallaTriangulos::cargarTextura(const char archivo[50]) {
-    char fichero[50];
-    sprintf(fichero, "./jpg/%s", archivo);
-    glGenTextures(1, &texId);
-    glBindTexture(GL_TEXTURE_2D, texId);
-
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, ancho, alto, 0,
-                 GL_RGB, GL_UNSIGNED_BYTE, asignarTextura(fichero));
-    esTextura = true;
-}
-
 mallaRevolucion::mallaRevolucion(const char *archivo, int veces) {
     esTextura = false;
     n = veces;
@@ -466,6 +457,22 @@ mallaRevolucion::mallaRevolucion(const char *archivo, int veces) {
 
     if (archivo == "lata-pinf.ply")
         mallaRevolucion::obtenerCoordenadasTapayBase(0.5);
+}
+
+void mallaRevolucion::cargarTextura(const char archivo[50]) {
+    char fichero[50];
+    sprintf(fichero, "./jpg/%s", archivo);
+    glGenTextures(1, &texId);
+    glBindTexture(GL_TEXTURE_2D, texId);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, ancho, alto, 0,
+                 GL_RGB, GL_UNSIGNED_BYTE, asignarTextura(fichero));
+    esTextura = true;
 }
 
 float mallaRevolucion::obtenerDistancias(vertice v1, vertice v2) {
@@ -537,8 +544,6 @@ void initModel() {
     lata.cargarTextura("Cruzcampo.jpg");
     lataTapa.cargarTextura("tapas.jpg");
     lataBase.cargarTextura("tapas.jpg");
-
-
 }
 
 /**	void Dibuja( void )
@@ -546,12 +551,27 @@ Procedimiento de dibujo del modelo. Es llamado por glut cada vez que se debe red
 **/
 
 void Dibuja(void) {
-    static GLfloat pos[4] = {5.0, 5.0, 10.0, 0.0};    // Posicion de la fuente de luz
+    static GLfloat luzAmbiente[4] = {5.0, 5.0, 10.0, 0.0};    // Posicion de la fuente de luz
+    static GLfloat morado[3] = {1.0, 0.0, 1.0};
+    static GLfloat pos1[4] = {0.0, 20.0, 40.0, 1.0};
+    static GLfloat verde[3] = {0.0, 1.0, 0.0};
+    static GLfloat pos2[4] = {20.0, 0.0, 1.0, 40.0};
 
-    float rosa[4] = {0.8, 0.0, 1, 1};
-    float blanco[4] = {1.0f, 1.0f, 1.0f, 0.0f};
-    float verde[4] = {0.0, 1.0, 0.0, 0.0};
-    float   luz_ambiente[]={0.2, 0.2, 0.2, 1.0}, luz1[]={1.0, 1.0, 1.0, 1.0};
+    float cobreAmbient[4] = {0.19125, 0.0735, 0.0225, 1.00};
+    float cobreDiffuse[4] = {0.7038, 0.27048, 0.0828, 1.00};
+    float cobreSpecular[4] = {0.256777, 0.137622, 0.086014, 1.00};
+    float cobreBrillo = 0.1;
+
+    float turquesaAmbient[4] = {0.1, 0.18, 0.1745, 1.00};
+    float turquesaDiffuse[4] = {0.396, 0.74151, 0.69102, 1.00};
+    float turquesaSpecular[4] = {0.297254, 0.30829, 0.306678, 1.00};
+    float turquesaBrillo = 0.1;
+
+    float plataAmbient[4] = {0.19225, 0.19225, 0.19225, 1.00};
+    float plataDiffuse[4] = {0.50754, 0.50754, 0.50754, 1.00};
+    float plataSpecular[4] = {0.508273, 0.508273, 0.508273, 1.00};
+    float plataBrillo = 0.4;
+
 
     glPushMatrix();        // Apila la transformacion geometrica actual
 
@@ -561,7 +581,14 @@ void Dibuja(void) {
 
     transformacionVisualizacion();    // Carga transformacion de visualizacion
 
-    glLightfv(GL_LIGHT0, GL_POSITION, pos);    // Declaracion de luz. Colocada aqui esta fija en la escena
+    glLightfv(GL_LIGHT0, GL_POSITION, luzAmbiente);    // Declaracion de luz. Colocada aqui esta fija en la escena
+
+    glLightfv(GL_LIGHT1, GL_POSITION, pos1);
+    glLightfv(GL_LIGHT1, GL_DIFFUSE, morado);
+
+    glLightfv(GL_LIGHT2, GL_POSITION, pos2);
+    glLightfv(GL_LIGHT2, GL_AMBIENT, verde);
+
 
     ejesCoordenadas.draw();            // Dibuja los ejes
 
@@ -583,34 +610,28 @@ void Dibuja(void) {
     glPolygonMode(GL_FRONT_AND_BACK, modo); //Cambia los modos de visualización
 
     glTranslatef(-10, 0, 0);
-
-    dado.setMaterialColorLuz(GL_SPECULAR, blanco, GL_LIGHT0);
     dado.draw();
 
     glTranslatef(10, 0, 0);
 
-    lata.setMaterialColorLuz(GL_AMBIENT_AND_DIFFUSE, blanco, GL_LIGHT0);
-
     glPushMatrix();
-    glRotatef(100,0,1,0);
+    glRotatef(100, 0, 1, 0);
     lata.draw();
-    lata.setMaterialColorLuz(GL_AMBIENT_AND_DIFFUSE, blanco, GL_LIGHT0);
     lataTapa.draw();
-    lata.setMaterialColorLuz(GL_AMBIENT_AND_DIFFUSE, blanco, GL_LIGHT0);
     lataBase.draw();
     glPopMatrix();
 
     glTranslatef(5, 0, 0);
 
-    busto.setMaterialColorLuz(GL_AMBIENT, verde, GL_LIGHT1);
+    busto.setMaterial(cobreAmbient, cobreDiffuse, cobreSpecular, cobreBrillo);
     busto.draw();
 
-    glTranslatef(-5,0,10);
-    busto.setMaterialColorLuz(GL_SPECULAR, rosa, GL_LIGHT2);
+    glTranslatef(-5, 0, 10);
+    busto.setMaterial(turquesaAmbient, turquesaDiffuse, turquesaSpecular, turquesaBrillo);
     busto.draw();
 
-    glTranslatef(10,0,0);
-    busto.setMaterialColorLuz(GL_DIFFUSE, blanco, GL_LIGHT1);
+    glTranslatef(10, 0, 0);
+    busto.setMaterial(plataAmbient, plataDiffuse, plataSpecular, plataBrillo);
     busto.draw();
 
     // Dibuja el modelo (A rellenar en prácticas 1,2 y 3)
