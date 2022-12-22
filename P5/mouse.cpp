@@ -48,9 +48,24 @@ x,y: Posicion, en coordenadas de pantalla, en que se encuantra el cursor.
 
 **/
 
+bool moviendo_camara = false;
+float   xant = 0,
+        yant = 0,
+        x_act = 0,
+        y_act = 0;
+
 void clickRaton (int boton, int estado, int x, int y)
 {
-
+    if (boton == GLUT_MIDDLE_BUTTON){
+        if (estado == GLUT_DOWN){
+            moviendo_camara = true;
+            xant = x;
+            yant = y;
+        }
+    }
+    else{
+        moviendo_camara = false;
+    }
 }
 
 
@@ -66,5 +81,14 @@ x,y: Posicion, en coordenadas de pantalla, en que se encuantra el cursor.
 
 void RatonMovido (int x, int y)
 {
+    if (moviendo_camara){
+        x_act = y - yant;
+        y_act = x - xant;
 
+        actualizarVista(x_act*0.1, y_act*0.1);
+
+        xant = x;
+        yant = y;
+    }
+    glutPostRedisplay();
 }

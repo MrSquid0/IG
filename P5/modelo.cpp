@@ -6,7 +6,7 @@
 	Estudiante: Gonzalo Jose Lopez Castilla
 =======================================================
 	G. Arroyo, J.C. Torres
-	Dpto. Lenguajes y Sistemas Informticos
+	Dpto. Lenguajes y Sistemas Informáticos
 	(Univ. de Granada)
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -24,9 +24,9 @@ modulo modelo.c
     Función Idle
 */
 #include <iostream>
-#include <stdio.h>
+#include <cstdio>
 #include <stdlib.h>
-#include <math.h>
+#include <cmath>
 #include <GL/glut.h>        // Libreria de utilidades de OpenGL
 #include "practicasIG.h"
 #include <vector>

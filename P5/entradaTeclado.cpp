@@ -81,6 +81,7 @@ y:
 
 float rotxCamara = 30, rotyCamara = 45;
 float dCamara = 10;
+float x_cam = 0;
 
 
 void letra (unsigned char k, int x, int y)
@@ -118,10 +119,28 @@ void letra (unsigned char k, int x, int y)
       break;
     case 27:			// Escape  Terminar
       exit (0);
+    case 'w':
+      dCamara -= 1;
+      break;
+    case 's':
+      dCamara += 1;
+      break;
+    case 'a':
+      x_cam -= 1;
+      break;
+    case 'd':
+      x_cam += 1;
+      break;
+    case 'r':
+      x_cam = 0;
+      rotxCamara = 30;
+      rotyCamara = 45;
+      dCamara = 10;
+      break;
     default:
       return;
     }
-  setCamara (rotxCamara, rotyCamara, dCamara);
+  setCamara (rotxCamara, rotyCamara, dCamara, x_cam);
   glutPostRedisplay ();		// Algunas de las opciones cambian paramentros
 }				// de la camara. Es necesario actualziar la imagen
 
@@ -184,6 +203,6 @@ void especial (int k, int x, int y)
     default:
       return;
     }
-  setCamara (rotxCamara, rotyCamara, dCamara);
+  setCamara (rotxCamara, rotyCamara, dCamara, x_cam);
   glutPostRedisplay ();		// Actualiza la imagen (ver proc. letra)
 }

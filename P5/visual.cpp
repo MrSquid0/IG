@@ -37,8 +37,6 @@ modulo visual.c
 #include "practicasIG.h"
 
 
-
-
 //================================================ VARIABLES  
 
 /**
@@ -48,6 +46,9 @@ Angulos de rotacion de la camara.
 **/
 
 float view_rotx = 30, view_roty = 45;
+float D = 10;
+float   x_camara = 0,
+        z_camara = D;
 
 
 /**
@@ -56,7 +57,7 @@ Distancia de la cámara
 
 **/
 
-float D = 10;
+
 
 
 /**
@@ -76,10 +77,13 @@ float anchoVentana, altoVentana;
 Cambia los parámetros de la cámara en el modulo visual
 
 **/
-void setCamara (float ax, float ay, float d)
+void setCamara (float ax, float ay, float d, float xCam)
 {
   view_rotx = ax;
   view_roty = ay;
+
+  x_camara = xCam;
+  z_camara = d;
 
   D = d;
 }
@@ -96,12 +100,17 @@ view_roty;
 **/
 void transformacionVisualizacion ()
 {
-  glTranslatef (0, 0, -D);
+  glTranslatef (-x_camara, 0, -z_camara);
 
   glRotatef (view_rotx, 1.0, 0.0, 0.0);
   glRotatef (view_roty, 0.0, 1.0, 0.0);
 
-  // glTranslatef(-x_camara,-y_camara,-z_camara);
+  //glTranslatef(-x_camara,y_camara,z_camara);
+}
+
+void actualizarVista(float x, float y){
+    view_rotx += x;
+    view_roty += y;
 }
 
 /**	void fijaProyeccion()
