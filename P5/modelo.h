@@ -158,6 +158,45 @@ public:
                                       float specular[4], float brillo);
 };
 
+class Grua : public Objeto3D {
+private:
+    //Colores
+    float rojo[4] = {1.0f, 0.0f, 0.0f, 0.0f };
+    float amarillo[4] = {1.0f, 1.0f, 0.0f, 1 };
+    float gris[4] = {0.5f, 0.5f, 0.5f};
+
+    float alturaPie;
+    float largoBrazoGrande;
+    float alturaCuerda;
+    float largoBrazoPeq;
+
+    void A (float xzPie, float yPie, int numMallas);
+    void B (float xCaja, float yCaja, float zCaja);
+    void C (float xzTorre, float yTorre, int numMallas);
+    void D (float xBrazoGrande, float zBrazoGrande, int numMallas);
+    void E (float xCaja, float yCaja, float zCaja);
+    void F (float yCuerda);
+    void G (float yGancho);
+    void H (float xBrazoPequenyo, float altoMalla, float anchoMalla, int numMallas);
+    void I (float xCaja, float yCaja, float zCaja);
+
+    void brazoPequenyoConCaja(float xBrazoPequenyo);
+    void brazoGrandeConCaja(float xBrazoGrande);
+    void cuerdaConGancho(float yCuerda);
+    void brazoGrande (float xBrazoGrande, float yCuerda);
+    void brazoGrandeConCubo (float xBrazoGrande, float yCuerda);
+    void brazoGrandeConCuboYBrazoPequenyo(float xBrazoGrande,
+                                          float yCuerda, float xBrazoPequenyo);
+    void construirGrua(float xBrazoGrande, float yCuerda,
+                       float xBrazoPequenyo, float yPie);
+
+public:
+    Grua(float alturaPie, float largoBrazoGrande, float alturaCuerda,
+         float largoBrazoPeq);
+    void draw();
+    void animaciones();
+};
+
 class mallaRevolucion : public mallaTriangulos {
 private:
     std::vector<vertice> perfilPrimitivo;

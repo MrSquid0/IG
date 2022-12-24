@@ -67,7 +67,7 @@ void setAnguloR3(int angulo){
     anguloR3 = angulo;
 };
 
-void animaciones(){
+void Grua::animaciones(){
     //Aumentanmos R1
     setAnguloR1(getAnguloR1()+1);
     if (getAnguloR1()>360)
@@ -147,179 +147,183 @@ void draw( )
     glEnable (GL_LIGHTING);
 }
 };
-/**
- * Colores
- */
-    float rojo[4] = {1.0f, 0.0f, 0.0f, 0.0f };
-    float amarillo[4] = {1.0f, 1.0f, 0.0f, 1 };
-    float gris[4] = {0.5f, 0.5f, 0.5f};
+Grua::Grua(float alturaPie, float largoBrazoGrande,
+           float alturaCuerda, float largoBrazoPeq) {
+    this->alturaPie = alturaPie;
+    this->largoBrazoGrande = largoBrazoGrande;
+    this->alturaCuerda = alturaCuerda;
+    this->largoBrazoPeq = largoBrazoPeq;
+}
 
-    //Figuras según el grafo
-    void A (float xzPie, float yPie, int numMallas){
-        glMaterialfv (GL_FRONT, GL_AMBIENT_AND_DIFFUSE, amarillo);
-        creaEstructura(0, 0, 0, 0, yPie, 0, xzPie, xzPie, numMallas);
-    }
+//Figuras según el grafo
+void Grua::A (float xzPie, float yPie, int numMallas){
+    glMaterialfv (GL_FRONT, GL_AMBIENT_AND_DIFFUSE, amarillo);
+    creaEstructura(0, 0, 0, 0, yPie, 0, xzPie, xzPie, numMallas);
+}
 
 
-    void B (float xCaja, float yCaja, float zCaja){
-        glMaterialfv (GL_FRONT, GL_AMBIENT_AND_DIFFUSE, amarillo);
-        paralelepipedo(0, 0, 0, 0, yCaja, 0, xCaja, zCaja);
-    }
+void Grua::B (float xCaja, float yCaja, float zCaja){
+    glMaterialfv (GL_FRONT, GL_AMBIENT_AND_DIFFUSE, amarillo);
+    paralelepipedo(0, 0, 0, 0, yCaja, 0, xCaja, zCaja);
+}
 
-    void C (float xzTorre, float yTorre, int numMallas){
-        glMaterialfv (GL_FRONT, GL_AMBIENT_AND_DIFFUSE, rojo);
-        creaTorre(0, 0, 0, 0, yTorre, 0, xzTorre, xzTorre, numMallas);
-    }
+void Grua::C (float xzTorre, float yTorre, int numMallas){
+    glMaterialfv (GL_FRONT, GL_AMBIENT_AND_DIFFUSE, rojo);
+    creaTorre(0, 0, 0, 0, yTorre, 0, xzTorre, xzTorre, numMallas);
+}
 
-    void D (float xBrazoGrande, float zBrazoGrande, int numMallas){
-        glMaterialfv (GL_FRONT, GL_AMBIENT_AND_DIFFUSE, amarillo);
-        creaBrazo(0, 0, 0, xBrazoGrande, 0, 0, zBrazoGrande, numMallas);
-    }
+void Grua::D (float xBrazoGrande, float zBrazoGrande, int numMallas){
+    glMaterialfv (GL_FRONT, GL_AMBIENT_AND_DIFFUSE, amarillo);
+    creaBrazo(0, 0, 0, xBrazoGrande, 0, 0, zBrazoGrande, numMallas);
+}
 
-    void E (float xCaja, float yCaja, float zCaja){
-        glMaterialfv (GL_FRONT, GL_AMBIENT_AND_DIFFUSE, rojo);
-        paralelepipedo(0, 0, 0, 0, yCaja, 0, xCaja, zCaja);
-    }
+void Grua::E (float xCaja, float yCaja, float zCaja){
+    glMaterialfv (GL_FRONT, GL_AMBIENT_AND_DIFFUSE, rojo);
+    paralelepipedo(0, 0, 0, 0, yCaja, 0, xCaja, zCaja);
+}
 
-    void F (float yCuerda){
-        glMaterialfv (GL_FRONT, GL_AMBIENT_AND_DIFFUSE, gris);
-        cilindro(0, 0, 0, 0, yCuerda, 0, 0.1);
-    }
+void Grua::F (float yCuerda){
+    glMaterialfv (GL_FRONT, GL_AMBIENT_AND_DIFFUSE, gris);
+    cilindro(0, 0, 0, 0, yCuerda, 0, 0.1);
+}
 
-    void G (float yGancho){
-        glMaterialfv (GL_FRONT, GL_AMBIENT_AND_DIFFUSE, gris);
-        creaGancho(0, 0, 0, yGancho);
-    }
+void Grua::G (float yGancho){
+    glMaterialfv (GL_FRONT, GL_AMBIENT_AND_DIFFUSE, gris);
+    creaGancho(0, 0, 0, yGancho);
+}
 
-    void H (float xBrazoPequenyo, float altoMalla, float anchoMalla, int numMallas){
-        glMaterialfv (GL_FRONT, GL_AMBIENT_AND_DIFFUSE, amarillo);
-        creaEstructura(0, 0, 0, xBrazoPequenyo, 0, 0, altoMalla, anchoMalla, numMallas);
-    }
+void Grua::H (float xBrazoPequenyo, float altoMalla, float anchoMalla, int numMallas){
+    glMaterialfv (GL_FRONT, GL_AMBIENT_AND_DIFFUSE, amarillo);
+    creaEstructura(0, 0, 0, xBrazoPequenyo, 0, 0, altoMalla, anchoMalla, numMallas);
+}
 
-    void I (float xCaja, float yCaja, float zCaja){
-        glMaterialfv (GL_FRONT, GL_AMBIENT_AND_DIFFUSE, gris);
-        caja(xCaja,yCaja,zCaja);
-    }
+void Grua::I (float xCaja, float yCaja, float zCaja){
+    glMaterialfv (GL_FRONT, GL_AMBIENT_AND_DIFFUSE, gris);
+    caja(xCaja,yCaja,zCaja);
+}
 
 
 //H+I
-    void brazoPequenyoConCaja(float xBrazoPequenyo){
+void Grua::brazoPequenyoConCaja(float xBrazoPequenyo){
 
-        int numMallas = xBrazoPequenyo/2;
-        float altoMalla = 0.5, anchoMalla = 1;
-        H (xBrazoPequenyo, altoMalla, anchoMalla, numMallas);
+    int numMallas = xBrazoPequenyo/2;
+    float altoMalla = 0.5, anchoMalla = 1;
+    H (xBrazoPequenyo, altoMalla, anchoMalla, numMallas);
 
-        float xCaja = xBrazoPequenyo/3, yCaja = altoMalla, zCaja = anchoMalla;
-        glTranslatef(xBrazoPequenyo-xCaja/2, altoMalla / 2 - yCaja * 2, 0); //T4
-        I (xCaja, yCaja, zCaja);
-    }
+    float xCaja = xBrazoPequenyo/3, yCaja = altoMalla, zCaja = anchoMalla;
+    glTranslatef(xBrazoPequenyo-xCaja/2, altoMalla / 2 - yCaja * 2, 0); //T4
+    I (xCaja, yCaja, zCaja);
+}
 
 //D+E
-    void brazoGrandeConCaja(float xBrazoGrande){
-        int numMallas = xBrazoGrande/2;
-        float zBrazoGrande = 1;
-        D(xBrazoGrande, zBrazoGrande, numMallas);
+void Grua::brazoGrandeConCaja(float xBrazoGrande){
+    int numMallas = xBrazoGrande/2;
+    float zBrazoGrande = 1;
+    D(xBrazoGrande, zBrazoGrande, numMallas);
 
-        float xCaja = xBrazoGrande/numMallas, yCaja = zBrazoGrande/8, zCaja = zBrazoGrande;
-        glTranslatef(xCaja/2,-yCaja,0); //T7
-        E(xCaja, yCaja, zCaja);
-    }
+    float xCaja = xBrazoGrande/numMallas, yCaja = zBrazoGrande/8, zCaja = zBrazoGrande;
+    glTranslatef(xCaja/2,-yCaja,0); //T7
+    E(xCaja, yCaja, zCaja);
+}
 
 //F+G
-    void cuerdaConGancho(float yCuerda){
-        glRotatef(anguloR2, 0,0,1);//R2
-        F(-yCuerda);
+void Grua::cuerdaConGancho(float yCuerda){
+    glRotatef(anguloR2, 0,0,1);//R2
+    F(-yCuerda);
 
-        float yGancho = yCuerda/4;
-        glTranslatef(0, -yCuerda, 0); //T8
-        glRotatef(anguloR3, 0,1,0);//R3
-        G(yGancho);
-    }
+    float yGancho = yCuerda/4;
+    glTranslatef(0, -yCuerda, 0); //T8
+    glRotatef(anguloR3, 0,1,0);//R3
+    G(yGancho);
+}
 
 //D+E+F+G
-    void brazoGrande (float xBrazoGrande, float yCuerda){
+void Grua::brazoGrande (float xBrazoGrande, float yCuerda){
 
-        glPushMatrix();
-        brazoGrandeConCaja(xBrazoGrande);
-        glPopMatrix();
+    glPushMatrix();
+    brazoGrandeConCaja(xBrazoGrande);
+    glPopMatrix();
 
-        int numMallas = xBrazoGrande/8;
-        if (xBrazoGrande <= 15)
-            numMallas = xBrazoGrande/8 * 2;
-        if (xBrazoGrande <= 8)
-            numMallas = xBrazoGrande/8 * 4;
+    int numMallas = xBrazoGrande/8;
+    if (xBrazoGrande <= 15)
+        numMallas = xBrazoGrande/8 * 2;
+    if (xBrazoGrande <= 8)
+        numMallas = xBrazoGrande/8 * 4;
 
-        glTranslatef(numMallas/2,0,0); //T6
-        glPushMatrix();
-        cuerdaConGancho(yCuerda);
-        glPopMatrix();
-    }
+    glTranslatef(numMallas/2,0,0); //T6
+    glPushMatrix();
+    cuerdaConGancho(yCuerda);
+    glPopMatrix();
+}
 
 //D+E+F+G+B
-    void brazoGrandeConCubo (float xBrazoGrande, float yCuerda){
-        int numMallas = xBrazoGrande/2;
-        glPushMatrix();
-        brazoGrande(xBrazoGrande, yCuerda);
-        glPopMatrix();
+void Grua::brazoGrandeConCubo (float xBrazoGrande, float yCuerda){
+    int numMallas = xBrazoGrande/2;
+    glPushMatrix();
+    brazoGrande(xBrazoGrande, yCuerda);
+    glPopMatrix();
 
-        float xCajaCubo = numMallas/4, yCajaCubo = -xCajaCubo/2, zCajaCubo = numMallas/4;
+    float xCajaCubo = numMallas/4, yCajaCubo = -xCajaCubo/2, zCajaCubo = numMallas/4;
 
-        glPushMatrix();
-        glTranslatef(xBrazoGrande+xCajaCubo/2,0,0); //T5
-        B(xCajaCubo, yCajaCubo, zCajaCubo);
-        glPopMatrix();
-    }
+    glPushMatrix();
+    glTranslatef(xBrazoGrande+xCajaCubo/2,0,0); //T5
+    B(xCajaCubo, yCajaCubo, zCajaCubo);
+    glPopMatrix();
+}
 
 //D+E+F+G+B+H+I
 
-    void brazoGrandeConCuboYBrazoPequenyo(float xBrazoGrande, float yCuerda, float xBrazoPequenyo){
-        int numMallas = xBrazoGrande/2;
-        float xCajaCubo = numMallas/4, yCajaCubo = xCajaCubo/2;
+void Grua::brazoGrandeConCuboYBrazoPequenyo(float xBrazoGrande,
+                                            float yCuerda, float xBrazoPequenyo){
+    int numMallas = xBrazoGrande/2;
+    float xCajaCubo = numMallas/4, yCajaCubo = xCajaCubo/2;
 
-        glRotatef(anguloR1, 0,1,0); //R1
-        glTranslatef(-xBrazoGrande-xCajaCubo/2, 0, 0); //T2
-        glPushMatrix();
-        brazoGrandeConCubo(xBrazoGrande, yCuerda);
-        glPopMatrix();
+    glRotatef(anguloR1, 0,1,0); //R1
+    glTranslatef(-xBrazoGrande-xCajaCubo/2, 0, 0); //T2
+    glPushMatrix();
+    brazoGrandeConCubo(xBrazoGrande, yCuerda);
+    glPopMatrix();
 
-        glTranslatef(xBrazoGrande+xCajaCubo, yCajaCubo-yCajaCubo/2,0); //T3
-        glPushMatrix();
-        brazoPequenyoConCaja(xBrazoPequenyo);
-        glPopMatrix();
-    }
+    glTranslatef(xBrazoGrande+xCajaCubo, yCajaCubo-yCajaCubo/2,0); //T3
+    glPushMatrix();
+    brazoPequenyoConCaja(xBrazoPequenyo);
+    glPopMatrix();
+}
 
 //A+C+D+E+F+G+B+H+I
-    void construirGrua(float xBrazoGrande, float yCuerda, float xBrazoPequenyo,
-                       float yPie){
-        //Construimos figura A
-        int numMallasPie = xBrazoGrande/2;
-        float xzPieYTorre = 1;
-        A(xzPieYTorre, yPie, numMallasPie);
+void Grua::construirGrua(float xBrazoGrande, float yCuerda, float xBrazoPequenyo,
+                         float yPie){
+    //Construimos figura A
+    int numMallasPie = xBrazoGrande/2;
+    float xzPieYTorre = 1;
+    A(xzPieYTorre, yPie, numMallasPie);
 
-        //Construimos figura brazoGrandeConCuboYBrazoPequenyo
-        int numMallas = xBrazoGrande/2;
-        float xCajaCubo = numMallas/4, yCajaCubo = xCajaCubo/2;
-        glTranslatef(xCajaCubo/2 - xzPieYTorre +xCajaCubo/2, yPie + yCajaCubo, 0); //T1
-        glPushMatrix();
-        brazoGrandeConCuboYBrazoPequenyo(xBrazoGrande, yCuerda, xBrazoPequenyo);
-        glPopMatrix();
+    //Construimos figura brazoGrandeConCuboYBrazoPequenyo
+    int numMallas = xBrazoGrande/2;
+    float xCajaCubo = numMallas/4, yCajaCubo = xCajaCubo/2;
+    glTranslatef(xCajaCubo/2 - xzPieYTorre +xCajaCubo/2, yPie + yCajaCubo, 0); //T1
+    glPushMatrix();
+    brazoGrandeConCuboYBrazoPequenyo(xBrazoGrande, yCuerda, xBrazoPequenyo);
+    glPopMatrix();
 
-        //Construimos figura C
-        float yTorre = xBrazoGrande/5;
-        int numMallasTorre = numMallas/2;
-        C(xzPieYTorre, yTorre, numMallasTorre);
-    }
-    void dibujaGrua(float alturaPie, float largoBrazoGrande, float alturaCuerda,
-                    float largoBrazoPeq){
-        construirGrua(largoBrazoGrande,alturaCuerda,
-                      largoBrazoPeq,alturaPie);
-    }
+    //Construimos figura C
+    float yTorre = xBrazoGrande/5;
+    int numMallasTorre = numMallas/2;
+    C(xzPieYTorre, yTorre, numMallasTorre);
+}
+void Grua::draw(){
+    glPushAttrib(GL_LIGHTING_BIT);
+    construirGrua(largoBrazoGrande,alturaCuerda,
+                  largoBrazoPeq,alturaPie);
+    glPopAttrib();
+}
 
 /**
  * Instanciamos objetos de los ejes y de la grúa
  */
 
 Ejes ejesCoordenadas;
+Grua grua(10,10,3,6);
 
 
 
@@ -345,7 +349,7 @@ void Dibuja (void)
 
     ejesCoordenadas.draw();			// Dibuja los ejes
 
-    dibujaGrua(10,10,3,6);
+    grua.draw();
 
     if (iluminacion) //Activa / desactiva la iluminación de las figuras
         glEnable(GL_LIGHTING); //Activa
@@ -372,5 +376,5 @@ void idle (int v) {
 
     glutPostRedisplay();        // Redibuja
     glutTimerFunc(30, idle, 0);    // Vuelve a activarse dentro de 30 ms
-    animaciones();
+    grua.animaciones();
 }
