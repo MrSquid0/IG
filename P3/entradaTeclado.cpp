@@ -33,7 +33,6 @@ modulo entradaTeclado.c
 #include <GL/glut.h>		// Libreria de utilidades de OpenGL
 #include "practicasIG.h"
 
-
 /** 
 
 Imprime en la consola las instrucciones del programa

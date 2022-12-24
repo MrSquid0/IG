@@ -65,13 +65,14 @@ struct cara{
     int v1, v2, v3; //Índice de vértices que componen una cara
 };
 
+//Getters de los ángulos de la grúa
 int getAnguloR1();
 int getAnguloR2();
 int getAnguloR3();
 
+//Setters de los ángulos de la grúa
 void setAnguloR1(int angulo);
 void setAnguloR2(int angulo);
-
 void setAnguloR3(int angulo);
 
 
@@ -114,7 +115,6 @@ private:
                                           float yCuerda, float xBrazoPequenyo);
     void construirGrua(float xBrazoGrande, float yCuerda,
                        float xBrazoPequenyo, float yPie);
-
 public:
     Grua(float alturaPie, float largoBrazoGrande, float alturaCuerda,
          float largoBrazoPeq);

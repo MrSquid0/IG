@@ -158,6 +158,16 @@ public:
                                       float specular[4], float brillo);
 };
 
+//Getters de los ángulos de la grúa
+int getAnguloR1();
+int getAnguloR2();
+int getAnguloR3();
+
+//Setters de los ángulos de la grúa
+void setAnguloR1(int angulo);
+void setAnguloR2(int angulo);
+void setAnguloR3(int angulo);
+
 class Grua : public Objeto3D {
 private:
     //Colores
@@ -189,7 +199,6 @@ private:
                                           float yCuerda, float xBrazoPequenyo);
     void construirGrua(float xBrazoGrande, float yCuerda,
                        float xBrazoPequenyo, float yPie);
-
 public:
     Grua(float alturaPie, float largoBrazoGrande, float alturaCuerda,
          float largoBrazoPeq);

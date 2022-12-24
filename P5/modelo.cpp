@@ -1,27 +1,14 @@
 /*	Prácticas de Informática Gráfica
 	Grupo C					Curso 2022-23
 
-	Codigo base para la realización de las practicas de IG
+	Codigo base para la realización de las prácticas de IG
 
 	Estudiante: Gonzalo Jose Lopez Castilla
 =======================================================
 	G. Arroyo, J.C. Torres
 	Dpto. Lenguajes y Sistemas Informáticos
 	(Univ. de Granada)
- This program is free software; you can redistribute it and/or
- modify it under the terms of the GNU General Public License
- as published by the Free Software Foundation; either version 2
- of the License, or (at your option) any later version.
- This program is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU General Public License for more details
- http://www.gnu.org/copyleft/gpl.html
 =======================================================/
-modulo modelo.c
-    Representación del modelo
-    Funciones de dibujo
-    Función Idle
 */
 #include <iostream>
 #include <cstdio>
@@ -31,7 +18,7 @@ modulo modelo.c
 #include "practicasIG.h"
 #include <vector>
 #include "file_ply_stl.h"
-#include "estructura.h"
+#include "estructura.h"     //Librería para usar piezas de la grúa
 
 
 /**	void initModel()
@@ -68,29 +55,21 @@ void setIluminacion2() {
         iluminacion2 = true;
 }
 
+//Ángulos de las rotaciones de la grúa (con sus setters y getters)
 int anguloR1 = 0, anguloR2 = 0, anguloR3 = 0, anguloAnimacion = 0;
-
 int getAnguloR1(){
-    return anguloR1;
-};
+    return anguloR1;};
 int getAnguloR2(){
-    return anguloR2;
-};
+    return anguloR2;};
 int getAnguloR3(){
-    return anguloR3;
-};
+    return anguloR3;};
 
 void setAnguloR1(int angulo){
-    anguloR1 = angulo;
-};
-
+    anguloR1 = angulo;};
 void setAnguloR2(int angulo){
-    anguloR2 = angulo;
-};
-
+    anguloR2 = angulo;};
 void setAnguloR3(int angulo){
-    anguloR3 = angulo;
-};
+    anguloR3 = angulo;};
 
 void Grua::animaciones(){
     //Aumentanmos R1
@@ -288,10 +267,12 @@ void Grua::construirGrua(float xBrazoGrande, float yCuerda, float xBrazoPequenyo
     C(xzPieYTorre, yTorre, numMallasTorre);
 }
 void Grua::draw(){
+    glPushMatrix();
     glPushAttrib(GL_LIGHTING_BIT);
     construirGrua(largoBrazoGrande,alturaCuerda,
                   largoBrazoPeq,alturaPie);
     glPopAttrib();
+    glPopMatrix();
 }
 
 void mallaTriangulos::setMaterial(float ambient[4], float diffuse[4],
@@ -766,6 +747,7 @@ mallaRevolucion lataTapa("lata-psup.ply", 60);
 mallaRevolucion lataBase("lata-pinf.ply", 60);
 mallaTriangulos busto("beethoven.ply");
 mallaRevolucion peon("perfil.ply", 60);
+mallaTriangulos coche("big_dodge.ply");
 Grua grua(10,10,3,6);
 
 void initModel() {
@@ -775,17 +757,8 @@ void initModel() {
     lataBase.cargarTextura("tapas.jpg");
 }
 
-/**	void Dibuja( void )
-Procedimiento de dibujo del modelo. Es llamado por glut cada vez que se debe redibujar.
-**/
-
-void Dibuja(void) {
-    static GLfloat luzAmbiente[4] = {5.0, 5.0, 10.0, 0.0};    // Posicion de la fuente de luz
-    static GLfloat morado[3] = {1.0, 0.0, 1.0};
-    static GLfloat pos1[4] = {0.0, 20.0, 40.0, 1.0};
-    static GLfloat verde[3] = {0.0, 1.0, 0.0};
-    static GLfloat pos2[4] = {20.0, 0.0, 1.0, 40.0};
-
+void dibujaEscena(){
+    //Materiales
     float cobreAmbient[4] = {0.19125, 0.0735, 0.0225, 1.00};
     float cobreDiffuse[4] = {0.7038, 0.27048, 0.0828, 1.00};
     float cobreSpecular[4] = {0.256777, 0.137622, 0.086014, 1.00};
@@ -801,6 +774,50 @@ void Dibuja(void) {
     float plataSpecular[4] = {0.508273, 0.508273, 0.508273, 1.00};
     float plataBrillo = 0.4;
 
+    //Dado
+    glTranslatef(-10, 0, 0);
+    dado.draw();
+
+    //Lata
+    glTranslatef(10, 0, 0);
+    glPushMatrix();
+    glRotatef(100, 0, 1, 0);
+    lata.draw();
+    lataTapa.draw();
+    lataBase.draw();
+    glPopMatrix();
+
+    //Busto de Beethoven
+    glTranslatef(5, 0, 0);
+    busto.setMaterial(cobreAmbient, cobreDiffuse, cobreSpecular, cobreBrillo);
+    busto.draw();
+
+    //Peón
+    glTranslatef(-5, 0, 10);
+    peon.setMaterial(turquesaAmbient, turquesaDiffuse, turquesaSpecular, turquesaBrillo);
+    peon.draw();
+
+    //Grúa
+    glTranslatef(10, 0, 0);
+    grua.draw();
+
+    //Coche
+    glTranslatef(-22, 0, 0);
+    coche.setMaterial(plataAmbient, plataDiffuse, plataSpecular, plataBrillo);
+    coche.draw();
+}
+
+/**	void Dibuja( void )
+Procedimiento de dibujo del modelo. Es llamado por glut cada vez que se debe redibujar.
+**/
+
+void Dibuja(void) {
+    //Luces
+    static GLfloat luzAmbiente[4] = {5.0, 5.0, 10.0, 0.0};    // Posicion de la fuente de luz
+    static GLfloat morado[3] = {1.0, 0.0, 1.0};
+    static GLfloat pos1[4] = {0.0, 20.0, 40.0, 1.0};
+    static GLfloat verde[3] = {0.0, 1.0, 0.0};
+    static GLfloat pos2[4] = {20.0, 0.0, 1.0, 40.0};
 
     glPushMatrix();        // Apila la transformacion geometrica actual
 
@@ -838,35 +855,9 @@ void Dibuja(void) {
 
     glPolygonMode(GL_FRONT_AND_BACK, modo); //Cambia los modos de visualización
 
-    glTranslatef(-10, 0, 0);
-    dado.draw();
-
-    glTranslatef(10, 0, 0);
-
-    glPushMatrix();
-    glRotatef(100, 0, 1, 0);
-    lata.draw();
-    lataTapa.draw();
-    lataBase.draw();
-    glPopMatrix();
-
-    glTranslatef(5, 0, 0);
-
-    busto.setMaterial(cobreAmbient, cobreDiffuse, cobreSpecular, cobreBrillo);
-    busto.draw();
-
-    glTranslatef(-5, 0, 10);
-    peon.setMaterial(turquesaAmbient, turquesaDiffuse, turquesaSpecular, turquesaBrillo);
-    peon.draw();
-
-    glTranslatef(10, 0, 0);
-
-    grua.draw();
-
-    // Dibuja el modelo (A rellenar en prácticas 1,2 y 3)
+    dibujaEscena(); //Dibuja la escena con todas las figuras de las prácticas 2, 3 y 4
 
     glPopMatrix();        // Desapila la transformacion geometrica
-
 
     glutSwapBuffers();        // Intercambia el buffer de dibujo y visualizacion
 }

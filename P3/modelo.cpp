@@ -43,29 +43,21 @@ initModel ()
 
 }
 
+//Ángulos de las rotaciones de la grúa (con sus setters y getters)
 int anguloR1 = 0, anguloR2 = 0, anguloR3 = 0, anguloAnimacion = 0;
-
 int getAnguloR1(){
-    return anguloR1;
-};
+    return anguloR1;};
 int getAnguloR2(){
-    return anguloR2;
-};
+    return anguloR2;};
 int getAnguloR3(){
-    return anguloR3;
-};
+    return anguloR3;};
 
 void setAnguloR1(int angulo){
-    anguloR1 = angulo;
-};
-
+    anguloR1 = angulo;};
 void setAnguloR2(int angulo){
-    anguloR2 = angulo;
-};
-
+    anguloR2 = angulo;};
 void setAnguloR3(int angulo){
-    anguloR3 = angulo;
-};
+    anguloR3 = angulo;};
 
 void Grua::animaciones(){
     //Aumentanmos R1
@@ -349,7 +341,7 @@ void Dibuja (void)
 
     ejesCoordenadas.draw();			// Dibuja los ejes
 
-    grua.draw();
+    grua.draw(); //Dibuja la grúa
 
     if (iluminacion) //Activa / desactiva la iluminación de las figuras
         glEnable(GL_LIGHTING); //Activa
