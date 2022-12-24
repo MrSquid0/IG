@@ -538,6 +538,7 @@ mallaRevolucion lata("lata-pcue.ply", 90);
 mallaRevolucion lataTapa("lata-psup.ply", 60);
 mallaRevolucion lataBase("lata-pinf.ply", 60);
 mallaTriangulos busto("beethoven.ply");
+mallaRevolucion peon("perfil.ply", 60);
 
 void initModel() {
     dado.cargarTextura();
@@ -627,12 +628,9 @@ void Dibuja(void) {
     busto.draw();
 
     glTranslatef(-5, 0, 10);
-    busto.setMaterial(turquesaAmbient, turquesaDiffuse, turquesaSpecular, turquesaBrillo);
-    busto.draw();
+    peon.setMaterial(turquesaAmbient, turquesaDiffuse, turquesaSpecular, turquesaBrillo);
+    peon.draw();
 
-    glTranslatef(10, 0, 0);
-    busto.setMaterial(plataAmbient, plataDiffuse, plataSpecular, plataBrillo);
-    busto.draw();
 
     // Dibuja el modelo (A rellenar en prácticas 1,2 y 3)
 
