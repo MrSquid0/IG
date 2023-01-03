@@ -54,7 +54,7 @@ int main (int argc, char *argv[])
 // Inicializa glu y openGL
   glutInit (&argc, argv);
 
-// Crea una ventana X para la salida grafica en la posicion 0,0 con tamaño 800x800, con colores RGB-alfa, con doble buffer, y 
+// Crea una ventana X para la salida gráfica en la posicion 0,0 con tamaño 800x800, con colores RGB-alfa, con doble buffer, y
 // buffer de profundidad
 
 
@@ -64,8 +64,9 @@ int main (int argc, char *argv[])
   glutInitDisplayMode (GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH);
   glutCreateWindow ("IG. Curso 2022/23. Autor: Gonzalo Jose Lopez Castilla");
 
-// Inicializa las variables del modelo
+// Inicializa las variables del modelo y el menú
   initModel ();
+  initMenu ();
 
 // Inicializa las funciones de dibujo y cambio de tamanyo de la ventana X
   glutDisplayFunc (Dibuja);

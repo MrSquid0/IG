@@ -49,13 +49,14 @@ x,y: Posicion, en coordenadas de pantalla, en que se encuantra el cursor.
 **/
 
 bool moviendo_camara = false;
-float   xant = 0,
+int   xant = 0,
         yant = 0,
         x_act = 0,
         y_act = 0;
 
 void clickRaton (int boton, int estado, int x, int y)
 {
+
     if (boton == GLUT_MIDDLE_BUTTON){
         if (estado == GLUT_DOWN){
             moviendo_camara = true;
@@ -65,6 +66,14 @@ void clickRaton (int boton, int estado, int x, int y)
     }
     else{
         moviendo_camara = false;
+    }
+
+    if(boton== GLUT_LEFT_BUTTON){
+        if( estado == GLUT_DOWN) {
+            xant=x;
+            yant=y;
+            pick(xant, yant, nullptr);
+        }
     }
 }
 

@@ -57,53 +57,64 @@ void setIluminacion2() {
 
 //Ángulos de las rotaciones de la grúa (con sus setters y getters)
 int anguloR1 = 0, anguloR2 = 0, anguloR3 = 0, anguloAnimacion = 0;
-int getAnguloR1(){
-    return anguloR1;};
-int getAnguloR2(){
-    return anguloR2;};
-int getAnguloR3(){
-    return anguloR3;};
 
-void setAnguloR1(int angulo){
-    anguloR1 = angulo;};
-void setAnguloR2(int angulo){
-    anguloR2 = angulo;};
-void setAnguloR3(int angulo){
-    anguloR3 = angulo;};
+int getAnguloR1() {
+    return anguloR1;
+};
 
-void Grua::animaciones(){
+int getAnguloR2() {
+    return anguloR2;
+};
+
+int getAnguloR3() {
+    return anguloR3;
+};
+
+void setAnguloR1(int angulo) {
+    anguloR1 = angulo;
+};
+
+void setAnguloR2(int angulo) {
+    anguloR2 = angulo;
+};
+
+void setAnguloR3(int angulo) {
+    anguloR3 = angulo;
+};
+
+void Grua::animaciones() {
     //Aumentanmos R1
-    setAnguloR1(getAnguloR1()+1);
-    if (getAnguloR1()>360)
-        setAnguloR1(getAnguloR1()-360);
+    setAnguloR1(getAnguloR1() + 1);
+    if (getAnguloR1() > 360)
+        setAnguloR1(getAnguloR1() - 360);
 
-    if (anguloAnimacion < anguloR2 || anguloR2 == -90){
+    if (anguloAnimacion < anguloR2 || anguloR2 == -90) {
         anguloAnimacion = anguloR2;
         //Aumentamos R2
-        setAnguloR2(getAnguloR2()+1);
-        if (getAnguloR2()>90)
+        setAnguloR2(getAnguloR2() + 1);
+        if (getAnguloR2() > 90)
             setAnguloR2(90);
-    } else if (anguloAnimacion > anguloR2 || anguloR2 == 90){
+    } else if (anguloAnimacion > anguloR2 || anguloR2 == 90) {
         anguloAnimacion = anguloR2;
         //Decrementamos R2
-        setAnguloR2(getAnguloR2()-1);
-        if (getAnguloR2()<-90)
+        setAnguloR2(getAnguloR2() - 1);
+        if (getAnguloR2() < -90)
             setAnguloR2(-90);
     } else {
         //Aumentamos R2
-        setAnguloR2(getAnguloR2()+1);
-        if (getAnguloR2()>90)
+        setAnguloR2(getAnguloR2() + 1);
+        if (getAnguloR2() > 90)
             setAnguloR2(90);
     }
 
     //Aumentamos R3
-    setAnguloR3(getAnguloR3()+1);
-    if (getAnguloR3()>360)
-        setAnguloR3(getAnguloR3()-360);
+    setAnguloR3(getAnguloR3() + 1);
+    if (getAnguloR3() > 360)
+        setAnguloR3(getAnguloR3() - 360);
 }
 
 Grua::Grua(float alturaPie, float largoBrazoGrande,
-           float alturaCuerda, float largoBrazoPeq) {
+           float alturaCuerda, float largoBrazoPeq, int id) : Objeto3D(id) {
     this->alturaPie = alturaPie;
     this->largoBrazoGrande = largoBrazoGrande;
     this->alturaCuerda = alturaCuerda;
@@ -111,117 +122,117 @@ Grua::Grua(float alturaPie, float largoBrazoGrande,
 }
 
 //Figuras según el grafo
-void Grua::A (float xzPie, float yPie, int numMallas){
-    glMaterialfv (GL_FRONT, GL_AMBIENT_AND_DIFFUSE, amarillo);
+void Grua::A(float xzPie, float yPie, int numMallas) {
+    glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, amarillo);
     creaEstructura(0, 0, 0, 0, yPie, 0, xzPie, xzPie, numMallas);
 }
 
 
-void Grua::B (float xCaja, float yCaja, float zCaja){
-    glMaterialfv (GL_FRONT, GL_AMBIENT_AND_DIFFUSE, amarillo);
+void Grua::B(float xCaja, float yCaja, float zCaja) {
+    glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, amarillo);
     paralelepipedo(0, 0, 0, 0, yCaja, 0, xCaja, zCaja);
 }
 
-void Grua::C (float xzTorre, float yTorre, int numMallas){
-    glMaterialfv (GL_FRONT, GL_AMBIENT_AND_DIFFUSE, rojo);
+void Grua::C(float xzTorre, float yTorre, int numMallas) {
+    glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, rojo);
     creaTorre(0, 0, 0, 0, yTorre, 0, xzTorre, xzTorre, numMallas);
 }
 
-void Grua::D (float xBrazoGrande, float zBrazoGrande, int numMallas){
-    glMaterialfv (GL_FRONT, GL_AMBIENT_AND_DIFFUSE, amarillo);
+void Grua::D(float xBrazoGrande, float zBrazoGrande, int numMallas) {
+    glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, amarillo);
     creaBrazo(0, 0, 0, xBrazoGrande, 0, 0, zBrazoGrande, numMallas);
 }
 
-void Grua::E (float xCaja, float yCaja, float zCaja){
-    glMaterialfv (GL_FRONT, GL_AMBIENT_AND_DIFFUSE, rojo);
+void Grua::E(float xCaja, float yCaja, float zCaja) {
+    glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, rojo);
     paralelepipedo(0, 0, 0, 0, yCaja, 0, xCaja, zCaja);
 }
 
-void Grua::F (float yCuerda){
-    glMaterialfv (GL_FRONT, GL_AMBIENT_AND_DIFFUSE, gris);
+void Grua::F(float yCuerda) {
+    glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, gris);
     cilindro(0, 0, 0, 0, yCuerda, 0, 0.1);
 }
 
-void Grua::G (float yGancho){
-    glMaterialfv (GL_FRONT, GL_AMBIENT_AND_DIFFUSE, gris);
+void Grua::G(float yGancho) {
+    glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, gris);
     creaGancho(0, 0, 0, yGancho);
 }
 
-void Grua::H (float xBrazoPequenyo, float altoMalla, float anchoMalla, int numMallas){
-    glMaterialfv (GL_FRONT, GL_AMBIENT_AND_DIFFUSE, amarillo);
+void Grua::H(float xBrazoPequenyo, float altoMalla, float anchoMalla, int numMallas) {
+    glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, amarillo);
     creaEstructura(0, 0, 0, xBrazoPequenyo, 0, 0, altoMalla, anchoMalla, numMallas);
 }
 
-void Grua::I (float xCaja, float yCaja, float zCaja){
-    glMaterialfv (GL_FRONT, GL_AMBIENT_AND_DIFFUSE, gris);
-    caja(xCaja,yCaja,zCaja);
+void Grua::I(float xCaja, float yCaja, float zCaja) {
+    glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, gris);
+    caja(xCaja, yCaja, zCaja);
 }
 
 
 //H+I
-void Grua::brazoPequenyoConCaja(float xBrazoPequenyo){
+void Grua::brazoPequenyoConCaja(float xBrazoPequenyo) {
 
-    int numMallas = xBrazoPequenyo/2;
+    int numMallas = xBrazoPequenyo / 2;
     float altoMalla = 0.5, anchoMalla = 1;
-    H (xBrazoPequenyo, altoMalla, anchoMalla, numMallas);
+    H(xBrazoPequenyo, altoMalla, anchoMalla, numMallas);
 
-    float xCaja = xBrazoPequenyo/3, yCaja = altoMalla, zCaja = anchoMalla;
-    glTranslatef(xBrazoPequenyo-xCaja/2, altoMalla / 2 - yCaja * 2, 0); //T4
-    I (xCaja, yCaja, zCaja);
+    float xCaja = xBrazoPequenyo / 3, yCaja = altoMalla, zCaja = anchoMalla;
+    glTranslatef(xBrazoPequenyo - xCaja / 2, altoMalla / 2 - yCaja * 2, 0); //T4
+    I(xCaja, yCaja, zCaja);
 }
 
 //D+E
-void Grua::brazoGrandeConCaja(float xBrazoGrande){
-    int numMallas = xBrazoGrande/2;
+void Grua::brazoGrandeConCaja(float xBrazoGrande) {
+    int numMallas = xBrazoGrande / 2;
     float zBrazoGrande = 1;
     D(xBrazoGrande, zBrazoGrande, numMallas);
 
-    float xCaja = xBrazoGrande/numMallas, yCaja = zBrazoGrande/8, zCaja = zBrazoGrande;
-    glTranslatef(xCaja/2,-yCaja,0); //T7
+    float xCaja = xBrazoGrande / numMallas, yCaja = zBrazoGrande / 8, zCaja = zBrazoGrande;
+    glTranslatef(xCaja / 2, -yCaja, 0); //T7
     E(xCaja, yCaja, zCaja);
 }
 
 //F+G
-void Grua::cuerdaConGancho(float yCuerda){
-    glRotatef(anguloR2, 0,0,1);//R2
+void Grua::cuerdaConGancho(float yCuerda) {
+    glRotatef(anguloR2, 0, 0, 1);//R2
     F(-yCuerda);
 
-    float yGancho = yCuerda/4;
+    float yGancho = yCuerda / 4;
     glTranslatef(0, -yCuerda, 0); //T8
-    glRotatef(anguloR3, 0,1,0);//R3
+    glRotatef(anguloR3, 0, 1, 0);//R3
     G(yGancho);
 }
 
 //D+E+F+G
-void Grua::brazoGrande (float xBrazoGrande, float yCuerda){
+void Grua::brazoGrande(float xBrazoGrande, float yCuerda) {
 
     glPushMatrix();
     brazoGrandeConCaja(xBrazoGrande);
     glPopMatrix();
 
-    int numMallas = xBrazoGrande/8;
+    int numMallas = xBrazoGrande / 8;
     if (xBrazoGrande <= 15)
-        numMallas = xBrazoGrande/8 * 2;
+        numMallas = xBrazoGrande / 8 * 2;
     if (xBrazoGrande <= 8)
-        numMallas = xBrazoGrande/8 * 4;
+        numMallas = xBrazoGrande / 8 * 4;
 
-    glTranslatef(numMallas/2,0,0); //T6
+    glTranslatef(numMallas / 2, 0, 0); //T6
     glPushMatrix();
     cuerdaConGancho(yCuerda);
     glPopMatrix();
 }
 
 //D+E+F+G+B
-void Grua::brazoGrandeConCubo (float xBrazoGrande, float yCuerda){
-    int numMallas = xBrazoGrande/2;
+void Grua::brazoGrandeConCubo(float xBrazoGrande, float yCuerda) {
+    int numMallas = xBrazoGrande / 2;
     glPushMatrix();
     brazoGrande(xBrazoGrande, yCuerda);
     glPopMatrix();
 
-    float xCajaCubo = numMallas/4, yCajaCubo = -xCajaCubo/2, zCajaCubo = numMallas/4;
+    float xCajaCubo = numMallas / 4, yCajaCubo = -xCajaCubo / 2, zCajaCubo = numMallas / 4;
 
     glPushMatrix();
-    glTranslatef(xBrazoGrande+xCajaCubo/2,0,0); //T5
+    glTranslatef(xBrazoGrande + xCajaCubo / 2, 0, 0); //T5
     B(xCajaCubo, yCajaCubo, zCajaCubo);
     glPopMatrix();
 }
@@ -229,17 +240,17 @@ void Grua::brazoGrandeConCubo (float xBrazoGrande, float yCuerda){
 //D+E+F+G+B+H+I
 
 void Grua::brazoGrandeConCuboYBrazoPequenyo(float xBrazoGrande,
-                                            float yCuerda, float xBrazoPequenyo){
-    int numMallas = xBrazoGrande/2;
-    float xCajaCubo = numMallas/4, yCajaCubo = xCajaCubo/2;
+                                            float yCuerda, float xBrazoPequenyo) {
+    int numMallas = xBrazoGrande / 2;
+    float xCajaCubo = numMallas / 4, yCajaCubo = xCajaCubo / 2;
 
-    glRotatef(anguloR1, 0,1,0); //R1
-    glTranslatef(-xBrazoGrande-xCajaCubo/2, 0, 0); //T2
+    glRotatef(anguloR1, 0, 1, 0); //R1
+    glTranslatef(-xBrazoGrande - xCajaCubo / 2, 0, 0); //T2
     glPushMatrix();
     brazoGrandeConCubo(xBrazoGrande, yCuerda);
     glPopMatrix();
 
-    glTranslatef(xBrazoGrande+xCajaCubo, yCajaCubo-yCajaCubo/2,0); //T3
+    glTranslatef(xBrazoGrande + xCajaCubo, yCajaCubo - yCajaCubo / 2, 0); //T3
     glPushMatrix();
     brazoPequenyoConCaja(xBrazoPequenyo);
     glPopMatrix();
@@ -247,30 +258,31 @@ void Grua::brazoGrandeConCuboYBrazoPequenyo(float xBrazoGrande,
 
 //A+C+D+E+F+G+B+H+I
 void Grua::construirGrua(float xBrazoGrande, float yCuerda, float xBrazoPequenyo,
-                         float yPie){
+                         float yPie) {
     //Construimos figura A
-    int numMallasPie = xBrazoGrande/2;
+    int numMallasPie = xBrazoGrande / 2;
     float xzPieYTorre = 1;
     A(xzPieYTorre, yPie, numMallasPie);
 
     //Construimos figura brazoGrandeConCuboYBrazoPequenyo
-    int numMallas = xBrazoGrande/2;
-    float xCajaCubo = numMallas/4, yCajaCubo = xCajaCubo/2;
-    glTranslatef(xCajaCubo/2 - xzPieYTorre +xCajaCubo/2, yPie + yCajaCubo, 0); //T1
+    int numMallas = xBrazoGrande / 2;
+    float xCajaCubo = numMallas / 4, yCajaCubo = xCajaCubo / 2;
+    glTranslatef(xCajaCubo / 2 - xzPieYTorre + xCajaCubo / 2, yPie + yCajaCubo, 0); //T1
     glPushMatrix();
     brazoGrandeConCuboYBrazoPequenyo(xBrazoGrande, yCuerda, xBrazoPequenyo);
     glPopMatrix();
 
     //Construimos figura C
-    float yTorre = xBrazoGrande/5;
-    int numMallasTorre = numMallas/2;
+    float yTorre = xBrazoGrande / 5;
+    int numMallasTorre = numMallas / 2;
     C(xzPieYTorre, yTorre, numMallasTorre);
 }
-void Grua::draw(){
+
+void Grua::draw() {
     glPushMatrix();
     glPushAttrib(GL_LIGHTING_BIT);
-    construirGrua(largoBrazoGrande,alturaCuerda,
-                  largoBrazoPeq,alturaPie);
+    construirGrua(largoBrazoGrande, alturaCuerda,
+                  largoBrazoPeq, alturaPie);
     glPopAttrib();
     glPopMatrix();
 }
@@ -314,7 +326,7 @@ void Ejes::draw() {
     glEnable(GL_LIGHTING);
 }
 
-Cubo::Cubo(float lado) {
+Cubo::Cubo(float lado, int id) : Objeto3D(id) {
     l = lado;
 }
 
@@ -415,7 +427,11 @@ void Cubo::cargarTextura() {
 }
 
 //Constructor de la malla pasándole por argumento la figura que queramos dibujar
-mallaTriangulos::mallaTriangulos(const char archivo[50]) {
+mallaTriangulos::mallaTriangulos(int id) : Objeto3D(id) {
+
+}
+
+mallaTriangulos::mallaTriangulos(const char archivo[50], int id) : Objeto3D(id) {
     esTextura = false;
     char fichero[50];
     sprintf(fichero, "./plys/%s", archivo);
@@ -603,7 +619,7 @@ void mallaTriangulos::draw() {
     glPopAttrib();
 }
 
-mallaRevolucion::mallaRevolucion(const char *archivo, int veces) {
+mallaRevolucion::mallaRevolucion(const char *archivo, int veces, int id) : mallaTriangulos(id) {
     esTextura = false;
     n = veces;
     char fichero[50];
@@ -741,14 +757,14 @@ void mallaRevolucion::obtenerCoordenadasTapayBase(float desplazamiento) {
  */
 
 Ejes ejesCoordenadas;
-Cubo dado(5);
-mallaRevolucion lata("lata-pcue.ply", 90);
-mallaRevolucion lataTapa("lata-psup.ply", 60);
-mallaRevolucion lataBase("lata-pinf.ply", 60);
-mallaTriangulos busto("beethoven.ply");
-mallaRevolucion peon("perfil.ply", 60);
-mallaTriangulos coche("big_dodge.ply");
-Grua grua(10,10,3,6);
+Cubo dado(5, 1);
+mallaRevolucion lata("lata-pcue.ply", 90, 2);
+mallaRevolucion lataTapa("lata-psup.ply", 60, 2);
+mallaRevolucion lataBase("lata-pinf.ply", 60, 2);
+mallaTriangulos busto("beethoven.ply", 3);
+mallaRevolucion peon("perfil.ply", 60, 4);
+mallaTriangulos coche("big_dodge.ply", 5);
+Grua grua(10, 10, 3, 6, 6);
 
 void initModel() {
     dado.cargarTextura();
@@ -757,7 +773,7 @@ void initModel() {
     lataBase.cargarTextura("tapas.jpg");
 }
 
-void dibujaEscena(){
+void escena() {
     //Materiales
     float cobreAmbient[4] = {0.19125, 0.0735, 0.0225, 1.00};
     float cobreDiffuse[4] = {0.7038, 0.27048, 0.0828, 1.00};
@@ -807,11 +823,7 @@ void dibujaEscena(){
     coche.draw();
 }
 
-/**	void Dibuja( void )
-Procedimiento de dibujo del modelo. Es llamado por glut cada vez que se debe redibujar.
-**/
-
-void Dibuja(void) {
+void dibujoEscena() {
     //Luces
     static GLfloat luzAmbiente[4] = {5.0, 5.0, 10.0, 0.0};    // Posicion de la fuente de luz
     static GLfloat morado[3] = {1.0, 0.0, 1.0};
@@ -835,7 +847,6 @@ void Dibuja(void) {
     glLightfv(GL_LIGHT2, GL_POSITION, pos2);
     glLightfv(GL_LIGHT2, GL_AMBIENT, verde);
 
-
     ejesCoordenadas.draw();            // Dibuja los ejes
 
     if (iluminacionGeneral) //Activa / desactiva la iluminación general de las figuras
@@ -855,11 +866,74 @@ void Dibuja(void) {
 
     glPolygonMode(GL_FRONT_AND_BACK, modo); //Cambia los modos de visualización
 
-    dibujaEscena(); //Dibuja la escena con todas las figuras de las prácticas 2, 3 y 4
+    escena(); //Dibuja la escena con todas las figuras de las prácticas 2, 3 y 4
 
     glPopMatrix();        // Desapila la transformacion geometrica
+}
 
-    glutSwapBuffers();        // Intercambia el buffer de dibujo y visualizacion
+/**	void Dibuja( void )
+Procedimiento de dibujo del modelo. Es llamado por glut cada vez que se debe redibujar.
+**/
+
+void Dibuja() {
+    dibujoEscena();    //Dibuja la escena
+    glutSwapBuffers(); //Intercambia el buffer de dibujo y visualizacion
+}
+
+void ColorSeleccion(int i, int componente) {
+    unsigned char r = (i & 0xFF);
+    unsigned char g = (componente & 0xFF);
+    glColor3ub(r, g, 0);
+    glDisable(GL_DITHER);
+    glDisable(GL_LIGHTING);
+    glDisable(GL_TEXTURE);
+}
+
+int pick(int x, int y, int *i) {
+    GLint viewport[4];
+    unsigned char data[4];
+
+    glGetIntegerv(GL_VIEWPORT, viewport);
+    glDisable(GL_DITHER);
+    glDisable(GL_LIGHTING);
+    dibujoEscena();
+    glEnable(GL_LIGHTING);
+    glEnable(GL_DITHER);
+    glFlush();
+    glFinish();
+
+    glReadPixels(x, viewport[3] - y, 1, 1,
+                 GL_RGBA, GL_UNSIGNED_BYTE, data);
+
+    *i = data[0];
+    int componente = data[1];
+
+    ColorSeleccion(*i, componente);
+
+    glutPostRedisplay();
+    return *i;
+}
+
+void initMenu() {
+    glutCreateMenu(manejadorMenu);
+    glutAddMenuEntry("Plata", 1);
+    glutAddMenuEntry("Cobre", 2);
+    glutAddMenuEntry("Turquesa", 3);
+    glutAttachMenu(GLUT_RIGHT_BUTTON);
+}
+
+void manejadorMenu(int opcion) {
+    switch (opcion) {
+        case 1: // Material plata
+
+            break;
+        case 2: // Material cobre
+
+            break;
+        case 3: // Material turquesa
+
+            break;
+    }
 }
 
 
@@ -867,8 +941,7 @@ void Dibuja(void) {
 Procedimiento de fondo. Es llamado por glut cuando no hay eventos pendientes.
 **/
 void idle(int v) {
-
     glutPostRedisplay();        // Redibuja
     glutTimerFunc(30, idle, 0);    // Vuelve a activarse dentro de 30 ms
-    grua.animaciones();
+    grua.animaciones();   //Anima las rotaciones de forma automáica
 }

@@ -77,7 +77,13 @@ struct cara{
 
 class Objeto3D 
 {
+protected:
+    int id;
 public:
+    Objeto3D(int id) {
+        this->id = id;
+    }
+
     GLuint texId;
     unsigned int ancho, alto;
     unsigned int material = GL_AMBIENT_AND_DIFFUSE;
@@ -90,6 +96,9 @@ public:
 
 class Ejes:Objeto3D {
 public:
+    Ejes() : Objeto3D(id) {
+        id = 0;
+    };
     float longitud = 30;
 
 // Dibuja el objeto
@@ -100,7 +109,7 @@ class Cubo: public Objeto3D {
 private:
     float l;
 public:
-    Cubo(float lado);
+    Cubo(float lado, int id);
     void draw();
     void cargarTextura();
 };
@@ -118,6 +127,10 @@ private:
     Material material;
 
 public:
+
+    explicit mallaTriangulos(const char archivo[50], int id);
+    explicit mallaTriangulos(int id);
+
     //Almacena todos los vértices y caras de los archivos '.ply'
     std::vector<float> vertices_ply;
     std::vector<int> caras_ply;
@@ -131,7 +144,7 @@ public:
     std::vector<struct vertice> normalesVertices;
 
     //Constructor por defecto
-    mallaTriangulos(){}
+    //mallaTriangulos() : Objeto3D(id){}
 
     //Par de 2 doubles donde almacenamos u y v
     std::pair <double, double> coordenada;
@@ -145,8 +158,6 @@ public:
     bool sombraPlana = false;
 
     float reflectividad = GL_AMBIENT_AND_DIFFUSE;
-
-    explicit mallaTriangulos(const char archivo[50]);
 
     void setReflectividad(float vision);
 
@@ -201,7 +212,7 @@ private:
                        float xBrazoPequenyo, float yPie);
 public:
     Grua(float alturaPie, float largoBrazoGrande, float alturaCuerda,
-         float largoBrazoPeq);
+         float largoBrazoPeq, int id);
     void draw();
     void animaciones();
 };
@@ -217,9 +228,13 @@ private:
 
 public:
 
-    mallaRevolucion(const char archivo[50], int veces);
+    mallaRevolucion(const char archivo[50], int veces, int id);
     void cargarTextura(const char archivo[50]);
     float obtenerDistancias(vertice v1, vertice v2);
     void obtenerCoordenadasLateral();
     void obtenerCoordenadasTapayBase(float desplazamiento);
 };
+
+int pick (int x, int y, int *i);
+void initMenu();
+void manejadorMenu(int choice);
