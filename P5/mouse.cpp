@@ -48,6 +48,12 @@ x,y: Posicion, en coordenadas de pantalla, en que se encuantra el cursor.
 
 **/
 
+int figuraActual; //Figura actual seleccionada con clic izquierdo
+
+int getFiguraActual(){
+    return figuraActual;
+}
+
 bool moviendo_camara = false;
 int   xant = 0,
         yant = 0,
@@ -72,7 +78,9 @@ void clickRaton (int boton, int estado, int x, int y)
         if( estado == GLUT_DOWN) {
             xant=x;
             yant=y;
-            pick(xant, yant, nullptr);
+            figuraActual = pick(xant, yant);
+            activarEsSeleccionado();
+            activarGruaSeleccionada();
         }
     }
 }

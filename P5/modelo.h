@@ -33,7 +33,7 @@
 /**
 	Funcion de redibujado. Se ejecuta con los eventos postRedisplay
 **/
-void Dibuja (void);
+void Dibuja ();
 
 /**
 	Funcion de fondo
@@ -75,23 +75,36 @@ struct cara{
     int v1, v2, v3; //Índice de vértices que componen una cara
 };
 
+void activarEsSeleccionado();
+void activarGruaSeleccionada();
+
 class Objeto3D 
 {
 protected:
     int id;
+    bool textura = false;
+    struct Material{
+        float specular[4];
+        float diffuse[4];
+        float ambient[4];
+        float brillo;
+    };
+    Material material;
+    float blanco[4] = {1.0, 1.0, 1.0, 0.0};
 public:
     Objeto3D(int id) {
         this->id = id;
     }
+    void setSelectionColor();
 
     GLuint texId;
     unsigned int ancho, alto;
-    unsigned int material = GL_AMBIENT_AND_DIFFUSE;
-    float color[4];
     virtual void draw( ) = 0; // Dibuja el objeto
     unsigned char *asignarTextura (const char *archivo){
         return LeerArchivoJPEG( archivo, ancho, alto);
     }
+    void setMaterial(float ambient[4], float diffuse[4],
+                     float specular[4], float brillo);
 } ;
 
 class Ejes:Objeto3D {
@@ -102,7 +115,7 @@ public:
     float longitud = 30;
 
 // Dibuja el objeto
-    void draw();
+    void draw() override;
 };
 
 class Cubo: public Objeto3D {
@@ -112,19 +125,13 @@ public:
     Cubo(float lado, int id);
     void draw();
     void cargarTextura();
+    void setDadoOriginal();
 };
 
 class mallaTriangulos : public Objeto3D{
 private:
     void drawFlat();
     void drawSmooth();
-    struct Material{
-        float specular[4];
-        float diffuse[4];
-        float ambient[4];
-        float brillo;
-    };
-    Material material;
 
 public:
 
@@ -164,9 +171,6 @@ public:
     void obtenerNormales();
 
     void draw();
-
-    void setMaterial(float ambient[4], float diffuse[4],
-                                      float specular[4], float brillo);
 };
 
 //Getters de los ángulos de la grúa
@@ -233,8 +237,9 @@ public:
     float obtenerDistancias(vertice v1, vertice v2);
     void obtenerCoordenadasLateral();
     void obtenerCoordenadasTapayBase(float desplazamiento);
+    void setLataOriginal();
 };
 
-int pick (int x, int y, int *i);
+int pick(int x, int y);
 void initMenu();
 void manejadorMenu(int choice);

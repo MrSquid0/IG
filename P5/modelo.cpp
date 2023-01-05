@@ -82,6 +82,43 @@ void setAnguloR3(int angulo) {
     anguloR3 = angulo;
 };
 
+bool esSeleccionado = false;
+bool gruaSeleccionada = false;
+
+void activarEsSeleccionado() {
+    esSeleccionado = true;
+}
+
+void activarGruaSeleccionada() {
+    gruaSeleccionada = true;
+}
+
+bool gruaAzul = false;
+bool gruaRojo = false;
+bool gruaAmarillo = false;
+
+//Colores
+float azul[4] = {0.0, 1.0, 1.0, 1.0};
+float rojo[4] = {1.0, 0.0, 0.0, 0.0};
+float amarilloMenu[4] = {1.0f, 1.0f, 0.0f, 1};
+float lila[4] = {2.0, 0.5, 1.0};
+
+//Materiales
+float cobreAmbient[4] = {0.19125, 0.0735, 0.0225, 1.00};
+float cobreDiffuse[4] = {0.7038, 0.27048, 0.0828, 1.00};
+float cobreSpecular[4] = {0.256777, 0.137622, 0.086014, 1.00};
+float cobreBrillo = 0.1;
+
+float turquesaAmbient[4] = {0.1, 0.18, 0.1745, 1.00};
+float turquesaDiffuse[4] = {0.396, 0.74151, 0.69102, 1.00};
+float turquesaSpecular[4] = {0.297254, 0.30829, 0.306678, 1.00};
+float turquesaBrillo = 0.1;
+
+float esmeraldaAmbient[4] = {0.0215, 0.1745, 0.0215, 1.00};
+float esmeraldaDiffuse[4] = {0.07568, 0.61424, 0.07568, 1.00};
+float esmeraldaSpecular[4] = {0.633, 0.727811, 0.633, 1.00};
+float esmeraldaBrillo = 0.6;
+
 void Grua::animaciones() {
     //Aumentanmos R1
     setAnguloR1(getAnguloR1() + 1);
@@ -123,48 +160,174 @@ Grua::Grua(float alturaPie, float largoBrazoGrande,
 
 //Figuras según el grafo
 void Grua::A(float xzPie, float yPie, int numMallas) {
-    glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, amarillo);
+    if (gruaSeleccionada)
+        glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, lila);
+    else
+        glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, amarillo);
+
+    if (gruaAzul)
+        glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, azul);
+    else if (gruaRojo)
+        glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, rojo);
+    else if (gruaAmarillo)
+        glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, amarilloMenu);
+
+    if (gruaSeleccionada)
+        glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, lila);
+
     creaEstructura(0, 0, 0, 0, yPie, 0, xzPie, xzPie, numMallas);
 }
 
 
 void Grua::B(float xCaja, float yCaja, float zCaja) {
-    glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, amarillo);
+    if (gruaSeleccionada)
+        glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, lila);
+    else
+        glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, amarillo);
+
+    if (gruaAzul)
+        glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, azul);
+    else if (gruaRojo)
+        glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, rojo);
+    else if (gruaAmarillo)
+        glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, amarilloMenu);
+
+    if (gruaSeleccionada)
+        glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, lila);
+
     paralelepipedo(0, 0, 0, 0, yCaja, 0, xCaja, zCaja);
 }
 
 void Grua::C(float xzTorre, float yTorre, int numMallas) {
-    glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, rojo);
+    if (gruaSeleccionada)
+        glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, lila);
+    else
+        glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, rojo);
+
+    if (gruaAzul)
+        glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, azul);
+    else if (gruaRojo)
+        glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, rojo);
+    else if (gruaAmarillo)
+        glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, amarilloMenu);
+
+    if (gruaSeleccionada)
+        glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, lila);
+
     creaTorre(0, 0, 0, 0, yTorre, 0, xzTorre, xzTorre, numMallas);
 }
 
 void Grua::D(float xBrazoGrande, float zBrazoGrande, int numMallas) {
-    glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, amarillo);
+    if (gruaSeleccionada)
+        glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, lila);
+    else
+        glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, amarillo);
+
+    if (gruaAzul)
+        glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, azul);
+    else if (gruaRojo)
+        glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, rojo);
+    else if (gruaAmarillo)
+        glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, amarilloMenu);
+
+    if (gruaSeleccionada)
+        glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, lila);
+
     creaBrazo(0, 0, 0, xBrazoGrande, 0, 0, zBrazoGrande, numMallas);
 }
 
 void Grua::E(float xCaja, float yCaja, float zCaja) {
-    glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, rojo);
+    if (gruaSeleccionada)
+        glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, lila);
+    else
+        glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, rojo);
+
+    if (gruaAzul)
+        glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, azul);
+    else if (gruaRojo)
+        glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, rojo);
+    else if (gruaAmarillo)
+        glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, amarilloMenu);
+
+    if (gruaSeleccionada)
+        glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, lila);
+
     paralelepipedo(0, 0, 0, 0, yCaja, 0, xCaja, zCaja);
 }
 
 void Grua::F(float yCuerda) {
-    glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, gris);
+    if (gruaSeleccionada)
+        glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, lila);
+    else
+        glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, gris);
+
+    if (gruaAzul)
+        glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, azul);
+    else if (gruaRojo)
+        glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, rojo);
+    else if (gruaAmarillo)
+        glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, amarilloMenu);
+
+    if (gruaSeleccionada)
+        glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, lila);
+
     cilindro(0, 0, 0, 0, yCuerda, 0, 0.1);
 }
 
 void Grua::G(float yGancho) {
-    glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, gris);
+    if (gruaSeleccionada)
+        glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, lila);
+    else
+        glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, gris);
+
+    if (gruaAzul)
+        glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, azul);
+    else if (gruaRojo)
+        glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, rojo);
+    else if (gruaAmarillo)
+        glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, amarilloMenu);
+
+    if (gruaSeleccionada)
+        glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, lila);
+
     creaGancho(0, 0, 0, yGancho);
 }
 
 void Grua::H(float xBrazoPequenyo, float altoMalla, float anchoMalla, int numMallas) {
-    glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, amarillo);
+    if (gruaSeleccionada)
+        glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, lila);
+    else
+        glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, amarillo);
+
+    if (gruaAzul)
+        glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, azul);
+    else if (gruaRojo)
+        glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, rojo);
+    else if (gruaAmarillo)
+        glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, amarilloMenu);
+
+    if (gruaSeleccionada)
+        glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, lila);
+
     creaEstructura(0, 0, 0, xBrazoPequenyo, 0, 0, altoMalla, anchoMalla, numMallas);
 }
 
 void Grua::I(float xCaja, float yCaja, float zCaja) {
-    glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, gris);
+    if (gruaSeleccionada)
+        glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, lila);
+    else
+        glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, gris);
+
+    if (gruaAzul)
+        glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, azul);
+    else if (gruaRojo)
+        glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, rojo);
+    else if (gruaAmarillo)
+        glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, amarilloMenu);
+
+    if (gruaSeleccionada)
+        glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, lila);
+
     caja(xCaja, yCaja, zCaja);
 }
 
@@ -287,8 +450,8 @@ void Grua::draw() {
     glPopMatrix();
 }
 
-void mallaTriangulos::setMaterial(float ambient[4], float diffuse[4],
-                                  float specular[4], float brillo) {
+void Objeto3D::setMaterial(float ambient[4], float diffuse[4],
+                           float specular[4], float brillo) {
     for (int i = 0; i < 4; i++) {
         material.ambient[i] = ambient[i];
     }
@@ -330,8 +493,17 @@ Cubo::Cubo(float lado, int id) : Objeto3D(id) {
     l = lado;
 }
 
+void Cubo::setDadoOriginal() {
+    textura = true;
+    glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, blanco);
+}
+
 void Cubo::draw() {
-    glEnable(GL_TEXTURE_2D);
+    if (textura)
+        glEnable(GL_TEXTURE_2D);
+    else
+        glDisable(GL_TEXTURE_2D);
+
     glBindTexture(GL_TEXTURE_2D, texId);
     //Construye un cubo dado un lado
 
@@ -539,7 +711,8 @@ void mallaTriangulos::obtenerNormales() {
 
 //Función para pintar la figura con sombra plana
 void mallaTriangulos::drawFlat() {
-    glEnable(GL_TEXTURE_2D);
+    if (textura)
+        glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, texId);
     glShadeModel(GL_FLAT);
     glBegin(GL_TRIANGLES);
@@ -617,6 +790,11 @@ void mallaTriangulos::draw() {
     else
         drawFlat();
     glPopAttrib();
+}
+
+void mallaRevolucion::setLataOriginal() {
+    textura = true;
+    glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, blanco);
 }
 
 mallaRevolucion::mallaRevolucion(const char *archivo, int veces, int id) : mallaTriangulos(id) {
@@ -773,31 +951,143 @@ void initModel() {
     lataBase.cargarTextura("tapas.jpg");
 }
 
-void escena() {
-    //Materiales
-    float cobreAmbient[4] = {0.19125, 0.0735, 0.0225, 1.00};
-    float cobreDiffuse[4] = {0.7038, 0.27048, 0.0828, 1.00};
-    float cobreSpecular[4] = {0.256777, 0.137622, 0.086014, 1.00};
-    float cobreBrillo = 0.1;
+bool opcionMenu1 = false; //Azul
+bool opcionMenu2 = false; //Rojo
+bool opcionMenu3 = false; //Amarillo
 
-    float turquesaAmbient[4] = {0.1, 0.18, 0.1745, 1.00};
-    float turquesaDiffuse[4] = {0.396, 0.74151, 0.69102, 1.00};
-    float turquesaSpecular[4] = {0.297254, 0.30829, 0.306678, 1.00};
-    float turquesaBrillo = 0.1;
+//1
+bool hayCambio1Dado = false;
+bool hayCambio2Dado = false;
+bool hayCambio3Dado = false;
 
-    float plataAmbient[4] = {0.19225, 0.19225, 0.19225, 1.00};
-    float plataDiffuse[4] = {0.50754, 0.50754, 0.50754, 1.00};
-    float plataSpecular[4] = {0.508273, 0.508273, 0.508273, 1.00};
-    float plataBrillo = 0.4;
+//2
+bool hayCambio1Lata = false;
+bool hayCambio2Lata = false;
+bool hayCambio3Lata = false;
 
+//3
+bool hayCambio1Busto = false;
+bool hayCambio2Busto = false;
+bool hayCambio3Busto = false;
+
+//4
+bool hayCambio1Peon = false;
+bool hayCambio2Peon = false;
+bool hayCambio3Peon = false;
+
+//5
+bool hayCambio1Coche = false;
+bool hayCambio2Coche = false;
+bool hayCambio3Coche = false;
+
+//6
+bool hayCambio1Grua = false;
+bool hayCambio2Grua = false;
+bool hayCambio3Grua = false;
+
+
+bool dadoSeleccionado = false;
+bool lataSeleccionado = false;
+bool bustoSeleccionado = false;
+bool peonSeleccionado = false;
+bool cocheSeleccionado = false;
+bool gruaSeleccionadoMenu = false;
+
+int anteriorFigura;
+
+void escena(bool useRealColors) {
     //Dado
     glTranslatef(-10, 0, 0);
+    if (useRealColors) {
+        if (!esSeleccionado || getFiguraActual() != 1) {
+            dado.setDadoOriginal();
+            if (opcionMenu1 && dadoSeleccionado) {
+                hayCambio1Dado = true;
+                hayCambio2Dado = false;
+                hayCambio3Dado = false;
+            }
+            else if (opcionMenu2 && dadoSeleccionado) {
+                hayCambio1Dado = false;
+                hayCambio2Dado = true;
+                hayCambio3Dado = false;
+            }
+            else if (opcionMenu3 && dadoSeleccionado) {
+                hayCambio1Dado = false;
+                hayCambio2Dado = false;
+                hayCambio3Dado = true;
+            }
+        } else if (getFiguraActual() == 1) {
+            glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, lila);
+            dadoSeleccionado = true;
+        }
+    } else {
+        glPopAttrib();
+        dado.setSelectionColor();
+        glDisable(GL_TEXTURE_2D);
+        glDisable(GL_LIGHTING);
+        glPushAttrib(GL_LIGHTING);
+    }
+
+    if (hayCambio1Dado)
+        glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, azul);
+    if (hayCambio2Dado)
+        glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, rojo);
+    if (hayCambio3Dado)
+        glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, amarilloMenu);
+
+    if (getFiguraActual() == 1)
+        glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, lila);
+
     dado.draw();
 
     //Lata
     glTranslatef(10, 0, 0);
     glPushMatrix();
     glRotatef(100, 0, 1, 0);
+    if (useRealColors) {
+        if (!esSeleccionado || getFiguraActual() != 2) {
+            lata.setLataOriginal();
+            lataTapa.setLataOriginal();
+            lataBase.setLataOriginal();
+            if (opcionMenu1 && lataSeleccionado) {
+                hayCambio1Lata = true;
+                hayCambio2Lata = false;
+                hayCambio3Lata = false;
+            }
+            else if (opcionMenu2 && lataSeleccionado) {
+                hayCambio1Lata = false;
+                hayCambio2Lata = true;
+                hayCambio3Lata = false;
+            }
+            else if (opcionMenu3 && lataSeleccionado) {
+                hayCambio1Lata = false;
+                hayCambio2Lata = false;
+                hayCambio3Lata = true;
+            }
+        } else if (getFiguraActual() == 2) {
+            glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, lila);
+            lataSeleccionado = true;
+        }
+    } else {
+        glPopAttrib();
+        lata.setSelectionColor();
+        lataTapa.setSelectionColor();
+        lataBase.setSelectionColor();
+        glDisable(GL_TEXTURE);
+        glDisable(GL_LIGHTING);
+        glPushAttrib(GL_LIGHTING);
+    }
+
+    if (hayCambio1Lata)
+        glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, azul);
+    if (hayCambio3Lata)
+        glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, rojo);
+    if (hayCambio3Lata)
+        glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, amarilloMenu);
+
+    if (getFiguraActual() == 2)
+        glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, lila);
+
     lata.draw();
     lataTapa.draw();
     lataBase.draw();
@@ -805,23 +1095,186 @@ void escena() {
 
     //Busto de Beethoven
     glTranslatef(5, 0, 0);
-    busto.setMaterial(cobreAmbient, cobreDiffuse, cobreSpecular, cobreBrillo);
+    if (useRealColors) {
+        if (!esSeleccionado || getFiguraActual() != 3) {
+            busto.setMaterial(cobreAmbient, cobreDiffuse, cobreSpecular, cobreBrillo);
+            if (opcionMenu1 && bustoSeleccionado) {
+                hayCambio1Busto = true;
+                hayCambio2Busto = false;
+                hayCambio3Busto = false;
+            }
+            else if (opcionMenu2 && bustoSeleccionado) {
+                hayCambio1Busto = false;
+                hayCambio2Busto = true;
+                hayCambio3Busto = false;
+            }
+            else if (opcionMenu3 && bustoSeleccionado) {
+                hayCambio1Busto = false;
+                hayCambio2Busto = false;
+                hayCambio3Busto = true;
+            }
+        } else if (getFiguraActual() == 3) {
+            glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, lila);
+            bustoSeleccionado = true;
+        }
+    } else {
+        glPopAttrib();
+        busto.setSelectionColor();
+        glDisable(GL_TEXTURE_2D);
+        glDisable(GL_LIGHTING);
+        glPushAttrib(GL_LIGHTING);
+    }
+
+    if (hayCambio1Busto)
+        glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, azul);
+    if (hayCambio2Busto)
+        glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, rojo);
+    if (hayCambio3Busto)
+        glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, amarilloMenu);
+
+    if (getFiguraActual() == 3)
+        glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, lila);
+
     busto.draw();
+
 
     //Peón
     glTranslatef(-5, 0, 10);
-    peon.setMaterial(turquesaAmbient, turquesaDiffuse, turquesaSpecular, turquesaBrillo);
+    if (useRealColors) {
+        if (!esSeleccionado || getFiguraActual() != 4){
+            peon.setMaterial(turquesaAmbient, turquesaDiffuse, turquesaSpecular, turquesaBrillo);
+            if (opcionMenu1 && peonSeleccionado) {
+                hayCambio1Peon = true;
+                hayCambio2Peon = false;
+                hayCambio3Peon = false;
+            }
+            else if (opcionMenu2 && peonSeleccionado) {
+                hayCambio1Peon = false;
+                hayCambio2Peon = true;
+                hayCambio3Peon = false;
+            }
+            else if (opcionMenu3 && peonSeleccionado) {
+                hayCambio1Peon = false;
+                hayCambio2Peon = false;
+                hayCambio3Peon = true;
+            }
+        }
+        else if (getFiguraActual() == 4) {
+            glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, lila);
+            peonSeleccionado = true;
+        }
+    } else {
+        glPopAttrib();
+        peon.setSelectionColor();
+        glDisable(GL_LIGHTING);
+        glPushAttrib(GL_LIGHTING);
+    }
+
+    if (hayCambio1Peon)
+        glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, azul);
+    if (hayCambio2Peon)
+        glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, rojo);
+    if (hayCambio3Peon)
+        glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, amarilloMenu);
+
+    if (getFiguraActual() == 4)
+        glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, lila);
+
     peon.draw();
 
     //Grúa
     glTranslatef(10, 0, 0);
+    if (useRealColors) {
+        if (!esSeleccionado || getFiguraActual() != 6){
+            gruaSeleccionada = false;
+            if (opcionMenu1 && gruaSeleccionadoMenu) {
+                hayCambio1Grua = true;
+                hayCambio2Grua = false;
+                hayCambio3Grua = false;
+            }
+            else if (opcionMenu2 && gruaSeleccionadoMenu) {
+                hayCambio1Grua = false;
+                hayCambio2Grua = true;
+                hayCambio3Grua = false;
+            }
+            else if (opcionMenu3 && gruaSeleccionadoMenu) {
+                hayCambio1Grua = false;
+                hayCambio2Grua = false;
+                hayCambio3Grua = true;
+            }
+        }
+        else if (getFiguraActual() == 6) {
+            glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, lila);
+            gruaSeleccionadoMenu = true;
+        }
+    } else {
+        glPopAttrib();
+        grua.setSelectionColor();
+        glDisable(GL_LIGHTING);
+        glPushAttrib(GL_LIGHTING);
+    }
+
+    if (hayCambio1Grua)
+        glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, azul);
+    if (hayCambio2Grua)
+        glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, rojo);
+    if (hayCambio3Grua)
+        glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, amarilloMenu);
+
+    if (getFiguraActual() == 6)
+        glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, lila);
+
     grua.draw();
 
     //Coche
     glTranslatef(-22, 0, 0);
-    coche.setMaterial(plataAmbient, plataDiffuse, plataSpecular, plataBrillo);
+    if (useRealColors) {
+        if (!esSeleccionado || getFiguraActual() != 5){
+            coche.setMaterial(esmeraldaAmbient, esmeraldaDiffuse, esmeraldaSpecular, esmeraldaBrillo);
+            if (opcionMenu1 && cocheSeleccionado) {
+                hayCambio1Coche = true;
+                hayCambio2Coche = false;
+                hayCambio3Coche = false;
+            }
+            else if (opcionMenu2 && cocheSeleccionado) {
+                hayCambio1Coche = false;
+                hayCambio2Coche = true;
+                hayCambio3Coche = false;
+            }
+            else if (opcionMenu3 && cocheSeleccionado) {
+                hayCambio1Coche = false;
+                hayCambio2Coche = false;
+                hayCambio3Coche = true;
+            }
+        }
+        else if (getFiguraActual() == 5) {
+            glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, lila);
+            cocheSeleccionado = true;
+        }
+    } else {
+        glPopAttrib();
+        coche.setSelectionColor();
+        glDisable(GL_LIGHTING);
+        glPushAttrib(GL_LIGHTING);
+    }
+
+    if (hayCambio1Coche)
+        glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, azul);
+    if (hayCambio2Coche)
+        glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, rojo);
+    if (hayCambio3Coche)
+        glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, amarilloMenu);
+
+    if (getFiguraActual() == 5)
+        glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, lila);
+
     coche.draw();
+
+    if (getFiguraActual() == 0)
+        esSeleccionado = false;
 }
+
+bool realColors = true;
 
 void dibujoEscena() {
     //Luces
@@ -866,7 +1319,8 @@ void dibujoEscena() {
 
     glPolygonMode(GL_FRONT_AND_BACK, modo); //Cambia los modos de visualización
 
-    escena(); //Dibuja la escena con todas las figuras de las prácticas 2, 3 y 4
+    //escena(realColors); //Dibuja la escena con todas las figuras de las prácticas 2, 3 y 4
+    escena(realColors);
 
     glPopMatrix();        // Desapila la transformacion geometrica
 }
@@ -880,58 +1334,284 @@ void Dibuja() {
     glutSwapBuffers(); //Intercambia el buffer de dibujo y visualizacion
 }
 
-void ColorSeleccion(int i, int componente) {
-    unsigned char r = (i & 0xFF);
-    unsigned char g = (componente & 0xFF);
-    glColor3ub(r, g, 0);
-    glDisable(GL_DITHER);
-    glDisable(GL_LIGHTING);
-    glDisable(GL_TEXTURE);
+void Objeto3D::setSelectionColor() {
+    unsigned char r = (this->id & 0xFF);
+    glColor3ub(r, 0, 0);
+    textura = false;
 }
 
-int pick(int x, int y, int *i) {
+int pick(int x, int y) {
     GLint viewport[4];
     unsigned char data[4];
 
     glGetIntegerv(GL_VIEWPORT, viewport);
     glDisable(GL_DITHER);
     glDisable(GL_LIGHTING);
+    glDisable(GL_TEXTURE_2D);
+    realColors = false;
     dibujoEscena();
+
+    glReadPixels(x, viewport[3] - y, 1, 1,
+                 GL_RGBA, GL_UNSIGNED_BYTE, data);
     glEnable(GL_LIGHTING);
     glEnable(GL_DITHER);
     glFlush();
     glFinish();
+    realColors = true;
 
-    glReadPixels(x, viewport[3] - y, 1, 1,
-                 GL_RGBA, GL_UNSIGNED_BYTE, data);
-
-    *i = data[0];
+    int result = data[0];
     int componente = data[1];
 
-    ColorSeleccion(*i, componente);
-
     glutPostRedisplay();
-    return *i;
+    return result;
 }
 
 void initMenu() {
     glutCreateMenu(manejadorMenu);
-    glutAddMenuEntry("Plata", 1);
-    glutAddMenuEntry("Cobre", 2);
-    glutAddMenuEntry("Turquesa", 3);
+    glutAddMenuEntry("Azul", 1);
+    glutAddMenuEntry("Rojo", 2);
+    glutAddMenuEntry("Amarillo", 3);
     glutAttachMenu(GLUT_RIGHT_BUTTON);
 }
 
 void manejadorMenu(int opcion) {
     switch (opcion) {
-        case 1: // Material plata
-
+        case 1: // Color azul
+            switch (getFiguraActual()){
+                case 1:
+                    lataSeleccionado = false;
+                    bustoSeleccionado = false;
+                    peonSeleccionado = false;
+                    cocheSeleccionado = false;
+                    gruaSeleccionadoMenu = false;
+                    if (esSeleccionado) {
+                        opcionMenu1 = true;
+                        opcionMenu2 = false;
+                        opcionMenu3 = false;
+                    }
+                    break;
+                case 2:
+                    dadoSeleccionado = false;
+                    bustoSeleccionado = false;
+                    peonSeleccionado = false;
+                    cocheSeleccionado = false;
+                    gruaSeleccionadoMenu = false;
+                    if (esSeleccionado) {
+                        opcionMenu1 = true;
+                        opcionMenu2 = false;
+                        opcionMenu3 = false;
+                    }
+                    break;
+                case 3:
+                    dadoSeleccionado = false;
+                    lataSeleccionado = false;
+                    peonSeleccionado = false;
+                    cocheSeleccionado = false;
+                    gruaSeleccionadoMenu = false;
+                    if (esSeleccionado) {
+                        opcionMenu1 = true;
+                        opcionMenu2 = false;
+                        opcionMenu3 = false;
+                    }
+                    break;
+                case 4:
+                    dadoSeleccionado = false;
+                    lataSeleccionado = false;
+                    bustoSeleccionado = false;
+                    cocheSeleccionado = false;
+                    gruaSeleccionadoMenu = false;
+                    if (esSeleccionado) {
+                        opcionMenu1 = true;
+                        opcionMenu2 = false;
+                        opcionMenu3 = false;
+                    }
+                    break;
+                case 5:
+                    dadoSeleccionado = false;
+                    lataSeleccionado = false;
+                    bustoSeleccionado = false;
+                    peonSeleccionado = false;
+                    gruaSeleccionadoMenu = false;
+                    if (esSeleccionado) {
+                        opcionMenu1 = true;
+                        opcionMenu2 = false;
+                        opcionMenu3 = false;
+                    }
+                    break;
+                case 6:
+                    dadoSeleccionado = false;
+                    lataSeleccionado = false;
+                    bustoSeleccionado = false;
+                    peonSeleccionado = false;
+                    cocheSeleccionado = false;
+                    if (esSeleccionado) {
+                        opcionMenu1 = true;
+                        opcionMenu2 = false;
+                        opcionMenu3 = false;
+                    }
+                    gruaAzul = true;
+                    gruaRojo = false;
+                    gruaAmarillo = false;
+                    break;
+            }
             break;
-        case 2: // Material cobre
-
+        case 2: // Color rojo
+            switch (getFiguraActual()){
+                case 1:
+                    lataSeleccionado = false;
+                    bustoSeleccionado = false;
+                    peonSeleccionado = false;
+                    cocheSeleccionado = false;
+                    gruaSeleccionadoMenu = false;
+                    if (esSeleccionado) {
+                        opcionMenu1 = false;
+                        opcionMenu2 = true;
+                        opcionMenu3 = false;
+                    }
+                    break;
+                case 2:
+                    dadoSeleccionado = false;
+                    bustoSeleccionado = false;
+                    peonSeleccionado = false;
+                    cocheSeleccionado = false;
+                    gruaSeleccionadoMenu = false;
+                    if (esSeleccionado) {
+                        opcionMenu1 = false;
+                        opcionMenu2 = true;
+                        opcionMenu3 = false;
+                    }
+                    break;
+                case 3:
+                    dadoSeleccionado = false;
+                    lataSeleccionado = false;
+                    peonSeleccionado = false;
+                    cocheSeleccionado = false;
+                    gruaSeleccionadoMenu = false;
+                    if (esSeleccionado) {
+                        opcionMenu1 = false;
+                        opcionMenu2 = true;
+                        opcionMenu3 = false;
+                    }
+                    break;
+                case 4:
+                    dadoSeleccionado = false;
+                    lataSeleccionado = false;
+                    bustoSeleccionado = false;
+                    cocheSeleccionado = false;
+                    gruaSeleccionadoMenu = false;
+                    if (esSeleccionado) {
+                        opcionMenu1 = false;
+                        opcionMenu2 = true;
+                        opcionMenu3 = false;
+                    }
+                    break;
+                case 5:
+                    dadoSeleccionado = false;
+                    lataSeleccionado = false;
+                    bustoSeleccionado = false;
+                    peonSeleccionado = false;
+                    gruaSeleccionadoMenu = false;
+                    if (esSeleccionado) {
+                        opcionMenu1 = false;
+                        opcionMenu2 = true;
+                        opcionMenu3 = false;
+                    }
+                    break;
+                case 6:
+                    dadoSeleccionado = false;
+                    lataSeleccionado = false;
+                    bustoSeleccionado = false;
+                    peonSeleccionado = false;
+                    cocheSeleccionado = false;
+                    if (esSeleccionado) {
+                        opcionMenu1 = false;
+                        opcionMenu2 = true;
+                        opcionMenu3 = false;
+                    }
+                    gruaAzul = false;
+                    gruaRojo = true;
+                    gruaAmarillo = false;
+                    break;
+            }
             break;
-        case 3: // Material turquesa
-
+        case 3: // Color amarillo
+            switch (getFiguraActual()){
+                case 1:
+                    lataSeleccionado = false;
+                    bustoSeleccionado = false;
+                    peonSeleccionado = false;
+                    cocheSeleccionado = false;
+                    gruaSeleccionadoMenu = false;
+                    if (esSeleccionado) {
+                        opcionMenu1 = false;
+                        opcionMenu2 = false;
+                        opcionMenu3 = true;
+                    }
+                    break;
+                case 2:
+                    dadoSeleccionado = false;
+                    bustoSeleccionado = false;
+                    peonSeleccionado = false;
+                    cocheSeleccionado = false;
+                    gruaSeleccionadoMenu = false;
+                    if (esSeleccionado) {
+                        opcionMenu1 = false;
+                        opcionMenu2 = false;
+                        opcionMenu3 = true;
+                    }
+                    break;
+                case 3:
+                    dadoSeleccionado = false;
+                    lataSeleccionado = false;
+                    peonSeleccionado = false;
+                    cocheSeleccionado = false;
+                    gruaSeleccionadoMenu = false;
+                    if (esSeleccionado) {
+                        opcionMenu1 = false;
+                        opcionMenu2 = false;
+                        opcionMenu3 = true;
+                    }
+                    break;
+                case 4:
+                    dadoSeleccionado = false;
+                    lataSeleccionado = false;
+                    bustoSeleccionado = false;
+                    cocheSeleccionado = false;
+                    gruaSeleccionadoMenu = false;
+                    if (esSeleccionado) {
+                        opcionMenu1 = false;
+                        opcionMenu2 = false;
+                        opcionMenu3 = true;
+                    }
+                    break;
+                case 5:
+                    dadoSeleccionado = false;
+                    lataSeleccionado = false;
+                    bustoSeleccionado = false;
+                    peonSeleccionado = false;
+                    gruaSeleccionadoMenu = false;
+                    if (esSeleccionado) {
+                        opcionMenu1 = false;
+                        opcionMenu2 = false;
+                        opcionMenu3 = true;
+                    }
+                    break;
+                case 6:
+                    dadoSeleccionado = false;
+                    lataSeleccionado = false;
+                    bustoSeleccionado = false;
+                    peonSeleccionado = false;
+                    cocheSeleccionado = false;
+                    if (esSeleccionado) {
+                        opcionMenu1 = false;
+                        opcionMenu2 = false;
+                        opcionMenu3 = true;
+                    }
+                    gruaAzul = false;
+                    gruaRojo = false;
+                    gruaAmarillo = true;
+                    break;
+            }
             break;
     }
 }
