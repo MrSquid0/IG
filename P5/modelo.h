@@ -183,6 +183,12 @@ void setAnguloR1(int angulo);
 void setAnguloR2(int angulo);
 void setAnguloR3(int angulo);
 
+//Setters de la modificación interactiva de velocidades
+void setF();
+void setG();
+
+void activarDesactivarAnimacion();
+
 class Grua : public Objeto3D {
 private:
     //Colores

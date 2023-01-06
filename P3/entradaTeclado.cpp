@@ -7,7 +7,7 @@
 	Estudiante: Gonzalo José López Castilla
 
 =======================================================
-	G. Arroyo, J.C. Torres 
+	Gvel. Arroyo, J.C. Torres
 	Dpto. Lenguajes y Sistemas Informticos
 	(Univ. de Granada)
 
@@ -140,6 +140,15 @@ void letra (unsigned char k, int x, int y)
          setAnguloR3(getAnguloR3()-1);
          if (getAnguloR3()<0)
             setAnguloR3(getAnguloR3()+360);
+         break;
+     case 'F':
+         setF();
+         break;
+     case 'G':
+         setG();
+         break;
+     case 'A':
+         activarDesactivarAnimacion();
          break;
     case 27:			// Escape  Terminar
       exit (0);

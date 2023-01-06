@@ -5,7 +5,7 @@
 
 	Estudiante: Gonzalo Jose Lopez Castilla
 =======================================================
-	G. Arroyo, J.C. Torres
+	Gvel. Arroyo, J.C. Torres
 	Dpto. Lenguajes y Sistemas Informticos
 	(Univ. de Granada)
  This program is free software; you can redistribute it and/or
@@ -59,27 +59,82 @@ void setAnguloR2(int angulo){
 void setAnguloR3(int angulo){
     anguloR3 = angulo;};
 
+//Velocidades
+bool Fvel = false, Gvel = false;
+
+void setF(){ //Aumenta/disminuye en 3 la velocidad
+    if (Fvel)
+        Fvel = false;
+    else
+        Fvel = true;
+}
+
+void setG() { //Aumenta/disminuye en 8 la velocidad
+    if (Gvel)
+        Gvel = false;
+    else
+        Gvel = true;
+}
+
 void Grua::animaciones(){
     //Aumentanmos R1
-    setAnguloR1(getAnguloR1()+1);
+    if (Fvel){
+        Gvel = false;
+        setAnguloR1(getAnguloR1()+3);
+    }
+    if (Gvel){
+        Fvel = false;
+        setAnguloR1(getAnguloR1()+15);
+    }
+    else
+        setAnguloR1(getAnguloR1()+1);
     if (getAnguloR1()>360)
         setAnguloR1(getAnguloR1()-360);
 
     if (anguloAnimacion < anguloR2 || anguloR2 == -90){
         anguloAnimacion = anguloR2;
+
         //Aumentamos R2
-        setAnguloR2(getAnguloR2()+1);
+        if (Fvel){
+            Gvel = false;
+            setAnguloR2(getAnguloR2()+3);
+        }
+        if (Gvel){
+            Fvel = false;
+            setAnguloR2(getAnguloR2()+8);
+        }
+        else
+            setAnguloR2(getAnguloR2()+1);
         if (getAnguloR2()>90)
             setAnguloR2(90);
     } else if (anguloAnimacion > anguloR2 || anguloR2 == 90){
         anguloAnimacion = anguloR2;
+
         //Decrementamos R2
-        setAnguloR2(getAnguloR2()-1);
+        if (Fvel){
+            Gvel = false;
+            setAnguloR2(getAnguloR2()-3);
+        }
+        if (Gvel){
+            Fvel = false;
+            setAnguloR2(getAnguloR2()-8);
+        }
+        else
+            setAnguloR2(getAnguloR2()-1);
         if (getAnguloR2()<-90)
             setAnguloR2(-90);
     } else {
         //Aumentamos R2
-        setAnguloR2(getAnguloR2()+1);
+        if (Fvel){
+            Gvel = false;
+            setAnguloR2(getAnguloR2()+3);
+        }
+        if (Gvel){
+            Fvel = false;
+            setAnguloR2(getAnguloR2()+8);
+        }
+        else
+            setAnguloR2(getAnguloR2()+1);
         if (getAnguloR2()>90)
             setAnguloR2(90);
     }
@@ -90,10 +145,10 @@ void Grua::animaciones(){
         setAnguloR3(getAnguloR3()-360);
 }
 
-
 int modo = GL_FILL;
 bool iluminacion = true;
 bool sombraPlana = false;
+bool animacionActivada = true;
 
 void setModo (int M){
     modo = M;
@@ -111,6 +166,13 @@ void setSombra (){
         sombraPlana = false;
     else
         sombraPlana = true;
+}
+
+void activarDesactivarAnimacion(){
+    if (animacionActivada)
+        animacionActivada = false;
+    else
+        animacionActivada = true;
 }
 
 class Ejes:Objeto3D
@@ -218,7 +280,7 @@ void Grua::brazoGrandeConCaja(float xBrazoGrande){
     E(xCaja, yCaja, zCaja);
 }
 
-//F+G
+//Fvel+Gvel
 void Grua::cuerdaConGancho(float yCuerda){
     glRotatef(anguloR2, 0,0,1);//R2
     F(-yCuerda);
@@ -229,7 +291,7 @@ void Grua::cuerdaConGancho(float yCuerda){
     G(yGancho);
 }
 
-//D+E+F+G
+//D+E+Fvel+Gvel
 void Grua::brazoGrande (float xBrazoGrande, float yCuerda){
 
     glPushMatrix();
@@ -248,7 +310,7 @@ void Grua::brazoGrande (float xBrazoGrande, float yCuerda){
     glPopMatrix();
 }
 
-//D+E+F+G+B
+//D+E+Fvel+Gvel+B
 void Grua::brazoGrandeConCubo (float xBrazoGrande, float yCuerda){
     int numMallas = xBrazoGrande/2;
     glPushMatrix();
@@ -263,7 +325,7 @@ void Grua::brazoGrandeConCubo (float xBrazoGrande, float yCuerda){
     glPopMatrix();
 }
 
-//D+E+F+G+B+H+I
+//D+E+Fvel+Gvel+B+H+I
 
 void Grua::brazoGrandeConCuboYBrazoPequenyo(float xBrazoGrande,
                                             float yCuerda, float xBrazoPequenyo){
@@ -282,7 +344,7 @@ void Grua::brazoGrandeConCuboYBrazoPequenyo(float xBrazoGrande,
     glPopMatrix();
 }
 
-//A+C+D+E+F+G+B+H+I
+//A+C+D+E+Fvel+Gvel+B+H+I
 void Grua::construirGrua(float xBrazoGrande, float yCuerda, float xBrazoPequenyo,
                          float yPie){
     //Construimos figura A
@@ -360,7 +422,6 @@ void Dibuja (void)
     glutSwapBuffers ();		// Intercambia el buffer de dibujo y visualizacion
 }
 
-
 /**	void idle()
 Procedimiento de fondo. Es llamado por glut cuando no hay eventos pendientes.
 **/
@@ -368,5 +429,6 @@ void idle (int v) {
 
     glutPostRedisplay();        // Redibuja
     glutTimerFunc(30, idle, 0);    // Vuelve a activarse dentro de 30 ms
-    grua.animaciones();
+    if (animacionActivada)
+        grua.animaciones();
 }

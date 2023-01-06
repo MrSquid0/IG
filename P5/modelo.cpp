@@ -29,6 +29,7 @@ int modo = GL_FILL;
 bool iluminacionGeneral = true;
 bool iluminacion1 = false;
 bool iluminacion2 = false;
+bool animacionActivada = true;
 
 void setModo(int M) {
     modo = M;
@@ -53,6 +54,13 @@ void setIluminacion2() {
         iluminacion2 = false;
     else
         iluminacion2 = true;
+}
+
+void activarDesactivarAnimacion(){
+    if (animacionActivada)
+        animacionActivada = false;
+    else
+        animacionActivada = true;
 }
 
 //Ángulos de las rotaciones de la grúa (con sus setters y getters)
@@ -119,35 +127,90 @@ float esmeraldaDiffuse[4] = {0.07568, 0.61424, 0.07568, 1.00};
 float esmeraldaSpecular[4] = {0.633, 0.727811, 0.633, 1.00};
 float esmeraldaBrillo = 0.6;
 
-void Grua::animaciones() {
-    //Aumentanmos R1
-    setAnguloR1(getAnguloR1() + 1);
-    if (getAnguloR1() > 360)
-        setAnguloR1(getAnguloR1() - 360);
+//Velocidades
+bool Fvel = false, Gvel = false;
 
-    if (anguloAnimacion < anguloR2 || anguloR2 == -90) {
+void setF(){ //Aumenta/disminuye en 3 la velocidad
+    if (Fvel)
+        Fvel = false;
+    else
+        Fvel = true;
+}
+
+void setG() { //Aumenta/disminuye en 8 la velocidad
+    if (Gvel)
+        Gvel = false;
+    else
+        Gvel = true;
+}
+
+void Grua::animaciones(){
+    //Aumentanmos R1
+    if (Fvel){
+        Gvel = false;
+        setAnguloR1(getAnguloR1()+3);
+    }
+    if (Gvel){
+        Fvel = false;
+        setAnguloR1(getAnguloR1()+15);
+    }
+    else
+        setAnguloR1(getAnguloR1()+1);
+    if (getAnguloR1()>360)
+        setAnguloR1(getAnguloR1()-360);
+
+    if (anguloAnimacion < anguloR2 || anguloR2 == -90){
         anguloAnimacion = anguloR2;
+
         //Aumentamos R2
-        setAnguloR2(getAnguloR2() + 1);
-        if (getAnguloR2() > 90)
+        if (Fvel){
+            Gvel = false;
+            setAnguloR2(getAnguloR2()+3);
+        }
+        if (Gvel){
+            Fvel = false;
+            setAnguloR2(getAnguloR2()+8);
+        }
+        else
+            setAnguloR2(getAnguloR2()+1);
+        if (getAnguloR2()>90)
             setAnguloR2(90);
-    } else if (anguloAnimacion > anguloR2 || anguloR2 == 90) {
+    } else if (anguloAnimacion > anguloR2 || anguloR2 == 90){
         anguloAnimacion = anguloR2;
+
         //Decrementamos R2
-        setAnguloR2(getAnguloR2() - 1);
-        if (getAnguloR2() < -90)
+        if (Fvel){
+            Gvel = false;
+            setAnguloR2(getAnguloR2()-3);
+        }
+        if (Gvel){
+            Fvel = false;
+            setAnguloR2(getAnguloR2()-8);
+        }
+        else
+            setAnguloR2(getAnguloR2()-1);
+        if (getAnguloR2()<-90)
             setAnguloR2(-90);
     } else {
         //Aumentamos R2
-        setAnguloR2(getAnguloR2() + 1);
-        if (getAnguloR2() > 90)
+        if (Fvel){
+            Gvel = false;
+            setAnguloR2(getAnguloR2()+3);
+        }
+        if (Gvel){
+            Fvel = false;
+            setAnguloR2(getAnguloR2()+8);
+        }
+        else
+            setAnguloR2(getAnguloR2()+1);
+        if (getAnguloR2()>90)
             setAnguloR2(90);
     }
 
     //Aumentamos R3
-    setAnguloR3(getAnguloR3() + 1);
-    if (getAnguloR3() > 360)
-        setAnguloR3(getAnguloR3() - 360);
+    setAnguloR3(getAnguloR3()+1);
+    if (getAnguloR3()>360)
+        setAnguloR3(getAnguloR3()-360);
 }
 
 Grua::Grua(float alturaPie, float largoBrazoGrande,
@@ -1623,5 +1686,6 @@ Procedimiento de fondo. Es llamado por glut cuando no hay eventos pendientes.
 void idle(int v) {
     glutPostRedisplay();        // Redibuja
     glutTimerFunc(30, idle, 0);    // Vuelve a activarse dentro de 30 ms
-    grua.animaciones();   //Anima las rotaciones de forma automáica
+    if (animacionActivada)
+        grua.animaciones();   //Anima las rotaciones de forma automáica
 }

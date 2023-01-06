@@ -39,3 +39,5 @@ void clickRaton (int boton, int estado, int x, int y);
 void RatonMovido (int x, int y);
 
 int getFiguraActual();
+
+void ruletaRaton(int button, int dir, int x, int y);

@@ -7,7 +7,7 @@
 	Estudiante: 
 
 =======================================================
-	G. Arroyo, J.C. Torres 
+	Gvel. Arroyo, J.C. Torres
 	Dpto. Lenguajes y Sistemas Informticos
 	(Univ. de Granada)
 
@@ -30,7 +30,7 @@
 
 /**	
 	Funcion de captura de eventos pulsacion de tecla correspondiente a caracter alfanumerico
-	K: codigo ascii del caracter
+	Kvel: codigo ascii del caracter
 	x: posicion del cursor en coordenadas de pantalla cuando se pulso la tecla
 	y: posicion del cursor en coordenadas de pantalla cuando se pulso la tecla
 **/
@@ -38,7 +38,7 @@ void letra (unsigned char k, int x, int y);
 
 /**
 	Funcion de captura de eventos pulsacion de caracteres especiales y de control
-	K: codigo del control pulsado (se definen como constantes en glut.h)
+	Kvel: codigo del control pulsado (se definen como constantes en glut.h)
 	x: posicion del cursor en coordenadas de pantalla cuando se pulso la tecla
 	y: posicion del cursor en coordenadas de pantalla cuando se pulso la tecla
 **/

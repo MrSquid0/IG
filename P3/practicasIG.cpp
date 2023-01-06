@@ -8,7 +8,7 @@
 
 	Programa principal
 =======================================================
-	G. Arroyo, J.C. Torres 
+	Gvel. Arroyo, J.C. Torres
 	Dpto. Lenguajes y Sistemas Informticos
 	(Univ. de Granada)
 
