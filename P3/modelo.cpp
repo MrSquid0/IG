@@ -161,13 +161,6 @@ void iluminacionON (){
         iluminacion = true;
 }
 
-void setSombra (){
-    if (sombraPlana)
-        sombraPlana = false;
-    else
-        sombraPlana = true;
-}
-
 void activarDesactivarAnimacion(){
     if (animacionActivada)
         animacionActivada = false;
@@ -403,12 +396,12 @@ void Dibuja (void)
 
     ejesCoordenadas.draw();			// Dibuja los ejes
 
-    grua.draw(); //Dibuja la grúa
-
     if (iluminacion) //Activa / desactiva la iluminación de las figuras
         glEnable(GL_LIGHTING); //Activa
     else
         glDisable(GL_LIGHTING); //Desactiva
+
+    grua.draw(); //Dibuja la grúa
 
     glPolygonMode (GL_FRONT_AND_BACK, modo) ; //Cambia los modos de visualización
 

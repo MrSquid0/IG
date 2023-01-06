@@ -108,9 +108,6 @@ void letra (unsigned char k, int x, int y)
     case '-':			// aleja la cámara
       dCamara += 5.0;
       break;
-     case 'v':
-         setSombra();
-         break;
      case 'B':
          setAnguloR1(getAnguloR1()+1);
          if (getAnguloR1()>360)
