@@ -1,0 +1,7 @@
+#Ignora archivos generados por cLion y makefiles
+
+**/cmake-build-debug
+**/.idea
+**/CMakeLists.txt
+
+**/*.o
