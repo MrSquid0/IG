@@ -55,6 +55,7 @@ void transformacionVisualizacion ();
 Fija la transformacion de proyeccion en funcion del tamaño de la ventana y del tipo de proyeccion
 
 **/
+void setFrustum(bool frustumValor);
 void fijaProyeccion ();
 
 

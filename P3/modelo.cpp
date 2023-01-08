@@ -273,7 +273,7 @@ void Grua::brazoGrandeConCaja(float xBrazoGrande){
     E(xCaja, yCaja, zCaja);
 }
 
-//Fvel+Gvel
+//F+G
 void Grua::cuerdaConGancho(float yCuerda){
     glRotatef(anguloR2, 0,0,1);//R2
     F(-yCuerda);
@@ -284,7 +284,7 @@ void Grua::cuerdaConGancho(float yCuerda){
     G(yGancho);
 }
 
-//D+E+Fvel+Gvel
+//D+E+F+G
 void Grua::brazoGrande (float xBrazoGrande, float yCuerda){
 
     glPushMatrix();
@@ -303,7 +303,7 @@ void Grua::brazoGrande (float xBrazoGrande, float yCuerda){
     glPopMatrix();
 }
 
-//D+E+Fvel+Gvel+B
+//D+E+F+G+B
 void Grua::brazoGrandeConCubo (float xBrazoGrande, float yCuerda){
     int numMallas = xBrazoGrande/2;
     glPushMatrix();
@@ -318,7 +318,7 @@ void Grua::brazoGrandeConCubo (float xBrazoGrande, float yCuerda){
     glPopMatrix();
 }
 
-//D+E+Fvel+Gvel+B+H+I
+//D+E+F+G+B+H+I
 
 void Grua::brazoGrandeConCuboYBrazoPequenyo(float xBrazoGrande,
                                             float yCuerda, float xBrazoPequenyo){
@@ -337,7 +337,7 @@ void Grua::brazoGrandeConCuboYBrazoPequenyo(float xBrazoGrande,
     glPopMatrix();
 }
 
-//A+C+D+E+Fvel+Gvel+B+H+I
+//A+C+D+E+F+G+B+H+I
 void Grua::construirGrua(float xBrazoGrande, float yCuerda, float xBrazoPequenyo,
                          float yPie){
     //Construimos figura A

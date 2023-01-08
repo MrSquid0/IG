@@ -33,7 +33,7 @@ modulo visual.c
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#include <GL/glut.h>		// Libreria de utilidades de OpenGL
+#include <GL/glut.h>        // Libreria de utilidades de OpenGL
 #include "practicasIG.h"
 
 
@@ -47,7 +47,7 @@ Angulos de rotacion de la camara.
 
 float view_rotx = 30, view_roty = 45;
 float D = 10;
-float   x_camara = 0,
+float x_camara = 0,
         z_camara = D;
 
 
@@ -70,22 +70,19 @@ Tamaño de la ventana X
 float anchoVentana, altoVentana;
 
 
-
-
 /** 	void setCamara()
 
 Cambia los parámetros de la cámara en el modulo visual
 
 **/
-void setCamara (float ax, float ay, float d, float xCam)
-{
-  view_rotx = ax;
-  view_roty = ay;
+void setCamara(float ax, float ay, float d, float xCam) {
+    view_rotx = ax;
+    view_roty = ay;
 
-  x_camara = xCam;
-  z_camara = d;
+    x_camara = xCam;
+    z_camara = d;
 
-  D = d;
+    D = d;
 }
 
 
@@ -98,17 +95,16 @@ La cámara mira al origen de coordenadas l una distancia D desde la posición an
 view_roty;
 
 **/
-void transformacionVisualizacion ()
-{
-  glTranslatef (-x_camara, 0, -z_camara);
+void transformacionVisualizacion() {
+    glTranslatef(-x_camara, 0, -z_camara);
 
-  glRotatef (view_rotx, 1.0, 0.0, 0.0);
-  glRotatef (view_roty, 0.0, 1.0, 0.0);
+    glRotatef(view_rotx, 1.0, 0.0, 0.0);
+    glRotatef(view_roty, 0.0, 1.0, 0.0);
 
-  //glTranslatef(-x_camara,y_camara,z_camara);
+    //glTranslatef(-x_camara,y_camara,z_camara);
 }
 
-void actualizarVista(float x, float y){
+void actualizarVista(float x, float y) {
     view_rotx += x;
     view_roty += y;
 }
@@ -118,20 +114,29 @@ void actualizarVista(float x, float y){
 Fija la transformacion de proyeccion en funcion del tamaño de la ventana y del tipo de proyeccion
 
 **/
-void fijaProyeccion ()
-{
-  float calto;			// altura de la ventana corregida
 
-  if (anchoVentana > 0)
-    calto = altoVentana / anchoVentana;
-  else
-    calto = 1;
+bool frustum = true;
 
-  glFrustum (-1, 1, -calto, calto, 1.5, 1500);
+void setFrustum(bool frustumValor) {
+    frustum = frustumValor;
+}
 
-  glMatrixMode (GL_MODELVIEW);
+void fijaProyeccion() {
+    float calto;            // altura de la ventana corregida
+
+    if (anchoVentana > 0)
+        calto = altoVentana / anchoVentana;
+    else
+        calto = 1;
+
+    if (frustum)
+        glFrustum(-1, 1, -calto, calto, 1.5, 1500);
+    else
+        glOrtho(-1, 1, -calto, calto, 1.5, 1500);
+
+        glMatrixMode(GL_MODELVIEW);
 // A partir de este momento las transformaciones son de modelado.       
-  glLoadIdentity ();
+    glLoadIdentity();
 
 }
 
@@ -142,16 +147,15 @@ Inicializa el viewport para que ocupe toda la ventana X, y llama l fijaProyeccio
 
 **/
 
-void inicializaVentana (GLsizei ancho, GLsizei alto)
-{
-  altoVentana = alto;
-  anchoVentana = ancho;
+void inicializaVentana(GLsizei ancho, GLsizei alto) {
+    altoVentana = alto;
+    anchoVentana = ancho;
 
-  glViewport (0, 0, ancho, alto);	// Establecemos el Viewport usando la nueva anchura y altura de la ventana X
+    glViewport(0, 0, ancho, alto);    // Establecemos el Viewport usando la nueva anchura y altura de la ventana X
 
-  glMatrixMode (GL_PROJECTION);
-  glLoadIdentity ();
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
 
-  fijaProyeccion ();		// Cargamos la transformacion de proyeccion
+    fijaProyeccion();        // Cargamos la transformacion de proyeccion
 
 }

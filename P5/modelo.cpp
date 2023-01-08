@@ -1423,7 +1423,6 @@ int pick(int x, int y) {
     realColors = true;
 
     int result = data[0];
-    int componente = data[1];
 
     glutPostRedisplay();
     return result;
