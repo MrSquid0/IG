@@ -85,7 +85,6 @@ void setG();
 
 void activarDesactivarAnimacion();
 
-
 class Objeto3D 
 { 
 public: 

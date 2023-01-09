@@ -1,8 +1,6 @@
 /*	Prácticas de Informática Gráfica
 	Grupo C					Curso 2022-23
-
 	Codigo base para la realización de las prácticas de IG
-
 	Estudiante: Gonzalo Jose Lopez Castilla
 =======================================================
 	G. Arroyo, J.C. Torres

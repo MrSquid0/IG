@@ -1,8 +1,6 @@
 /*	Prácticas de Informática Gráfica
 	Grupo C					Curso 2022-23
-
 	Codigo base para la realización de las practicas de IG
-
 	Estudiante: Gonzalo Jose Lopez Castilla
 =======================================================
 	Gvel. Arroyo, J.C. Torres
@@ -171,28 +169,28 @@ void activarDesactivarAnimacion(){
 class Ejes:Objeto3D
 {
 public:
-float longitud = 30;
+    float longitud = 30;
 // Dibuja el objeto
-void draw( )
-{
-    glDisable (GL_LIGHTING);
-    glBegin (GL_LINES);
+    void draw( )
     {
-        glColor3f (0, 1, 0);
-        glVertex3f (0, 0, 0);
-        glVertex3f (0, longitud, 0);
+        glDisable (GL_LIGHTING);
+        glBegin (GL_LINES);
+        {
+            glColor3f (0, 1, 0);
+            glVertex3f (0, 0, 0);
+            glVertex3f (0, longitud, 0);
 
-        glColor3f (1, 0, 0);
-        glVertex3f (0, 0, 0);
-        glVertex3f (longitud, 0, 0);
+            glColor3f (1, 0, 0);
+            glVertex3f (0, 0, 0);
+            glVertex3f (longitud, 0, 0);
 
-        glColor3f (0, 0, 1);
-        glVertex3f (0, 0, 0);
-        glVertex3f (0, 0, longitud);
+            glColor3f (0, 0, 1);
+            glVertex3f (0, 0, 0);
+            glVertex3f (0, 0, longitud);
+        }
+        glEnd ();
+        glEnable (GL_LIGHTING);
     }
-    glEnd ();
-    glEnable (GL_LIGHTING);
-}
 };
 Grua::Grua(float alturaPie, float largoBrazoGrande,
            float alturaCuerda, float largoBrazoPeq) {

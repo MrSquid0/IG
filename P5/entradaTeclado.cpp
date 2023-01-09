@@ -1,27 +1,22 @@
 /*	Prácticas de Informática Gráfica
-
 	Grupo C					Curso 2022-23
- 	
-	Codigo base para la realización de las practicas de IG
-	
-	Estudiante: Gonzalo José López Castilla
 
+	Codigo base para la realización de las practicas de IG
+
+	Estudiante: Gonzalo José López Castilla
 =======================================================
-	G. Arroyo, J.C. Torres 
+	G. Arroyo, J.C. Torres
 	Dpto. Lenguajes y Sistemas Informticos
 	(Univ. de Granada)
-
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
  as published by the Free Software Foundation; either version 2
  of the License, or (at your option) any later version.
-
  This program is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU General Public License for more details 
+ GNU General Public License for more details
  http://www.gnu.org/copyleft/gpl.html
-
 =======================================================/
 modulo entradaTeclado.c
 	Gestion de eventos de teclado
@@ -34,10 +29,8 @@ modulo entradaTeclado.c
 #include "practicasIG.h"
 
 
-/** 
-
+/**
 Imprime en la consola las instrucciones del programa
-
 **/
 void printHelp() {
 
@@ -62,20 +55,13 @@ void printHelp() {
 /* @teclado ---------------------------------------------------------------- */
 
 /** 		void letra (unsigned char k, int x, int y)
-
 Este procedimiento es llamado por el sistema cuando se pulsa una tecla normal
 El codigo k es el ascii de la letra
-
 Para anyadir nuevas ordenes de teclado coloca el correspondiente case.
-
 Parametros de entrada:
-
 k: codigo del caracter pulsado
-
 x:
-
 y:
-
 **/
 
 float rotxCamara = 30, rotyCamara = 45;
@@ -183,15 +169,10 @@ void letra(unsigned char k, int x, int y) {
 /**		void especial(int k, int x, int y)
 Este procedimiento es llamado por el sistema cuando se pulsa una tecla
 especial. El codigo k esta definido en glut mediante constantes
-
 Parametros de entrada:
-
 k: codigo del caracter pulsado (definido en glut mediante constantes).
-
 x:
-
 y:
-
 **/
 void especial(int k, int x, int y) {
 
